@@ -89,6 +89,8 @@ List* slice(List* lst, int st, int end, int step = 1){
 	st+=lst->size;
 	end+=lst->size;
     }
+    else if(end < 0)
+	end+= lst->size;
     if(st >= 0 && end >=0){  
     	List* new_list = new List();
     	Node* cur_node = lst->head;
@@ -103,6 +105,26 @@ List* slice(List* lst, int st, int end, int step = 1){
 		st%=step;
 	}
     }
+    else{
+	List* new_list = new List();
+    	Node* cur_node = lst->head;
+	for(int i = 0; i < st; i++){
+	    std::cout << cur_node->value;
+	    cur_node = cur_node->next;
+        }
+    	int st = 0;
+	for(int i = st; i < lst->size; i++)
+	    if(st == 0) add_node_to_list(new_list, cur_node);
+	    st++;
+		st%=step;
+	}
+	for(int i = 0 i < end; i++)
+	    if(st == 0) add_node_to_list(new_list, cur_node);
+	    st++;
+		st%=step;
+	}
+    }
+    
     return new_list;
 }
 
