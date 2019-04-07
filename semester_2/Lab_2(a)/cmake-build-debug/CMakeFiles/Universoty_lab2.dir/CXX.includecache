@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sadoffnick/CLionProjects/Universoty_lab2/array_ls.h
+iostream
+-
+cctype
+-
+vector_ls.h
+/home/sadoffnick/CLionProjects/Universoty_lab2/vector_ls.h
+
+/home/sadoffnick/CLionProjects/Universoty_lab2/main.cpp
+iostream
+-
+cctype
+-
+vector
+-
+cstdlib
+-
+vector_ls.h
+/home/sadoffnick/CLionProjects/Universoty_lab2/vector_ls.h
+array_ls.h
+/home/sadoffnick/CLionProjects/Universoty_lab2/array_ls.h
+
+/home/sadoffnick/CLionProjects/Universoty_lab2/vector_ls.h
+iostream
+-
+cctype
+-
+vector
+-
+
