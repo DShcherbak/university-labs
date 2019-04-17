@@ -4,22 +4,22 @@
 
 using namespace std;
 
-string convert_month(int n);
+std::string convert_month(int n);
 
-string convert_time(tm* t);
+std::string convert_time(tm* t);
 
 class message{
 private:
-    string text = "";
-    string cur_time;
+    std::string text = "";
+    std::string cur_time;
     int author_id;
     int adress_id;
 public:
-    void set_text(string T){
+    void set_text(std::string T){
         text = T;
     }
     void set_time(){
-        time_t now = time(0);
+        time_t now = time(nullptr);
         tm *gmtm = gmtime(&now);
         cur_time = convert_time(gmtm);
        // delete(gmtm);
@@ -32,13 +32,17 @@ public:
         adress_id = adr;
     }
 
-    void get_message(int current_login, int adr, string T = ""){
-        if(T == "")
+    void get_message(int current_login, int adr, std::string T = ""){
+        if(T.empty())
             cin >> T;
         set_text(T);
         set_time();
         set_author(current_login);
         set_adress(adr);
+    }
+    
+    void print(const std::string &author_name){
+        std::cout << author_name << ": " << text;
     }
 
 
@@ -47,8 +51,11 @@ public:
 
 class server{
 private:
-    vector <message> messages;
+
 public:
+    vector <message> messages;
+    vector <std::string> name;
+
     void load() {
        // freopen("backup.txt","r",stdin);
         // TODO : Розібратись як с.ка нормально читати з файла базу данних
@@ -60,7 +67,7 @@ public:
     }
 };
 
-string convert_month(int n){
+std::string convert_month(int n){
     if (n < 9)
         return ('0' + to_string(n+1));
     else
@@ -68,8 +75,8 @@ string convert_month(int n){
 
 }
 
-string convert_time(tm* t){
-    string current_time = "";
+std::string convert_time(tm* t){
+    std::string current_time = "";
     current_time += to_string((*t).tm_hour+2) +':'+ to_string((*t).tm_min) +':'+ to_string((*t).tm_sec);
     current_time += " ";
     current_time += to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ to_string((*t).tm_year+1900);
@@ -85,6 +92,8 @@ int main() {
     //log_in
     message new_message;
     new_message.get_message(1,0);
-    print_message(new_message);
+    S.name.push_back("Admin");
+    S.name.push_back("Tester");
+    new_message.print(S.name[1]);
 
 }
