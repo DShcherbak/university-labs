@@ -1,6 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
+#include <map>
+#include <set>
+
 
 using namespace std;
 
@@ -55,15 +59,32 @@ private:
 public:
     vector <message> messages;
     vector <std::string> name;
+    std::map <std::string, std::string> password;
+    std::map <std::string, std::string> id;
+    std::set <std::string> logins;
 
     void load() {
-       // freopen("backup.txt","r",stdin);
-        // TODO : Розібратись як с.ка нормально читати з файла базу данних
+        freopen("passwords","r",stdin);
+        int cnt_users = 0, _id;
+        std::string login, pass;
+        cin >> cnt_users;
+        for(int i = 0; i < cnt_users; i++){
+            cin >> _id >> login >> pass;
+            name.push_back(login);
+            password[login] = pass;
+            id[login] = _id;
+            logins.insert(login);
+        }
         messages.resize(3);
         messages[0].get_message(0,1, "Hello!");
         messages[1].get_message(0,1, "dear admin");
         messages[2].get_message(0,1, "i love you!");
         cout << "Server loaded!\n";
+
+    }
+
+    void sign_up(string log){
+        std::cout << "Your password:";
     }
 };
 
@@ -91,9 +112,22 @@ int main() {
     S.load();
     //log_in
     message new_message;
-    new_message.get_message(1,0);
-    S.name.push_back("Admin");
-    S.name.push_back("Tester");
-    new_message.print(S.name[1]);
+//    new_message.get_message(1,0);
+//    new_message.print(S.name[1]);
+    bool logged_in = false;
+    std::string log;
+    char q;
+    while(!logged_in){
+        std::cout << "Please, log in to use my messager.\nYour login: ";
+        cin >> log;
+        if(S.logins.count(log) == 0){
+            std::cout << "No such user found. Would you like to sign up? (y/n)";
+            std :: cin >> q;
+            if(q == 'y' || q == 'Y')
+            {
+                S.sign_up(log);
+            }
+        }
+    }
 
 }
