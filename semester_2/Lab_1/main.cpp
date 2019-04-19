@@ -6,8 +6,6 @@
 #include <set>
 
 
-using namespace std;
-
 std::string convert_month(int n);
 
 std::string convert_time(tm* t);
@@ -41,23 +39,28 @@ public:
     int get_author(){
         return author_id;
     }
-
     void set_adress(int adr){
         adress_id = adr;
     }
     int get_adress(){
         return adress_id;
     }
-
     void get_message(int aut, int adr, std::string T){
         set_text(T);
         set_time();
         set_author(aut);
         set_adress(adr);
     }
-    
     void print(const std::string &author_name){
         std::cout << author_name << ": " << text << " :: " << cur_time << "\n";
+    }
+    std::string transform(){
+        std::string res = "";
+        res += std::to_string(author_id) + "\n";
+        res += std::to_string(adress_id) + "\n";
+        res += text + "\n";
+        res += cur_time + "\n";
+        return res;
     }
 };
 
@@ -66,8 +69,8 @@ private:
     int CNT_USERS = 1;
 
 public:
-    vector <message> messages;
-    vector <std::string> name;
+    std::vector <message> messages;
+    std::vector <std::string> name;
     std::map <std::string, int> id;
     std::set <std::string> names;
 
@@ -78,12 +81,22 @@ public:
         messages[2].get_message(0,1, "i love you!");
         name.push_back("Admin");
         name.push_back("Test");
-        cout << "Server loaded!\n";
+        std::cout << "Server loaded!\n";
 
     }
 
     void save() {
-
+        FILE* back = fopen("backup.txt","r");
+        std::string mes;
+        mes = messages[0].transform();
+        std::cout << "mama\n";
+        //for(auto m : messages){
+         //   mes = m.transform();
+         //   fprintf(back,"%s", &mes);
+        //std::cout << "iamere\n";
+        //}
+        fclose(back);
+        std ::cout << "All saved!\n";
     }
 
     void print(int from = 0, int to = 0){
@@ -107,7 +120,6 @@ public:
     void new_message(){
         std::string author, adress, Text;
         std::cout << "Enter your name:\n";
-     //   fflush(cin);
         getline(std::cin, author);
         std::cout << "Whom is your message for:\n";
         getline(std::cin, adress);
@@ -123,7 +135,7 @@ public:
         if(names.count(adress) == 0){
             id[adress] = ++CNT_USERS;
             names.insert(adress);
-            name.push_back(author);
+            name.push_back(adress);
         }
         m.get_message(id[author],id[adress],Text);
         add_message(m);
@@ -132,17 +144,17 @@ public:
 
 std::string convert_month(int n){
     if (n < 9)
-        return ('0' + to_string(n+1));
+        return ('0' + std::to_string(n+1));
     else
-        return to_string(n+1);
+        return std::to_string(n+1);
 
 }
 
 std::string convert_time(tm* t){
     std::string current_time = "";
-    current_time += to_string((*t).tm_hour+2) +':'+ to_string((*t).tm_min) +':'+ to_string((*t).tm_sec);
+    current_time += std::to_string((*t).tm_hour+2) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec);
     current_time += " ";
-    current_time += to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ to_string((*t).tm_year+1900);
+    current_time += std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
     return current_time;
 }
 
@@ -194,8 +206,9 @@ void demo() {
     S = *(new server());
     S.load();
     //log_in
-    S.new_message();
-    S.print();
+   // S.new_message();
+   // S.print();
+    S.save();
     // new_message.get_message(1,0,T);
     //new_message.print(S.name[1]);
     //  S.add_message(new_message);
