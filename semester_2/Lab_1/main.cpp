@@ -45,19 +45,22 @@ public:
     int get_adress(){
         return adress_id;
     }
-    void get_message(int aut, int adr, std::string T){
-        set_text(T);
-        set_time();
+    void get_message(int aut, int adr, std::string _text, std::string _time = "-1"){
+        set_text(_text);
+        if(_time == "-1")
+            set_time();
+        else
+            cur_time = _time;
         set_author(aut);
         set_adress(adr);
     }
     void print(const std::string &author_name){
         std::cout << author_name << ": " << text << " :: " << cur_time << "\n";
     }
-    std::string transform(){
+    std::string to_string(std::string login_auth, std::string login_adr){
         std::string res = "";
-        res += std::to_string(author_id) + "\n";
-        res += std::to_string(adress_id) + "\n";
+        res += login_auth + "\n";
+        res += login_adr + "\n";
         res += text + "\n";
         res += cur_time + "\n";
         return res;
@@ -66,7 +69,7 @@ public:
 
 class server{
 private:
-    int CNT_USERS = 1;
+    int CNT_USERS = 2;
 
 public:
     std::vector <message> messages;
@@ -74,32 +77,58 @@ public:
     std::map <std::string, int> id;
     std::set <std::string> names;
 
-    void load() {
-        messages.resize(3);
-        messages[0].get_message(0,1, "Hello!");
-        messages[1].get_message(0,1, "dear admin");
-        messages[2].get_message(0,1, "i love you!");
+    void clear_all(){
+        names.clear();
+        id.clear();
+        name.clear();
+        messages.clear();
+        CNT_USERS = 2;
+        names.insert("Admin");
+        id["TOALL"] = 0;
+        id["Admin"] = 1;
+        name.push_back("TOALL");
         name.push_back("Admin");
-        name.push_back("Test");
-        std::cout << "Server loaded!\n";
+    }
 
+    void load() {
+        int CNT_MES;
+        message m;
+        clear_all();
+        std::string auth, adr, text, time;
+        std::ifstream in("backup.txt");
+        in >> CNT_MES;
+        for(int i = 0; i <CNT_MES; i++){
+            in >> auth;
+            in >> adr;
+            in >> text;
+            in >> time;
+            if(names.count(auth) == 0){
+                names.insert(auth);
+                id[auth] = CNT_USERS;
+                name[CNT_USERS++] = auth;
+            }
+            if(names.count(adr) == 0){
+                names.insert(adr);
+                id[adr] = CNT_USERS;
+                name[CNT_USERS++] = adr;
+            }
+            m.get_message(id[auth],id[adr],text,time);
+        }
+        in.close();
+        std ::cout << "Server loaded!\n";
     }
 
     void save() {
-        FILE* back = fopen("backup.txt","r");
-        std::string mes;
-        mes = messages[0].transform();
-        std::cout << "mama\n";
-        //for(auto m : messages){
-         //   mes = m.transform();
-         //   fprintf(back,"%s", &mes);
-        //std::cout << "iamere\n";
-        //}
-        fclose(back);
+        std::ofstream out("backup.txt");
+        out << messages.size() << std::endl;
+        for(auto m : messages)
+            out << m.to_string(name[m.get_author()],name[m.get_adress()]);
+        out.close();
         std ::cout << "All saved!\n";
     }
 
     void print(int from = 0, int to = 0){
+        std::cout << "Messages:\n";
         if(from == 0 && to == 0){
             for(auto m : messages){
                 m.print(name[m.get_author()]);
@@ -205,9 +234,7 @@ void demo() {
     server S;
     S = *(new server());
     S.load();
-    //log_in
-   // S.new_message();
-   // S.print();
+    S.print();
     S.save();
     // new_message.get_message(1,0,T);
     //new_message.print(S.name[1]);
