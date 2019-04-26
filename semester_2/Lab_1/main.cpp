@@ -46,6 +46,7 @@ public:
         return adress_id;
     }
     void get_message(int aut, int adr, std::string _text, std::string _time = "-1"){
+        std::cout << aut <<  adr << _text <<  _time  << "\n";
         set_text(_text);
         if(_time == "-1")
             set_time();
@@ -94,25 +95,36 @@ public:
         int CNT_MES;
         message m;
         clear_all();
-        std::string auth, adr, text, time;
+        std::string auth, adr, txt, time;
         std::ifstream in("backup.txt");
         in >> CNT_MES;
+        getline(in,auth,'\n');
+        std::cout << CNT_MES << std::endl;
         for(int i = 0; i <CNT_MES; i++){
-            in >> auth;
-            in >> adr;
-            in >> text;
-            in >> time;
+        //    in >> auth;
+        //    in >> adr;
+            getline(in, auth, '\n');
+            getline(in, adr, '\n');
+            getline(in, txt, '\n');
+            getline(in, time, '\n');
+
+            std::cout << ""<< auth;
+            std::cout << "\n"<< adr;
+            std::cout << "\n"<< txt;
+            std::cout << "\n"<< time << "ppp\n";
             if(names.count(auth) == 0){
                 names.insert(auth);
                 id[auth] = CNT_USERS;
-                name[CNT_USERS++] = auth;
+                name.push_back(auth);
             }
             if(names.count(adr) == 0){
                 names.insert(adr);
                 id[adr] = CNT_USERS;
-                name[CNT_USERS++] = adr;
+                name.push_back(adr);
             }
-            m.get_message(id[auth],id[adr],text,time);
+            std::cout << "#@)&?$0\n";
+            m.get_message(id[auth],id[adr],txt,time);
+            messages.push_back(m);
         }
         in.close();
         std ::cout << "Server loaded!\n";
@@ -176,12 +188,11 @@ std::string convert_month(int n){
         return ('0' + std::to_string(n+1));
     else
         return std::to_string(n+1);
-
 }
 
 std::string convert_time(tm* t){
     std::string current_time = "";
-    current_time += std::to_string((*t).tm_hour+2) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec);
+    current_time += std::to_string((*t).tm_hour+3) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec);
     current_time += " ";
     current_time += std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
     return current_time;
@@ -235,6 +246,8 @@ void demo() {
     S = *(new server());
     S.load();
     S.print();
+    S.new_message();
+    S.print();
     S.save();
     // new_message.get_message(1,0,T);
     //new_message.print(S.name[1]);
@@ -252,21 +265,22 @@ void benchmark() {
 
 
 int main() {
+    int key = 2;
     while(true) {
-        int key;
         std::cout << "MAIN MENU\n";
         std::cout << "Please, choose your mode:\n";
         std::cout << "Press 1 for interactive mode.\n";
         std::cout << "Press 2 for demonstration mode.\n";
         std::cout << "Press 3 for benchmark mode.\n";
         std::cout << "Press 4 to exit the program\n";
-        std::cin >> key;
+     //   std::cin >> key;
         switch(key){
 //            case 1:
   //              interactive();
    //             return 0;
             case 2:
                 demo();
+                key = 4;
                 break;
             case 3:
                 benchmark();
