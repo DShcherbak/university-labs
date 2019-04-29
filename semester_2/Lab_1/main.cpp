@@ -48,7 +48,7 @@ public:
         return adress_id;
     }
     void get_message(int aut, int adr, std::string _text, std::string _time = "-1"){
-        std::cout << aut <<  adr << _text <<  _time  << "\n";
+   //     std::cout << aut <<  adr << _text <<  _time  << "\n";
         set_text(_text);
         if(_time == "-1")
             set_time();
@@ -98,11 +98,10 @@ public:
         message m;
         clear_all();
         std::string auth, adr, txt, time;
-   /*     std::ifstream in("backup.txt");
+/*       std::ifstream in("backup.txt");
         in >> CNT_MES;
         messages.resize(CNT_MES);
         getline(in,auth,'\n');
-        std::cout << CNT_MES << std::endl;
         for(int i = 0; i <CNT_MES; i++){
             getline(in, auth, '\n');
             getline(in, adr, '\n');
@@ -122,24 +121,39 @@ public:
             messages[i] = m;
         }
         in.close();
-  */
-        std::ifstream bin("binary_backup.txt", std::ios::binary);
 
+   */     std::ifstream bin("binary_backup.txt", std::ios::binary);
         bin.read((char*)&CNT_MES, sizeof(int));
-        messages.resize(CNT_MES);
+       // messages.resize(CNT_MES);
+       int name_size;
         std::cout << CNT_MES << std::endl;
         for(int i = 0; i <CNT_MES; i++){
-            bin.read((char*)&m, sizeof(message));
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&auth),name_size);
+
+            std::cout << i << std::endl;
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&adr),name_size);
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&txt),name_size);
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&time),name_size);
+
             if(names.count(auth) == 0){
                 names.insert(auth);
                 id[auth] = CNT_USERS++;
                 name.push_back(auth);
+                m.set_author(id[auth]);
             }
             if(names.count(adr) == 0){
                 names.insert(adr);
                 id[adr] = CNT_USERS++;
                 name.push_back(adr);
+                m.set_adress(id[adr]);
             }
+
             messages[i] = m;
         }
         bin.close();
@@ -153,15 +167,28 @@ public:
             out << m.to_string(name[m.get_author()],name[m.get_adress()]);
         out.close();
         std ::cout << "All saved!\n";
-        std::string name;
+
+        std::string sname;
         std::ofstream bout("binary_backup.txt", std::ios::binary);
         int cnt_mes = messages.size();
+        int name_size;
         bout.write((char*)&cnt_mes, sizeof(int));
         for(auto m : messages){
+            name_size = name[m.get_author()].size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(name[m.get_author()].c_str(),name_size);
 
-            bout.write((char*)&bm, sizeof(bm));
-            bout.write((char*)&bm, sizeof(bm));
-            bout.write((char*)&bm, sizeof(bm));
+            name_size = name[m.get_adress()].size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(name[m.get_adress()].c_str(),name_size);
+
+            name_size = m.get_text().size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(m.get_text().c_str(),name_size);
+
+            name_size = m.get_time().size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(m.get_time().c_str(),name_size);
         }
 
         bout.close();
