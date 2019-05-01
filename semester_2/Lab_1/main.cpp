@@ -10,12 +10,14 @@ std::string convert_month(int n);
 
 std::string convert_time(tm* t);
 
+
+
 class message{
 private:
     std::string text = "";
     std::string cur_time;
-    int author_id;
-    int adress_id;
+    int author_id = -2;
+    int adress_id = -2;
 
 public:
     void set_text(std::string T){
@@ -46,7 +48,7 @@ public:
         return adress_id;
     }
     void get_message(int aut, int adr, std::string _text, std::string _time = "-1"){
-        std::cout << aut <<  adr << _text <<  _time  << "\n";
+   //     std::cout << aut <<  adr << _text <<  _time  << "\n";
         set_text(_text);
         if(_time == "-1")
             set_time();
@@ -96,38 +98,77 @@ public:
         message m;
         clear_all();
         std::string auth, adr, txt, time;
-        std::ifstream in("backup.txt");
+/*       std::ifstream in("backup.txt");
         in >> CNT_MES;
+        messages.resize(CNT_MES);
         getline(in,auth,'\n');
-        std::cout << CNT_MES << std::endl;
         for(int i = 0; i <CNT_MES; i++){
-        //    in >> auth;
-        //    in >> adr;
             getline(in, auth, '\n');
             getline(in, adr, '\n');
             getline(in, txt, '\n');
             getline(in, time, '\n');
-
-            std::cout << ""<< auth;
-            std::cout << "\n"<< adr;
-            std::cout << "\n"<< txt;
-            std::cout << "\n"<< time << "ppp\n";
             if(names.count(auth) == 0){
                 names.insert(auth);
-                id[auth] = CNT_USERS;
+                id[auth] = CNT_USERS++;
                 name.push_back(auth);
             }
             if(names.count(adr) == 0){
                 names.insert(adr);
-                id[adr] = CNT_USERS;
+                id[adr] = CNT_USERS++;
                 name.push_back(adr);
             }
-            std::cout << "#@)&?$0\n";
             m.get_message(id[auth],id[adr],txt,time);
-            messages.push_back(m);
+            messages[i] = m;
         }
         in.close();
-        std ::cout << "Server loaded!\n";
+
+   */     std::ifstream bin("binary_backup.txt", std::ios::binary);
+        bin.read((char*)&CNT_MES, sizeof(int));
+
+        messages.resize(CNT_MES);
+       int name_size;
+       char temp_string[100];
+        std::cout << CNT_MES << std::endl;
+        for(int i = 0; i <CNT_MES; i++){
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            auth = temp_string;
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            adr = temp_string;
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            txt = temp_string;
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            time = temp_string;
+
+            if(names.count(auth) == 0){
+                names.insert(auth);
+                id[auth] = CNT_USERS++;
+                name.push_back(auth);
+                m.set_author(id[auth]);
+            }
+            if(names.count(adr) == 0){
+                names.insert(adr);
+                id[adr] = CNT_USERS++;
+                name.push_back(adr);
+                m.set_adress(id[adr]);
+            }
+
+            m.get_message(id[auth],id[adr],txt,time);
+          //  std::cout << "!!!\n";
+            messages[i] = m;
+        }
+        bin.close();
+        std ::cout << "Server loaded from binary!\n";
     }
 
     void save() {
@@ -137,6 +178,32 @@ public:
             out << m.to_string(name[m.get_author()],name[m.get_adress()]);
         out.close();
         std ::cout << "All saved!\n";
+
+        std::string sname;
+        std::ofstream bout("binary_backup.txt", std::ios::binary);
+        int cnt_mes = messages.size();
+        int name_size;
+        bout.write((char*)&cnt_mes, sizeof(int));
+        for(auto m : messages){
+            name_size = name[m.get_author()].size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(name[m.get_author()].c_str(),name_size);
+
+            name_size = name[m.get_adress()].size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(name[m.get_adress()].c_str(),name_size);
+
+            name_size = m.get_text().size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(m.get_text().c_str(),name_size);
+
+            name_size = m.get_time().size();
+            bout.write((char*)&name_size, sizeof(int));
+            bout.write(m.get_time().c_str(),name_size);
+        }
+
+        bout.close();
+        std ::cout << "All binary-saved!)\n";
     }
 
     void print(int from = 0, int to = 0){
@@ -154,6 +221,10 @@ public:
         }
     }
 
+    void print(std::string from, std::string to = "TOALL"){
+        print(id[from],id[to]);
+    }
+
     void add_message(message m){
         messages.push_back(m);
     }
@@ -168,13 +239,13 @@ public:
         getline(std::cin, Text);
         message m;
         if(names.count(author) == 0){
-            id[author] = ++CNT_USERS;
+            id[author] = CNT_USERS++;
             names.insert(author);
             name.push_back(author);
 
         }
         if(names.count(adress) == 0){
-            id[adress] = ++CNT_USERS;
+            id[adress] = CNT_USERS++;
             names.insert(adress);
             name.push_back(adress);
         }
@@ -247,7 +318,7 @@ void demo() {
     S.load();
     S.print();
     S.new_message();
-    S.print();
+    S.print("Admin", "Tester");
     S.save();
     // new_message.get_message(1,0,T);
     //new_message.print(S.name[1]);
@@ -275,17 +346,15 @@ int main() {
         std::cout << "Press 4 to exit the program\n";
      //   std::cin >> key;
         switch(key){
-//            case 1:
-  //              interactive();
-   //             return 0;
+            case 1:
+//                interactive();
+                return 0;
             case 2:
                 demo();
-                key = 4;
-                break;
+                return 0;
             case 3:
                 benchmark();
                 return 0;
-                break;
             case 4:
                 return 0;
             default:
