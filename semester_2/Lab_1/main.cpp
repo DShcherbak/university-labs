@@ -124,22 +124,31 @@ public:
 
    */     std::ifstream bin("binary_backup.txt", std::ios::binary);
         bin.read((char*)&CNT_MES, sizeof(int));
-       // messages.resize(CNT_MES);
+
+        messages.resize(CNT_MES);
        int name_size;
+       char temp_string[100];
         std::cout << CNT_MES << std::endl;
         for(int i = 0; i <CNT_MES; i++){
             bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&auth),name_size);
-
-            std::cout << i << std::endl;
-            bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&adr),name_size);
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            auth = temp_string;
 
             bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&txt),name_size);
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            adr = temp_string;
 
             bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&time),name_size);
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            txt = temp_string;
+
+            bin.read((char*)&name_size, sizeof(int));
+            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+            temp_string[name_size] = '\0';
+            time = temp_string;
 
             if(names.count(auth) == 0){
                 names.insert(auth);
@@ -154,6 +163,8 @@ public:
                 m.set_adress(id[adr]);
             }
 
+            m.get_message(id[auth],id[adr],txt,time);
+          //  std::cout << "!!!\n";
             messages[i] = m;
         }
         bin.close();
