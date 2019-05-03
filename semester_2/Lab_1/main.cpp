@@ -10,8 +10,6 @@ std::string convert_month(int n);
 
 std::string convert_time(tm* t);
 
-
-
 class message{
 private:
     std::string text = "";
@@ -47,7 +45,7 @@ public:
     int get_adress(){
         return adress_id;
     }
-    void get_message(int aut, int adr, std::string _text, std::string _time = "-1"){
+    void set_message(int aut, int adr, std::string _text, std::string _time = "-1"){
    //     std::cout << aut <<  adr << _text <<  _time  << "\n";
         set_text(_text);
         if(_time == "-1")
@@ -68,6 +66,38 @@ public:
         res += cur_time + "\n";
         return res;
     }
+};
+
+bool starts(message m, std::string s){
+    std::string t = m.get_text();
+    if(t.length() < s.length()) 
+        return false;
+    for(int i = 0, l = s.length(); i  < l; i++)
+        if(s[i] != t[i])
+            return false;
+    
+    return true;
+}
+
+bool fits_time(std::string t0, std::string t1){
+    int time[2][6];
+    std::string tmp = "";
+    int cnt = 0;
+    for(int j = 0; j < 6; j++){
+        tmp = "";
+        while(!(t0[cnt] == '.' || t0[cnt] == ':'|| t0[cnt == ' '] || cnt == t0.size()))
+            tmp+=t0[cnt++];
+        time[0][6-j-1] = stoi(tmp);
+    }
+    cnt = 0;
+    for(int j = 0; j < 6; j++){
+        tmp = "";
+        while(!(t1[cnt] == '.' || t1[cnt] == ':'|| t1[cnt == ' ']) || cnt == t1.size())
+            tmp+=t1[cnt++];
+        time[1][6-j-1] = stoi(tmp);
+    }
+    for (int i = 0; i < 6; i++)
+        std::cout << time[0][i] << ":" << time[1][i] << std::endl;
 };
 
 class server{
@@ -117,7 +147,7 @@ public:
                 id[adr] = CNT_USERS++;
                 name.push_back(adr);
             }
-            m.get_message(id[auth],id[adr],txt,time);
+            m.set_message(id[auth],id[adr],txt,time);
             messages[i] = m;
         }
         in.close();
@@ -163,7 +193,7 @@ public:
                 m.set_adress(id[adr]);
             }
 
-            m.get_message(id[auth],id[adr],txt,time);
+            m.set_message(id[auth],id[adr],txt,time);
           //  std::cout << "!!!\n";
             messages[i] = m;
         }
@@ -207,7 +237,10 @@ public:
     }
 
     void print(int from = 0, int to = 0){
-        std::cout << "Messages:\n";
+        std::cout << "Messages";
+        std::cout << (from != 0 ? " from " + name[from] : "");
+        std::cout << (to != 0 ? " to " + name[to] : "");
+        std::cout << ":\n";
         if(from == 0 && to == 0){
             for(auto m : messages){
                 m.print(name[m.get_author()]);
@@ -219,10 +252,34 @@ public:
                     m.print(name[m.get_author()]);
             }
         }
+        std::cout << "---------------------------\n";
     }
 
     void print(std::string from, std::string to = "TOALL"){
         print(id[from],id[to]);
+    }
+    
+    void find_by_start(std::string start){
+        std::cout << "Messages startin with \"" << start << "\":\n";
+        for(auto m:messages){
+            if(starts(m,start)){
+                m.print(name[m.get_author()]);
+            }
+        }
+        std::cout << "---------------------------\n";
+    }
+
+    void find_by_type_mark(int type, double mark){
+
+    }
+
+    void find_by_author_time(std::string athr, std::string time){
+        std::cout << "All messages from " << athr;
+        std::cout << "that were send before " << time << " :\n";
+        for(auto m:messages){
+            if(athr == name[m.get_author()] && fits_time(time,m.get_time()))
+                m.print(name[m.get_author()]);
+        }
     }
 
     void add_message(message m){
@@ -249,7 +306,7 @@ public:
             names.insert(adress);
             name.push_back(adress);
         }
-        m.get_message(id[author],id[adress],Text);
+        m.set_message(id[author],id[adress],Text);
         add_message(m);
     }
 };
@@ -317,10 +374,15 @@ void demo() {
     S = *(new server());
     S.load();
     S.print();
-    S.new_message();
-    S.print("Admin", "Tester");
-    S.save();
-    // new_message.get_message(1,0,T);
+    S.print("Tester","Admin");
+    S.print("Admin");
+    S.find_by_start("I");
+
+ //   S.find_by_author_time("Freddy","11:10:10 28.04.2019");
+   // S.new_message();
+   // S.print("Admin", "Tester");
+   // S.save();
+    // new_message.set_message(1,0,T);
     //new_message.print(S.name[1]);
     //  S.add_message(new_message);
 
