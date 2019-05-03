@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <set>
+#include <cctype>
 
 
 std::string convert_month(int n);
@@ -16,6 +17,14 @@ private:
     std::string cur_time;
     int author_id = -2;
     int adress_id = -2;
+    char type = 'M';
+    /*
+     * M --- Regular message
+     * N --- News
+     * Q --- Question
+     * A --- Answer
+     * I --- Invitation
+     * */
 
 public:
     void set_text(std::string T){
@@ -24,6 +33,7 @@ public:
     std::string get_text(){
         return text;
     }
+
     void set_time(){
         time_t now = time(nullptr);
         tm *gmtm = gmtime(&now);
@@ -33,35 +43,48 @@ public:
     std::string get_time(){
         return cur_time;
     }
+
     void set_author(int cur_id){
         author_id = cur_id;
     }
     int get_author(){
         return author_id;
     }
+
     void set_adress(int adr){
         adress_id = adr;
     }
     int get_adress(){
         return adress_id;
     }
-    void set_message(int aut, int adr, std::string _text, std::string _time = "-1"){
-   //     std::cout << aut <<  adr << _text <<  _time  << "\n";
+
+    void set_type(int t){
+        type = t;
+    }
+    char get_type(){
+        return type;
+    }
+
+    void set_message(int aut, int adr, int typ, std::string _text, std::string _time = "-1"){
         set_text(_text);
         if(_time == "-1")
             set_time();
         else
             cur_time = _time;
+        set_type(typ);
         set_author(aut);
         set_adress(adr);
     }
+
     void print(const std::string &author_name){
-        std::cout << author_name << ": " << text << " :: " << cur_time << "\n";
+        std::cout <<"(" << type << ") " << author_name << ": " << text << " :: " << cur_time << "\n";
     }
+
     std::string to_string(std::string login_auth, std::string login_adr){
         std::string res = "";
         res += login_auth + "\n";
         res += login_adr + "\n";
+        res += type + "\n";
         res += text + "\n";
         res += cur_time + "\n";
         return res;
@@ -85,19 +108,28 @@ bool fits_time(std::string t0, std::string t1){
     int cnt = 0;
     for(int j = 0; j < 6; j++){
         tmp = "";
-        while(!(t0[cnt] == '.' || t0[cnt] == ':'|| t0[cnt == ' '] || cnt == t0.size()))
+        while(!(t0[cnt] == '.' || t0[cnt] == ':'|| t0[cnt] == ' ' || cnt == t0.size()))
             tmp+=t0[cnt++];
+        cnt++;
         time[0][6-j-1] = stoi(tmp);
     }
     cnt = 0;
     for(int j = 0; j < 6; j++){
         tmp = "";
-        while(!(t1[cnt] == '.' || t1[cnt] == ':'|| t1[cnt == ' ']) || cnt == t1.size())
+        while(!(t1[cnt] == '.' || t1[cnt] == ':'|| t1[cnt] == ' ') || cnt == t1.size())
             tmp+=t1[cnt++];
-        time[1][6-j-1] = stoi(tmp);
+        cnt++;
+        time[1][6-j-1] = std::stoi(tmp);
     }
-    for (int i = 0; i < 6; i++)
-        std::cout << time[0][i] << ":" << time[1][i] << std::endl;
+    std::swap(time[0][3],time[0][5]);
+    std::swap(time[1][3],time[1][5]);
+    for (int i = 0; i < 6; i++){
+        if(time[0][i] < time[1][i])
+            return false;
+        if(time[0][i] > time[1][i])
+            return true;
+    }
+        return true;
 };
 
 class server{
@@ -128,7 +160,8 @@ public:
         message m;
         clear_all();
         std::string auth, adr, txt, time;
-/*       std::ifstream in("backup.txt");
+        char typ = 'M';
+       std::ifstream in("backup.txt");
         in >> CNT_MES;
         messages.resize(CNT_MES);
         getline(in,auth,'\n');
@@ -147,12 +180,12 @@ public:
                 id[adr] = CNT_USERS++;
                 name.push_back(adr);
             }
-            m.set_message(id[auth],id[adr],txt,time);
+            m.set_message(id[auth],id[adr],typ,txt,time);
             messages[i] = m;
         }
         in.close();
 
-   */     std::ifstream bin("binary_backup.txt", std::ios::binary);
+   /*     std::ifstream bin("binary_backup.txt", std::ios::binary);
         bin.read((char*)&CNT_MES, sizeof(int));
 
         messages.resize(CNT_MES);
@@ -193,13 +226,13 @@ public:
                 m.set_adress(id[adr]);
             }
 
-            m.set_message(id[auth],id[adr],txt,time);
+            m.set_message(id[auth],id[adr],typ,txt,time);
           //  std::cout << "!!!\n";
             messages[i] = m;
         }
         bin.close();
         std ::cout << "Server loaded from binary!\n";
-    }
+  */  }
 
     void save() {
         std::ofstream out("backup.txt");
@@ -230,6 +263,8 @@ public:
             name_size = m.get_time().size();
             bout.write((char*)&name_size, sizeof(int));
             bout.write(m.get_time().c_str(),name_size);
+
+            bout.write((char*)m.get_type(),1);
         }
 
         bout.close();
@@ -275,7 +310,7 @@ public:
 
     void find_by_author_time(std::string athr, std::string time){
         std::cout << "All messages from " << athr;
-        std::cout << "that were send before " << time << " :\n";
+        std::cout << " that were send before " << time << " :\n";
         for(auto m:messages){
             if(athr == name[m.get_author()] && fits_time(time,m.get_time()))
                 m.print(name[m.get_author()]);
@@ -306,7 +341,7 @@ public:
             names.insert(adress);
             name.push_back(adress);
         }
-        m.set_message(id[author],id[adress],Text);
+        m.set_message(id[author],id[adress],'M', Text);
         add_message(m);
     }
 };
@@ -378,10 +413,10 @@ void demo() {
     S.print("Admin");
     S.find_by_start("I");
 
- //   S.find_by_author_time("Freddy","11:10:10 28.04.2019");
+    S.find_by_author_time("Freddy","11:10:10 28.04.2019");
    // S.new_message();
    // S.print("Admin", "Tester");
-   // S.save();
+    S.save();
     // new_message.set_message(1,0,T);
     //new_message.print(S.name[1]);
     //  S.add_message(new_message);
