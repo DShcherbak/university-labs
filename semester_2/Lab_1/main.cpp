@@ -17,7 +17,8 @@ private:
     std::string cur_time;
     int author_id = -2;
     int adress_id = -2;
-    char type = 'M';
+    char message_type = 'M';
+    double mark = 0.0;
     /*
      * M --- Regular message
      * N --- News
@@ -58,33 +59,42 @@ public:
         return adress_id;
     }
 
-    void set_type(int t){
-        type = t;
+    void set_type(char t){
+        message_type = t;
     }
     char get_type(){
-        return type;
+        return message_type;
     }
 
-    void set_message(int aut, int adr, int typ, std::string _text, std::string _time = "-1"){
-        set_text(_text);
+    void set_message(int aut, int adr, char typ, double mrk, std::string txt, std::string _time = "-1"){
+        text = txt;
         if(_time == "-1")
             set_time();
         else
             cur_time = _time;
-        set_type(typ);
-        set_author(aut);
-        set_adress(adr);
+        message_type = typ;
+        author_id = aut;
+        adress_id = adr;
+        mark = mrk;
+    }
+    double get_mark(){
+        return mark;
     }
 
-    void print(const std::string &author_name){
-        std::cout <<"(" << type << ") " << author_name << ": " << text << " :: " << cur_time << "\n";
+    void print(const std::string &author_name, const std::string &adress_name){
+        std::cout <<"[" << mark << "]" << "\n";
+        std::cout <<"(" << message_type << ") " << author_name << " -> " << adress_name << ": " << text << " :: " << cur_time << "\n";
     }
 
     std::string to_string(std::string login_auth, std::string login_adr){
         std::string res = "";
         res += login_auth + "\n";
         res += login_adr + "\n";
-        res += type + "\n";
+        res += message_type;
+        res += "\n";
+        int mrk = mark*1000;
+        res += std::to_string(mrk);
+        res += "\n";
         res += text + "\n";
         res += cur_time + "\n";
         return res;
@@ -130,7 +140,24 @@ bool fits_time(std::string t0, std::string t1){
             return true;
     }
         return true;
-};
+}
+
+double spam_mark(std::string s){
+    double spam  = 0.0;
+    for(int i = 2, l = s.length(); i < l; i++){
+        if(s[i] == s[i-1]){
+            spam += 1.0/(l-1);
+            //std::cout << spam << std::endl;
+        }
+        if(s[i] == s[i-2]){
+            spam += 1.0/(l-1);
+            //std::cout << spam << std::endl;
+        }
+    }
+
+
+    return spam;
+}
 
 class server{
 private:
@@ -141,6 +168,7 @@ public:
     std::vector <std::string> name;
     std::map <std::string, int> id;
     std::set <std::string> names;
+    std::set <char> types = {'M','N','Q','A', 'I'};
 
     void clear_all(){
         names.clear();
@@ -160,79 +188,100 @@ public:
         message m;
         clear_all();
         std::string auth, adr, txt, time;
-        char typ = 'M';
-       std::ifstream in("backup.txt");
-        in >> CNT_MES;
-        messages.resize(CNT_MES);
-        getline(in,auth,'\n');
-        for(int i = 0; i <CNT_MES; i++){
-            getline(in, auth, '\n');
-            getline(in, adr, '\n');
-            getline(in, txt, '\n');
-            getline(in, time, '\n');
-            if(names.count(auth) == 0){
-                names.insert(auth);
-                id[auth] = CNT_USERS++;
-                name.push_back(auth);
+        double mark;
+        char typ;
+        bool binary = 1;
+        if(binary){
+            std::ifstream bin("binary_backup.txt", std::ios::binary);
+            bin.read((char*)&CNT_MES, sizeof(int));
+
+            messages.resize(CNT_MES);
+            int name_size;
+            char temp_string[100];
+            std::cout << CNT_MES << std::endl;
+            for(int i = 0; i <CNT_MES; i++){
+                bin.read((char*)&name_size, sizeof(int));
+                bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+                temp_string[name_size] = '\0';
+                auth = temp_string;
+
+                bin.read((char*)&name_size, sizeof(int));
+                bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+                temp_string[name_size] = '\0';
+                adr = temp_string;
+
+                bin.read(reinterpret_cast<char *>(&temp_string),1);
+                typ = temp_string[0];
+
+                bin.read((char*)&name_size, sizeof(int));
+                mark = name_size/1000.0;
+
+                bin.read((char*)&name_size, sizeof(int));
+                bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+                temp_string[name_size] = '\0';
+                txt = temp_string;
+
+
+                bin.read((char*)&name_size, sizeof(int));
+                bin.read(reinterpret_cast<char *>(&temp_string),name_size);
+                temp_string[name_size] = '\0';
+                time = temp_string;
+
+                if(names.count(auth) == 0){
+                    names.insert(auth);
+                    id[auth] = CNT_USERS++;
+                    name.push_back(auth);
+                    m.set_author(id[auth]);
+                }
+                if(names.count(adr) == 0){
+                    names.insert(adr);
+                    id[adr] = CNT_USERS++;
+                    name.push_back(adr);
+                    m.set_adress(id[adr]);
+                }
+
+                m.set_message(id[auth],id[adr],typ,mark,txt,time);
+                messages[i] = m;
             }
-            if(names.count(adr) == 0){
-                names.insert(adr);
-                id[adr] = CNT_USERS++;
-                name.push_back(adr);
-            }
-            m.set_message(id[auth],id[adr],typ,txt,time);
-            messages[i] = m;
+            bin.close();
+            std ::cout << "Server loaded from binary!\n";
         }
-        in.close();
+        else{
+            std::ifstream in("backup.txt");
+            in >> CNT_MES;
+            messages.resize(CNT_MES);
+            getline(in,auth,'\n');
+            int marking;
+            for(int i = 0; i <CNT_MES; i++){
+                getline(in, auth, '\n');
+                getline(in, adr, '\n');
+                getline(in,txt,'\n');
+                typ = txt[0];
+                in >> marking;
+                mark = marking/1000.0;
+                std::cout << "Cool:" << mark << std::endl;
+                getline(in,txt,'\n');
+                getline(in, txt, '\n');
+                getline(in, time, '\n');
+                if(names.count(auth) == 0){
+                    names.insert(auth);
+                    id[auth] = CNT_USERS++;
+                    name.push_back(auth);
+                }
+                if(names.count(adr) == 0){
+                    names.insert(adr);
+                    id[adr] = CNT_USERS++;
+                    name.push_back(adr);
+                }
+                m.set_message(id[auth],id[adr],typ,mark,txt,time);
+                messages[i] = m;
 
-   /*     std::ifstream bin("binary_backup.txt", std::ios::binary);
-        bin.read((char*)&CNT_MES, sizeof(int));
-
-        messages.resize(CNT_MES);
-       int name_size;
-       char temp_string[100];
-        std::cout << CNT_MES << std::endl;
-        for(int i = 0; i <CNT_MES; i++){
-            bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
-            temp_string[name_size] = '\0';
-            auth = temp_string;
-
-            bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
-            temp_string[name_size] = '\0';
-            adr = temp_string;
-
-            bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
-            temp_string[name_size] = '\0';
-            txt = temp_string;
-
-            bin.read((char*)&name_size, sizeof(int));
-            bin.read(reinterpret_cast<char *>(&temp_string),name_size);
-            temp_string[name_size] = '\0';
-            time = temp_string;
-
-            if(names.count(auth) == 0){
-                names.insert(auth);
-                id[auth] = CNT_USERS++;
-                name.push_back(auth);
-                m.set_author(id[auth]);
             }
-            if(names.count(adr) == 0){
-                names.insert(adr);
-                id[adr] = CNT_USERS++;
-                name.push_back(adr);
-                m.set_adress(id[adr]);
-            }
+            in.close();
 
-            m.set_message(id[auth],id[adr],typ,txt,time);
-          //  std::cout << "!!!\n";
-            messages[i] = m;
         }
-        bin.close();
-        std ::cout << "Server loaded from binary!\n";
-  */  }
+
+    }
 
     void save() {
         std::ofstream out("backup.txt");
@@ -245,7 +294,8 @@ public:
         std::string sname;
         std::ofstream bout("binary_backup.txt", std::ios::binary);
         int cnt_mes = messages.size();
-        int name_size;
+        int name_size; int marking;
+        char typ[1];
         bout.write((char*)&cnt_mes, sizeof(int));
         for(auto m : messages){
             name_size = name[m.get_author()].size();
@@ -256,6 +306,12 @@ public:
             bout.write((char*)&name_size, sizeof(int));
             bout.write(name[m.get_adress()].c_str(),name_size);
 
+            typ[0] = m.get_type();
+            bout.write((char*)typ,1);
+
+            marking = m.get_mark()*1000;
+            bout.write((char*)&marking, sizeof(int));
+
             name_size = m.get_text().size();
             bout.write((char*)&name_size, sizeof(int));
             bout.write(m.get_text().c_str(),name_size);
@@ -264,7 +320,7 @@ public:
             bout.write((char*)&name_size, sizeof(int));
             bout.write(m.get_time().c_str(),name_size);
 
-            bout.write((char*)m.get_type(),1);
+
         }
 
         bout.close();
@@ -278,13 +334,13 @@ public:
         std::cout << ":\n";
         if(from == 0 && to == 0){
             for(auto m : messages){
-                m.print(name[m.get_author()]);
+                m.print(name[m.get_author()],name[m.get_adress()]);
             }
         }
         else{
             for(auto m : messages){
                 if((from == m.get_author() || from == 0) && (to == m.get_adress() || to == 0))
-                    m.print(name[m.get_author()]);
+                    m.print(name[m.get_author()],name[m.get_adress()]);
             }
         }
         std::cout << "---------------------------\n";
@@ -298,13 +354,13 @@ public:
         std::cout << "Messages startin with \"" << start << "\":\n";
         for(auto m:messages){
             if(starts(m,start)){
-                m.print(name[m.get_author()]);
+                m.print(name[m.get_author()],name[m.get_adress()]);
             }
         }
         std::cout << "---------------------------\n";
     }
 
-    void find_by_type_mark(int type, double mark){
+    void find_by_type_mark(int typ, double mark){
 
     }
 
@@ -313,7 +369,7 @@ public:
         std::cout << " that were send before " << time << " :\n";
         for(auto m:messages){
             if(athr == name[m.get_author()] && fits_time(time,m.get_time()))
-                m.print(name[m.get_author()]);
+                m.print(name[m.get_author()],name[m.get_adress()]);
         }
     }
 
@@ -322,11 +378,20 @@ public:
     }
 
     void new_message(){
-        std::string author, adress, Text;
+        std::string author, adress, type, Text;
         std::cout << "Enter your name:\n";
         getline(std::cin, author);
         std::cout << "Whom is your message for:\n";
         getline(std::cin, adress);
+        std::cout << "What type is your message (for others better to understand)";
+        std::cout << "You can choose between:\n";
+        std::cout << "\"M\" - regular message\n";
+        std::cout << "\"N\" - news\n";
+        std::cout << "\"Q\" - question\n";
+        std::cout << "\"A\" - answer\n";
+        std::cout << "\"I\" - invitation\n";
+        std::cout << "Your choise (please, uppercase): ";
+        getline(std::cin, type);
         std::cout << "Enter your message:\n";
         getline(std::cin, Text);
         message m;
@@ -341,24 +406,17 @@ public:
             names.insert(adress);
             name.push_back(adress);
         }
-        m.set_message(id[author],id[adress],'M', Text);
+        m.set_message(id[author],id[adress],(types.count(type[0]) == 0 ? 'M' : type[0]),spam_mark(Text), Text);
         add_message(m);
     }
 };
 
 std::string convert_month(int n){
-    if (n < 9)
-        return ('0' + std::to_string(n+1));
-    else
-        return std::to_string(n+1);
+    return n < 9 ? '0' + std::to_string(n + 1) : std::to_string(n + 1);
 }
 
 std::string convert_time(tm* t){
-    std::string current_time = "";
-    current_time += std::to_string((*t).tm_hour+3) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec);
-    current_time += " ";
-    current_time += std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
-    return current_time;
+    return std::to_string((*t).tm_hour+3) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec) + " " + std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
 }
 
 /*
@@ -407,6 +465,7 @@ void interactive(){
 void demo() {
     server S;
     S = *(new server());
+    double t = spam_mark("aaaaaaab");
     S.load();
     S.print();
     S.print("Tester","Admin");
@@ -414,7 +473,7 @@ void demo() {
     S.find_by_start("I");
 
     S.find_by_author_time("Freddy","11:10:10 28.04.2019");
-   // S.new_message();
+    S.new_message();
    // S.print("Admin", "Tester");
     S.save();
     // new_message.set_message(1,0,T);
