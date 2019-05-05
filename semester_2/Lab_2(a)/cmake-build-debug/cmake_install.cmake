@@ -1,4 +1,4 @@
-# Install script for directory: /home/sadoffnick/CLionProjects/Universoty_lab2
+# Install script for directory: /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_2(a)
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/sadoffnick/CLionProjects/Universoty_lab2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_2(a)/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

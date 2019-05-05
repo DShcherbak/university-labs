@@ -304,8 +304,8 @@ void demo(){
 void benchmark() {
 
     std::cout << "Rewriting \"benchmark.txt\"...\n";
-  //  freopen("benchmark.txt","w",stdout);
-    std::cout << "Results for list:";
+    freopen("benchmark.txt","w",stdout);
+    std::cout << "Results for list:\n";
     List* lst = create_empty_list();
     double diff = 0.0;
         long long cnt_for_sec = 1;
@@ -336,7 +336,7 @@ void benchmark() {
             std::cout << cnt_for_sec << ":" << diff << "\n";
         }
 
-    std::cout << "Results for std::vector:";
+    std::cout << "Results for std::vector:\n";
     std::vector <element*> vec = create_empty_vector();
     diff = 0.0;
     cnt_for_sec = 1;
@@ -366,7 +366,7 @@ void benchmark() {
         std::cout << cnt_for_sec << ":" << diff << "\n";
     }
 
-    std::cout << "Results for array:";
+    std::cout << "Results for array:\n";
     element** arr = create_empty_array();
     diff = 0.0;
     cnt_for_sec = 1;
