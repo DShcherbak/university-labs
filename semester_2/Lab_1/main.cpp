@@ -28,9 +28,6 @@ private:
      * */
 
 public:
-    int get_ID(){
-        return ID;
-    }
 
     void set_text(std::string T){
         text = T;
@@ -392,6 +389,7 @@ public:
 
     void new_message(){
         std::string author, adress, type, Text;
+        getline(std::cin, author); // skip
         std::cout << "Enter your name:\n";
         getline(std::cin, author);
         std::cout << "Whom is your message for:\n";
@@ -422,6 +420,59 @@ public:
         m.set_message(id[author],id[adress],(types.count(type[0]) == 0 ? 'M' : type[0]),spam_mark(Text), Text);
         add_message(m);
     }
+
+    void find_messages(){
+        char key, typ;
+        double mrk;
+        std::string a,t,t1;
+        std::cout << "Please, choose searching type:\n";
+        std::cout << "A - search by starting symbols\n";
+        std::cout << "B - search by type and spam system marking\n";
+        std::cout << "C - search by author and time period\n";
+        std::cout << "D - search by author and/or receiver\n";
+        std::cout << "Your choise (please, uppercase): ";
+        std::cin >> key;
+        switch(key){
+            case 'A':
+                std::cout << "Starting symbols:";
+                getline(std::cin,t);//skip \n
+                getline(std::cin,t);
+                find_by_start(t);
+                break;
+            case 'B':
+                std::cout << "Enter type:";
+                std::cin >> typ;
+                std::cout << "Enter mark:";
+                std::cin >> mrk;
+                find_by_type_mark(typ,mrk);
+                break;
+            case 'C':
+                std::cout << "Enter author:";
+                getline(std::cin,a); // skip \n
+                getline(std::cin,a);
+                std::cout << "Enter start time (format reqiured : HOURS:MINUTES:SECONDS DAY.MONTH.YEAR):";
+                getline(std::cin,t);
+                std::cout << "Enter end time (format reqiured : HOURS:MINUTES:SECONDS DAY.MONTH.YEAR):";
+                getline(std::cin,t1);
+                find_by_author_time(a,t,t1);
+                break;
+            case 'D':
+                std::cout << "Enter author:";
+                getline(std::cin,a); // skip \n
+                getline(std::cin,a);
+                std::cout << "Enter adressant (possibly left empty):";
+                getline(std::cin,t);
+                if(t == "\n" || t == "")
+                    print(a);
+                else
+                    print(a,t);
+                break;
+            default:
+                std::cout << "No such command.\n";
+                break;
+
+        }
+    }
 };
 
 std::string convert_month(int n){
@@ -432,7 +483,7 @@ std::string convert_time(tm* t){
     return std::to_string((*t).tm_hour+3) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec) + " " + std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
 }
 
-/*
+
 void interactive(){
     char key; int ID; std::string value;
     server S;
@@ -443,7 +494,7 @@ void interactive(){
         std::cout << "Enter \"n\" to add a new message\n";
         std::cout << "Enter \"s\" to save current state to file\n";
         std::cout << "Enter \"l\" to load messages from file (be careful, all unsaved changes will be lost!)\n";
-        std::cout << "Enter \"p\" to print messages\n";
+        std::cout << "Enter \"p\" to print all messages\n";
         std::cout << "Enter \"f\" to find some messages\n";
         std::cout << "Enter \"q\" to quit.\n";
         std::cin >> key;
@@ -455,25 +506,28 @@ void interactive(){
             case 'n':
                 S.new_message();
                 break;
-            case 'd':
-                delete_element_by_id(root,ID);
-                break;
-            case 'g':
-                get_element_by_id(root,ID);
-                break;
             case 's':
-                set_element(root,value, ID);
+                S.save();
+                break;
+            case 'l':
+                S.load();
                 break;
             case 'p':
-                print_cycled_list(root,ID);
+                S.print();
                 break;
+            case 'f':
+                S.find_messages();
+                break;
+            case 'q':
+                S.load();
+                return;
             default:
                 std::cout << "No such command.\n";
                 break;
         }
     }
 }
-*/
+
 
 void demo() {
     server S;
@@ -486,7 +540,7 @@ void demo() {
 
     S.find_by_start("I");
     S.find_by_author_time("Freddy","00:00:00 27.04.2019","11:10:10 28.04.2019");
-    S.find_by_type_mark('M', 0.2);
+    S.find_by_type_mark('M', 0.1);
 
     S.new_message();
     S.save();
@@ -503,7 +557,7 @@ void benchmark() {
 
 
 int main() {
-    int key = 2;
+    int key;
     while(true) {
         std::cout << "MAIN MENU\n";
         std::cout << "Please, choose your mode:\n";
@@ -511,10 +565,10 @@ int main() {
         std::cout << "Press 2 for demonstration mode.\n";
         std::cout << "Press 3 for benchmark mode.\n";
         std::cout << "Press 4 to exit the program\n";
-     //   std::cin >> key;
+        std::cin >> key;
         switch(key){
             case 1:
-//                interactive();
+                interactive();
                 return 0;
             case 2:
                 demo();
