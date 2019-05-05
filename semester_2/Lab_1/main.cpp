@@ -28,6 +28,10 @@ private:
      * */
 
 public:
+    int get_ID(){
+        return ID;
+    }
+
     void set_text(std::string T){
         text = T;
     }
@@ -81,8 +85,9 @@ public:
         return mark;
     }
 
-    void print(const std::string &author_name, const std::string &adress_name){
-        std::cout <<"[" << mark << "]" << "\n";
+    void print(const std::string &author_name, const std::string &adress_name, bool mrk = false){
+        if(mrk)
+            std::cout <<"[" << mark << "]" << "\n";
         std::cout <<"(" << message_type << ") " << author_name << " -> " << adress_name << ": " << text << " :: " << cur_time << "\n";
     }
 
@@ -144,13 +149,14 @@ bool fits_time(std::string t0, std::string t1){
 
 double spam_mark(std::string s){
     double spam  = 0.0;
-    for(int i = 2, l = s.length(); i < l; i++){
+    int l = 2*(s.length()-2);
+    for(int i = 2, k = s.length(); i < k; i++){
         if(s[i] == s[i-1]){
-            spam += 1.0/(l-1);
+            spam += 1.0/l;
             //std::cout << spam << std::endl;
         }
         if(s[i] == s[i-2]){
-            spam += 1.0/(l-1);
+            spam += 1.0/l;
             //std::cout << spam << std::endl;
         }
     }
@@ -240,7 +246,7 @@ public:
                     m.set_adress(id[adr]);
                 }
 
-                m.set_message(id[auth],id[adr],typ,mark,txt,time);
+                m.set_message(id[auth],id[adr],typ,spam_mark(txt),txt,time);
                 messages[i] = m;
             }
             bin.close();
@@ -259,7 +265,6 @@ public:
                 typ = txt[0];
                 in >> marking;
                 mark = marking/1000.0;
-                std::cout << "Cool:" << mark << std::endl;
                 getline(in,txt,'\n');
                 getline(in, txt, '\n');
                 getline(in, time, '\n');
@@ -360,17 +365,25 @@ public:
         std::cout << "---------------------------\n";
     }
 
-    void find_by_type_mark(int typ, double mark){
-
+    void find_by_type_mark(char typ, double mark){
+        std::cout << "Messages of type \'" << typ << "\', with mark not less than " << mark << ":\n";
+        for(auto m: messages){
+            if(m.get_type() == typ && m.get_mark() >= mark){
+                m.print(name[m.get_author()],name[m.get_adress()],true);
+            }
+        }
+        std::cout << "---------------------------\n";
     }
 
-    void find_by_author_time(std::string athr, std::string time){
+    void find_by_author_time(std::string athr, std::string time_st, std::string time_end){
         std::cout << "All messages from " << athr;
-        std::cout << " that were send before " << time << " :\n";
+        std::cout << " that were send between " << time_st;
+        std::cout << " and " << time_end << " :\n";
         for(auto m:messages){
-            if(athr == name[m.get_author()] && fits_time(time,m.get_time()))
+            if(athr == name[m.get_author()] && fits_time(m.get_time(),time_st) && fits_time(time_end,m.get_time()))
                 m.print(name[m.get_author()],name[m.get_adress()]);
         }
+        std::cout << "---------------------------\n";
     }
 
     void add_message(message m){
@@ -470,15 +483,13 @@ void demo() {
     S.print();
     S.print("Tester","Admin");
     S.print("Admin");
-    S.find_by_start("I");
 
-    S.find_by_author_time("Freddy","11:10:10 28.04.2019");
+    S.find_by_start("I");
+    S.find_by_author_time("Freddy","00:00:00 27.04.2019","11:10:10 28.04.2019");
+    S.find_by_type_mark('M', 0.2);
+
     S.new_message();
-   // S.print("Admin", "Tester");
     S.save();
-    // new_message.set_message(1,0,T);
-    //new_message.print(S.name[1]);
-    //  S.add_message(new_message);
 
 
 }
