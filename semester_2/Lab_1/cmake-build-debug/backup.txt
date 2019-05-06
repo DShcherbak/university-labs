@@ -1,0 +1,97 @@
+16
+Admin
+Tester
+M
+66
+Can you here me?
+11:31:30 26.04.2019
+Tester
+Admin
+M
+55
+Yes. Your commands?
+11:31:43 26.04.2019
+Admin
+Tester
+M
+0
+Enemy at 10 o'clock.
+11:5:25 26.04.2019
+Tester
+Admin
+M
+52
+Done. See you in the office in an hour.
+15:18:43 26.04.2019
+Admin
+Tester
+M
+142
+See you.
+15:19:38 26.04.2019
+Admin
+J.
+M
+80
+We'll meet him in an hour.
+15:33:49 26.04.2019
+J.
+Admin
+M
+31
+Great. Make sure he will be safe.
+15:34:46 26.04.2019
+Freddy
+Mom
+M
+166
+Mama, i
+16:51:29 26.04.2019
+Freddy
+Mom
+M
+125
+I've killed a man
+8:20:58 28.04.2019
+Mom
+Freddy
+M
+142
+How did that happened?
+8:47:55 28.04.2019
+Freddy
+Mom
+M
+66
+I've put a gun against his head
+8:48:47 28.04.2019
+Freddy
+Mom
+M
+151
+Pull the trigger, now he's dead...
+11:19:15 28.04.2019
+Mom
+Freddy
+M
+0
+Oh, my gosh!
+17:22:0 28.04.2019
+First
+Second
+M
+1000
+...
+18:11:25 28.04.2019
+Second
+First
+M
+0
+I know, bro
+19:11:3 1.05.2019
+Spammer
+J.
+Q
+385
+ahahaaaahhahaahahaahahahha lallalala?
+3:20:30 6.05.2019
