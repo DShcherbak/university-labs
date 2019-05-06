@@ -114,6 +114,10 @@ bool starts(message m, std::string s){
     return true;
 }
 
+std::string random_text(){
+    return "foo bar bar foo bar";
+}
+
 bool fits_time(std::string t0, std::string t1){
     int time[2][6];
     std::string tmp = "";
@@ -180,9 +184,9 @@ public:
         messages.clear();
         CNT_USERS = 2;
         names.insert("Admin");
-        id["TOALL"] = 0;
+        id["ALL"] = 0;
         id["Admin"] = 1;
-        name.push_back("TOALL");
+        name.push_back("ALL");
         name.push_back("Admin");
     }
 
@@ -193,7 +197,7 @@ public:
         std::string auth, adr, txt, time;
         double mark;
         char typ;
-        bool binary = 1;
+        bool binary = 0;
         if(binary){
             std::ifstream bin("binary_backup.txt", std::ios::binary);
             bin.read((char*)&CNT_MES, sizeof(int));
@@ -329,6 +333,64 @@ public:
         std ::cout << "All binary-saved!)\n";
     }
 
+    std::pair <double,double> save(int repeat, bool only_binary = false){
+        auto bench_clock = clock();
+        double diff, bin_diff;
+        if(!only_binary){
+            std::ofstream out("bench_backup.txt");
+            for(int i = 0; i < repeat; i++) {
+                out << messages.size() << std::endl;
+                for (auto m : messages)
+                    out << m.to_string(name[m.get_author()], name[m.get_adress()]);
+            }
+            out.close();
+            diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        }
+        else
+            diff = -1;
+
+        std::string sname;
+        bench_clock = clock();
+        int cnt_mes = messages.size();
+        int name_size; int marking;
+        char typ[1];
+
+        std::ofstream bout("bench_binary_backup.txt", std::ios::binary);
+        for(int i = 0; i < repeat; i++){
+            bout.write((char*)&cnt_mes, sizeof(int));
+            for(auto m : messages){
+                name_size = name[m.get_author()].size();
+                bout.write((char*)&name_size, sizeof(int));
+                bout.write(name[m.get_author()].c_str(),name_size);
+
+                name_size = name[m.get_adress()].size();
+                bout.write((char*)&name_size, sizeof(int));
+                bout.write(name[m.get_adress()].c_str(),name_size);
+
+                typ[0] = m.get_type();
+                bout.write((char*)typ,1);
+
+                marking = m.get_mark()*1000;
+                bout.write((char*)&marking, sizeof(int));
+
+                name_size = m.get_text().size();
+                bout.write((char*)&name_size, sizeof(int));
+                bout.write(m.get_text().c_str(),name_size);
+
+                name_size = m.get_time().size();
+                bout.write((char*)&name_size, sizeof(int));
+                bout.write(m.get_time().c_str(),name_size);
+
+
+            }
+
+        }
+        bout.close();
+        bin_diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        return {diff,bin_diff};
+    }
+
+
     void print(int from = 0, int to = 0){
         std::cout << "Messages";
         std::cout << (from != 0 ? " from " + name[from] : "");
@@ -348,7 +410,7 @@ public:
         std::cout << "---------------------------\n";
     }
 
-    void print(std::string from, std::string to = "TOALL"){
+    void print(std::string from, std::string to = "ALL"){
         print(id[from],id[to]);
     }
     
@@ -473,6 +535,22 @@ public:
 
         }
     }
+
+    void new_random_message(int i){
+        std::string author, adress, Text;
+        author = "a" + std::to_string(CNT_USERS);
+        adress= "a" + std::to_string(CNT_USERS+1);
+        Text = random_text();
+        id[author] = CNT_USERS++;
+        names.insert(author);
+        name.push_back(author);
+        id[adress] = CNT_USERS++;
+        names.insert(adress);
+        name.push_back(adress);
+        message m;
+        m.set_message(id[author],id[adress],'M',spam_mark(Text),Text);
+        messages.push_back(m);
+    }
 };
 
 std::string convert_month(int n){
@@ -549,9 +627,85 @@ void demo() {
 }
 
 void benchmark() {
-
     std::cout << "Rewriting \"benchmark.txt\"...\n";
-    //  freopen("benchmark.txt","w",stdout);
+    freopen("benchmark.txt","w",stdout);
+    std::cout << "N of messages --- time (array) --- time (file) --- time(binary file)\n";
+    server S;
+    double diff = 0.0, diff_save, diff_bin_save;
+    long long cnt_for_sec = 1;
+    auto bench_clock = clock();
+
+    while(diff < 1) {
+        cnt_for_sec = cnt_for_sec*10;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec; i++) {
+            S.new_random_message(i);
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        std::pair <double,double> t = S.save(true);
+        diff_save = t.first;
+        diff_bin_save = t.second;
+        std::cout.setf(std::ios::left);
+        std::cout.width(18);
+        std::cout << cnt_for_sec;
+        std::cout.width(17);
+        std::cout << diff;
+        std::cout.width(16);
+        std::cout << diff_save;
+        std::cout.width(15);
+        std::cout << diff_bin_save << "\n";
+    }
+    while(diff < 10) {
+        cnt_for_sec = cnt_for_sec<<1;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec; i++) {
+            S.new_random_message(i);
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        std::pair <double,double> t = S.save(1);
+        diff_save = t.first;
+        diff_bin_save = t.second;
+        std::cout.setf(std::ios::left);
+        std::cout.width(18);
+        std::cout << cnt_for_sec;
+        std::cout.width(17);
+        std::cout << diff;
+        std::cout.width(16);
+        std::cout << diff_save;
+        std::cout.width(15);
+        std::cout << diff_bin_save << "\n";
+    }
+    int repeat = 1;
+    while(diff_save < 10){
+        repeat = repeat << 1;
+        std::pair <double,double> t = S.save(repeat);
+        diff_save = t.first;
+        diff_bin_save = t.second;
+        std::cout.setf(std::ios::left);
+        std::cout.width(18);
+        std::cout << cnt_for_sec*repeat;
+        std::cout.width(17);
+        std::cout << ".....";
+        std::cout.width(16);
+        std::cout << diff_save;
+        std::cout.width(15);
+        std::cout << diff_bin_save << "\n";
+    }
+    while(diff_bin_save < 10){
+        repeat = repeat << 1;
+        std::pair <double,double> t = S.save(repeat,true);
+        diff_save = t.first;
+        diff_bin_save = t.second;
+        std::cout.setf(std::ios::left);
+        std::cout.width(18);
+        std::cout << cnt_for_sec*repeat;
+        std::cout.width(17);
+        std::cout << ".....";
+        std::cout.width(16);
+        std::cout << ".....";
+        std::cout.width(15);
+        std::cout << diff_bin_save << "\n";
+    }
 
 }
 
