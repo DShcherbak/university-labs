@@ -59,10 +59,10 @@ RM = /snap/clion/69/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1
+CMAKE_SOURCE_DIR = /home/sadoffnick/Univercity_Labs/semester_2/Lab_1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug
+CMAKE_BINARY_DIR = /home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug
 
 #=============================================================================
 # Target rules for target CMakeFiles/Lab1.dir
@@ -71,7 +71,7 @@ CMAKE_BINARY_DIR = /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univerci
 CMakeFiles/Lab1.dir/all:
 	$(MAKE) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/depend
 	$(MAKE) -f CMakeFiles/Lab1.dir/build.make CMakeFiles/Lab1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target Lab1"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target Lab1"
 .PHONY : CMakeFiles/Lab1.dir/all
 
 # Include target in all.
@@ -81,9 +81,9 @@ all: CMakeFiles/Lab1.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Lab1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/Lab1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/Lab1.dir/rule
 
 # Convenience name for target.

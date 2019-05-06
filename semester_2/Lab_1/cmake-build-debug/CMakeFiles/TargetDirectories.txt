@@ -1,3 +1,3 @@
-/home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/Lab1.dir
-/home/sadoffnick/CLionProjects/Univercity_Labs_Local/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/Lab1.dir
+/home/sadoffnick/Univercity_Labs/semester_2/Lab_1/cmake-build-debug/CMakeFiles/edit_cache.dir

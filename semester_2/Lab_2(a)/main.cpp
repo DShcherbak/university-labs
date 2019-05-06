@@ -312,6 +312,15 @@ void benchmark() {
         auto bench_clock = clock();
 
        while(diff < 2) {
+            cnt_for_sec = cnt_for_sec*10;
+            bench_clock = clock();
+            for (int i = 0; i < cnt_for_sec; i++) {
+                add_element_after_number(lst, random_IP());
+            }
+            diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+            std::cout << cnt_for_sec << ":" << diff << "\n";
+        }
+       while(diff < 10) {
             cnt_for_sec = cnt_for_sec<<1;
             bench_clock = clock();
             for (int i = 0; i < cnt_for_sec; i++) {
@@ -324,6 +333,18 @@ void benchmark() {
         cnt_for_sec = 1;
         diff=  0;
         while(diff < 2 && size_of_list(lst) > 0) {
+            cnt_for_sec = cnt_for_sec*10;
+            bench_clock = clock();
+            for (int i = 0; i < cnt_for_sec; i++) {
+                delete_element_by_id(lst, rand() %(size_of_list(lst)));
+            }
+            diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+            for (int i = 0; i < cnt_for_sec; i++) {
+                add_element_after_number(lst, random_IP());
+            }
+            std::cout << cnt_for_sec << ":" << diff << "\n";
+        }
+        while(diff < 10 && size_of_list(lst) > 0) {
             cnt_for_sec = cnt_for_sec<<1;
             bench_clock = clock();
             for (int i = 0; i < cnt_for_sec; i++) {
@@ -342,6 +363,15 @@ void benchmark() {
     cnt_for_sec = 1;
 
     while(diff < 2) {
+        cnt_for_sec = cnt_for_sec*10;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec; i++) {
+            add_element_after_number(vec, random_IP());
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        std::cout << cnt_for_sec << ":" << diff << "\n";
+    }
+    while(diff < 10) {
         cnt_for_sec = cnt_for_sec<<1;
         bench_clock = clock();
         for (int i = 0; i < cnt_for_sec; i++) {
@@ -354,6 +384,18 @@ void benchmark() {
     cnt_for_sec = 1;
     diff=  0;
     while(diff < 2 && size_of_list(vec) > 0) {
+        cnt_for_sec = cnt_for_sec*10;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec; i++) {
+            delete_element_by_id(vec, 1);
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        for (int i = 0; i < cnt_for_sec; i++) {
+            add_element_after_number(lst, random_IP());
+        }
+        std::cout << cnt_for_sec << ":" << diff << "\n";
+    }
+    while(diff < 10 && size_of_list(vec) > 0) {
         cnt_for_sec = cnt_for_sec<<1;
         bench_clock = clock();
         for (int i = 0; i < cnt_for_sec; i++) {
@@ -372,6 +414,15 @@ void benchmark() {
     cnt_for_sec = 1;
 
     while(diff < 2) {
+        cnt_for_sec = cnt_for_sec*10;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec; i++) {
+            add_element_after_number(arr, random_IP(),1);
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        std::cout << cnt_for_sec << ":" << diff << "\n";
+    }
+    while(diff < 10) {
         cnt_for_sec = cnt_for_sec<<1;
         bench_clock = clock();
         for (int i = 0; i < cnt_for_sec; i++) {
@@ -384,6 +435,19 @@ void benchmark() {
     cnt_for_sec = 1;
     diff=  0;
     while(diff < 2){// && size_of_list(arr) > 0) {
+        cnt_for_sec = cnt_for_sec*10;
+        bench_clock = clock();
+        for (int i = 0; i < cnt_for_sec && size_of_list(arr) > 0; i++) {
+            delete_element_by_id(arr, 1);
+        }
+        diff = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+        if(size_of_list(arr) > 0)
+            for (int i = 0; i < cnt_for_sec; i++) {
+                add_element_after_number(arr, random_IP());
+            }
+        std::cout << cnt_for_sec << ":" << diff << size_of_list(arr) << "\n";
+    }
+    while(diff < 10){// && size_of_list(arr) > 0) {
         cnt_for_sec = cnt_for_sec<<1;
         bench_clock = clock();
         for (int i = 0; i < cnt_for_sec && size_of_list(arr) > 0; i++) {
@@ -400,7 +464,6 @@ void benchmark() {
     std::cout << "E.N.D.\n";
    // fclose(stdout);
    delete_list(arr);
-    std::cout << "Yeah!\n";
 }
 
 
