@@ -6,7 +6,7 @@ struct Point{
     double x,y,z;
     double dist;
 
-    Point(int _x, int _y, int _z){
+    Point(int _x = 0, int _y = 0, int _z = 0){
         x = _x;
         y = _y;
         z = _z;
@@ -25,10 +25,7 @@ bool operator <(Point a, Point b){
         else if(a.x > b.x)
             return false;
         else{
-            if(a.y < b.y)
-                return true;
-            else
-                return false;
+            return a.y < b.y;
         }
     }
 }
@@ -45,26 +42,23 @@ bool operator >(Point a, Point b){
         else if(a.x < b.x)
             return false;
         else{
-            if(a.y > b.y)
-                return true;
-            else
-                return false;
+            return a.y > b.y;
         }
     }
 }
 
 std::ostream& operator<<(std::ostream& os, Point& p)
 {
-    os << '(' << p.x << ", " << p.y << ", " << p.z << ", " << p.dist << ')';
+    os << "({" << p.x << ", " << p.y << ", " << p.z << "}; " << p.dist << ')';
     return os;
 }
 
-void print(std::vector<Point> a){
+void print(const std::vector<Point> &a){
     for(auto t:a) std::cout << t << " ";
     std::cout << std::endl;
 }
 
-void print(std::vector<int> a){
+void print(const std::vector<int> &a){
     for(auto t:a) std::cout << t << " ";
     std::cout << std::endl;
 }
@@ -111,31 +105,31 @@ void quicksort(std::vector<Point> &a,int left, int right){
     print(a);
 }
 
-void merge(std::vector <int> &a, int l1, int l2, int r1, int r2){
-    std::vector<int> b;
+void merge(std::vector <Point> &a, int l1, int r1, int l2, int r2){
+    std::vector<Point> b;
     int p1 = r1, p2 = r2;
     int cnt = r2-l1+1;
     b.resize(cnt--);
     while(cnt >= 0){
-        if(p2 < l2 || a[p1] > a[p2])
+        if(p2 < l2)
             b[cnt--] = a[p1--];
-        else if(p1 < l1 || a[p2] > a[p1])
+        else if(p1 < l1)
             b[cnt--] = a[p2--];
-        else
+        else if (a[p1] > a[p2])
             b[cnt--] = a[p1--];
+        else
+            b[cnt--] = a[p2--];
     }
-    std::cout << l1 << "." << l2 << "." << r1 << "." << r2 << ":";
-    print(b);
     for(int i = 0; i <= r2-l1; i++)
         a[l1+i] = b[i];
 }
 
-void merge_sort(std::vector <int> &a, int left, int right){
+void merge_sort(std::vector <Point> &a, int left, int right){
     if(left >= right) return;
     int middle = (left+right)>>1;
     merge_sort(a,left,middle);
     merge_sort(a,middle+1,right);
-    merge(a,left,middle+1,middle,right);
+    merge(a,left,middle,middle+1,right);
     print(a);
 }
 
@@ -145,7 +139,9 @@ int main() {
     std::vector <Point> b = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
                            *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
     quicksort(b,0,9);
-    std::vector <int> c = {10,1,8,3,6,5,4,7,2,9};
+    std::vector <Point> c = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
+                             *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
+
     merge_sort(c,0,c.size()-1);
 
     return 0;
