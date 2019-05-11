@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <algorithm>
 
 struct Point{
     double x,y,z;
@@ -63,11 +64,11 @@ void print(const std::vector<int> &a){
     std::cout << std::endl;
 }
 
-void insert_sort(std::vector<Point> &a){
-    int n = a.size(), id_max;
-    for(int i = n; i > 0; i--){
-        id_max = 0;
-        for(int j = 0; j < i; j++){
+void insert_sort(std::vector<Point> &a,int left, int right){
+    int id_max;
+    for(int i = right+1; i > left; i--){
+        id_max = left;
+        for(int j = left; j < i; j++){
             if(a[id_max] < a[j])
                 id_max = j;
         }
@@ -120,6 +121,7 @@ void merge(std::vector <Point> &a, int l1, int r1, int l2, int r2){
         else
             b[cnt--] = a[p2--];
     }
+
     for(int i = 0; i <= r2-l1; i++)
         a[l1+i] = b[i];
 }
@@ -133,16 +135,34 @@ void merge_sort(std::vector <Point> &a, int left, int right){
     print(a);
 }
 
+void frankenstein_sort(std::vector <Point> &a, int left, int right, int threshold){
+    if(right-left < threshold){
+        insert_sort(a,left,right);
+        return;
+    }
+    int middle = (left+right)>>1;
+    frankenstein_sort(a,left,middle,threshold);
+    frankenstein_sort(a,middle+1,right,threshold);
+    merge(a,left,middle,middle+1,right);
+
+}
+
 int main() {
     std::vector <Point> a = {*(new Point(5,0,0)),*(new Point(0,3,0)),*(new Point(0,0,4)),};
-    insert_sort(a);
     std::vector <Point> b = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
                            *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
-    quicksort(b,0,9);
     std::vector <Point> c = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
                              *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
+    std::vector <Point> d = {*(new Point(11,0,0)), *(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
+                             *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
+    std::vector <Point> e = {*(new Point(11,0,0)), *(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
+                             *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
 
-    merge_sort(c,0,c.size()-1);
-
+    frankenstein_sort(c,0,c.size()-1,10);
+    std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
+    frankenstein_sort(d,0,d.size()-1,10);
+    print(d);
+    std::stable_sort(e.begin(),e.end());
+    print(e);
     return 0;
 }
