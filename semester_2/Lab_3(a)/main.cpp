@@ -3,6 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
+const int MOD = 2134;
+
 struct Point{
     double x,y,z;
     double dist;
@@ -73,7 +75,7 @@ void insert_sort(std::vector<Point> &a,int left, int right){
                 id_max = j;
         }
         std::swap(a[id_max], a[i-1]);
-        print(a);
+  //      print(a);
     }
 }
 
@@ -132,7 +134,7 @@ void merge_sort(std::vector <Point> &a, int left, int right){
     merge_sort(a,left,middle);
     merge_sort(a,middle+1,right);
     merge(a,left,middle,middle+1,right);
-    print(a);
+ //   print(a);
 }
 
 void frankenstein_sort(std::vector <Point> &a, int left, int right, int threshold){
@@ -144,7 +146,55 @@ void frankenstein_sort(std::vector <Point> &a, int left, int right, int threshol
     frankenstein_sort(a,left,middle,threshold);
     frankenstein_sort(a,middle+1,right,threshold);
     merge(a,left,middle,middle+1,right);
+}
 
+Point create_random_point(){
+    int _x = rand()%MOD;
+    int _y = rand()%MOD;
+    int _z = rand()%MOD;
+    Point* p = new Point(_x,_y,_z);
+    return *p;
+
+}
+
+Point create_point(double n){
+    int _x = n/3.0;
+    int _y = n/3.0;
+    int _z = n/3.0;
+
+    Point* p = new Point(_x,_y,_z);
+    return *p;
+
+}
+
+std::vector <Point> create_random_vector(int n){
+   // std::cout <<
+    std::vector <Point> vec;
+    vec.resize(n);
+    for(int i = 0; i < n; i++){
+        vec[i] = create_random_point();
+    }
+    return vec;
+}
+
+std::vector <Point> create_sorted_vector(int n){
+    // std::cout <<
+    std::vector <Point> vec;
+    vec.resize(n);
+    for(int i = 0; i < n; i++){
+        vec[i] = create_point(i);
+    }
+    return vec;
+}
+
+std::vector <Point> create_unsorted_vector(int n){
+    // std::cout <<
+    std::vector <Point> vec;
+    vec.resize(n);
+    for(int i = 0; i < n; i++){
+        vec[i] = create_point(i);
+    }
+    return vec;
 }
 
 int main() {
@@ -159,10 +209,62 @@ int main() {
                              *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
 
     frankenstein_sort(c,0,c.size()-1,10);
-    std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
+  //  std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
     frankenstein_sort(d,0,d.size()-1,10);
     print(d);
     std::stable_sort(e.begin(),e.end());
     print(e);
+
+    std::cout << "let's find optimal value of threshold for frankenstein (mixed) sort: \n";
+    int n = 10;
+    int max_size = 1 << 30;
+    int old_threshold = 1 << 7;
+    int new_threshold = 1 << 7;
+    std::vector <Point> testing;
+    testing.resize(20);
+    for(int new_threshold = 10; new_threshold <= 145; new_threshold+=5){
+        std::cout << "New threshold: " << new_threshold << std::endl;
+        std::cout << "Count of Points --- random --- sorted --- unsorted\n";
+        double diff_rand = 0.0, diff_sort, diff_unsort;
+        long long cnt_for_sec = 1;
+        auto bench_clock = clock();
+        std::cin >> diff_rand;
+        diff_rand = 0.0;
+        diff_sort = 0.0;
+        diff_unsort = 0.0;
+        for(int i = 1; i < max_size && (std::max(diff_rand,std::max(diff_sort,diff_unsort) ) < 0.5);i = i << 1) {
+            testing.clear();
+            testing = create_random_vector(i);
+            bench_clock = clock();
+            frankenstein_sort(testing,0,testing.size()-1,new_threshold);
+            diff_rand = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+
+            testing.clear();
+            testing = create_sorted_vector(i);
+            bench_clock = clock();
+            frankenstein_sort(testing,0,testing.size()-1,new_threshold);
+            diff_sort = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+
+            testing.clear();
+            testing = create_unsorted_vector(i);
+            bench_clock = clock();
+            frankenstein_sort(testing,0,testing.size()-1,new_threshold);
+            diff_unsort = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+
+            std::cout.setf(std::ios::left);
+            std::cout.width(18);
+            std::cout << i;
+            std::cout.width(17);
+            std::cout << diff_rand;
+            std::cout.width(16);
+            std::cout << diff_sort;
+            std::cout.width(15);
+            std::cout << diff_unsort << "\n";
+        }
+    }
+  //  std::vector <Point> test = create_random_vector(n);
+ //   std::cout << "Size:" << test.size() << std::endl;
+ //   for(auto t : test) std::cout << t << ", ";
+  //  std::cout << std::endl;
     return 0;
 }
