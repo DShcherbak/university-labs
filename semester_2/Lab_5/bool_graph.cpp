@@ -8,6 +8,7 @@ struct Graph_bool{
     int vertices; // ALWAYS LESS THAN 32
     int adj[Nmax];
     double min_dist[Nmax][Nmax];
+    std::vector <int> top_sort;
     bool is_oriented = false;
 
     Graph_bool(int vert, int edge, bool is_orient = false){
@@ -125,13 +126,14 @@ void dfs_top(Graph_bool *G, int cur, std::vector <bool> &visited){
     int V = G->vertices;
     for(int i = 0; i < V; i++){
         if(!visited[i] && (G->adj[cur] & (1 << i)))
-
+            dfs_top(G,i,visited);
     }
+    G->top_sort.push_back(cur);
 }
 
 
 std::vector <int> topsort(Graph_bool *G){
-    int V = G->vertices-1;
+    int V = G->vertices;
     std::vector <bool> visited;
     visited.resize(V,false);
     for(int i = 0; i < V; i++){
@@ -139,4 +141,5 @@ std::vector <int> topsort(Graph_bool *G){
             dfs_top(G,i,visited);
         }
     }
+    reverse (G->top_sort.begin(), G->top_sort.end());
 }

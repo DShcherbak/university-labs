@@ -39,7 +39,10 @@ int main() {
     std::cout << "Distances from " << start << " to:\n";
     for(int i = 0, n = GB->vertices; i < n; i++)
         std::cout << i << " : " << GB->min_dist[start][i] << "\n";
-    std::cout << "Topsort (for oreinted graph):"
-
+    std::cout << "Topsort (for oreinted graph):";
+    topsort(GM);
+    for(int v : GM->top_sort)
+        std::cout << v << " ";
+    std::cout << std::endl;
     return 0;
 }

@@ -34,6 +34,7 @@ struct Graph_matrix{
     int vertices;
     int adj[MAX_VERTICES][MAX_VERTICES];
     double min_dist[MAX_VERTICES][MAX_VERTICES];
+    std::vector <int> top_sort;
     bool is_oriented = false;
     bool is_weight = false;
 
@@ -139,3 +140,27 @@ void Dijkstra(Graph_matrix* G, int st){
         cur = next;
     }
 }
+
+void dfs_top(Graph_matrix *G, int cur, std::vector <bool> &visited){
+    visited[cur] = true;
+    int V = G->vertices;
+    for(int i = 0; i < V; i++){
+        if(!visited[i] && (G->adj[cur][i] != -1))
+            dfs_top(G,i,visited);
+    }
+    G->top_sort.push_back(cur);
+}
+
+
+std::vector <int> topsort(Graph_matrix *G){
+    int V = G->vertices;
+    std::vector <bool> visited;
+    visited.resize(V,false);
+    for(int i = 0; i < V; i++){
+        if(!visited[i]){
+            dfs_top(G,i,visited);
+        }
+    }
+    reverse (G->top_sort.begin(), G->top_sort.end());
+}
+
