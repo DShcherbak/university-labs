@@ -1,4 +1,6 @@
 #include <iostream>
+#include "Tree.cpp"
+#include "Binary_Tree.cpp"
 
 int main() {
     std::cout << "Hello, Den" << std::endl;
