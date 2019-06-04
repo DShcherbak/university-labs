@@ -1,24 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
 #include <random>
 #include <algorithm>
 #include <queue>
 
 const double probability = 0.1;
 
-int randomInt(int begin, int end) {
+int randomInt(int begin, int end){
     static std::random_device rd;
     std::mt19937_64 gen(rd());
     std::uniform_int_distribution<> dis(begin, end);
     return dis(gen);
 }
 
-
-struct Binary_node{
-    Binary_node* parent;
+struct Node {
+    Node *parent;
     int value;
-    Binary_node *left, *right;
+    std::vector <Node*> children;
 
-    Binary_node(Node* a){
-        value = a->value;
+    Node(int v){
+        value = v;
     }
 };
 
