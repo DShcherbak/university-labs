@@ -49,7 +49,7 @@ void add_node(Binary_node* &root, Binary_node* new_node){
 }
 
 
-Binary_node* build_binary_tree(Node* root, Binary_node* parent){
+Binary_node* build_binary_tree(Node* root, Binary_node* parent = nullptr){
     if(root == nullptr)
         return nullptr;
     Binary_node* bin_root = new Binary_node(root);
@@ -61,41 +61,47 @@ Binary_node* build_binary_tree(Node* root, Binary_node* parent){
     int n = root->children.size();
     Binary_node* father = bin_root->left;
     for(int i = 1; i < n; i++){
-        father->right = build_binary_tre
-
-                e(root->children[i],father);
+        father->right = build_binary_tree(root->children[i],father);
         father = father->right;
     }
 
     return bin_root;
 }
 
-void sewd_tree(Binary_node* &root){
+void sewd_tree(Binary_node* &root, Binary_node* &prev){
     if(!root)
         return;
-    Binary_node* prev = nullptr;
-    sewd_tree(root->left);
-    if(prev && !(prev->true_right_son))
+    sewd_tree(root->left,prev);
+    if(prev && !(prev->right)){
         prev->right = root;
-    if(!root->left)
+        prev->true_right_son = false;
+       // std::cout << prev->value << "-R->" << (root ? root->value : -1) << "\n";
+    }
+    if(!root->left){
         root->left = prev;
+        root->true_left_son = false;
+     //  std::cout << (prev ? prev->value : -1) << "<-L-" << root->value << "\n";
+    }
     prev = root;
-    sewd_tree(root->right);
+    sewd_tree(root->right,prev);
 }
 
 Binary_node* next_sewd(Binary_node* root){
     Binary_node* next = root->right;
     if(root->true_right_son){
-        while(next->true_left_son)
+        while(next && next->true_left_son)
             next = next->left;
     }
     return next;
 }
 
 void print_sewd_tree(Binary_node* root){
+ //   if(root == nullptr)
+ //       return;
     Binary_node *cur = root, *prev = nullptr;
-    while(cur->true_left_son)
+    while(cur->true_left_son && cur->left){
         cur = cur->left;
+    }
     while(cur){
         std::cout << cur->value << " ";
         cur = next_sewd(cur);
@@ -153,22 +159,52 @@ int depth(Binary_node* root){
     return 1+std::max(depth(root->left),depth(root->right));
 }
 
-void delete_node_by_value(Binary_node* root, int val){
-    if(root->value == val){
-        if(root->parent == nullptr) {
-            root->right->parent = root->left;
-        }
+
+void add_node_to_root(Binary_node* &root, Binary_node* son){
+    son->left = nullptr;
+    son->right = nullptr;
+    if(!root->right){
+        root->right = son;
+        root->true_right_son = true;
+        son->parent = root;
+        return;
+    }if(!root->left){
+        root->left = son;
+        root->true_left_son = true;
+        son->parent = root;
+        return;
     }
+    if(randomInt(0,1))
+        add_node_to_root(root->right,son);
+    else
+        add_node_to_root(root->left,son);
 }
 
-void delete_root_by_value(Binary_node* root, int val){
-    if(root->value == val){
-        //delete
+void add_tree_to_root(Binary_node* &root, Binary_node* son){
+    if(!son)
+        return;
+    add_tree_to_root(root,son->left);
+    add_tree_to_root(root,son->right);
+    add_node_to_root(root,son);
+}
+
+void delete_node_by_value(Binary_node* &root, int value){
+    if(!root)
+        return;
+    delete_node_by_value(root->left,value);
+    delete_node_by_value(root->right,value);
+    Binary_node* temp,*son;
+    if(root->value == value){
+        int new_parent = randomInt(0,1);
+        if(new_parent){
+            temp = root->left;
+            son = root->right;
+            delete root;
+            root = temp;
+            add_tree_to_root(root,son);
+        }
+
     }
-    else if(root->value < val)
-        delete_node_by_value(root->left,val);
-    else
-        delete_node_by_value(root->right,val);
 }
 
 
@@ -180,6 +216,9 @@ void print_tree(Binary_node *root, int depth = 0) {
         std::cout << '\t' << '|';
     std::cout << root->value << std::endl;
     print_tree(root->left, depth + 1);
+    for (int i = 0; i < depth; i++)
+        std::cout << '\t' << '|';
+    std::cout << "---\n";
     print_tree(root->right, depth + 1);
 }
 
