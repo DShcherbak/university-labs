@@ -197,7 +197,7 @@ std::vector <Point> create_unsorted_vector(int n){
 }
 
 int main() {
-    freopen("benchmark.txt","w",stdout);
+    freopen("benchmark_threshold.txt","w",stdout);
     std::vector <Point> a = {*(new Point(5,0,0)),*(new Point(0,3,0)),*(new Point(0,0,4)),};
     std::vector <Point> b = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
                            *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
