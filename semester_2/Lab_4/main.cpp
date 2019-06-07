@@ -17,6 +17,8 @@ void interactive(){
         std::cout << "Enter \"q\" to quit.\n";
         std::cin >> key;
         if(key == 'q'){
+            delete_tree(root);
+            delete_tree(bin_root);
             std::cout << "Good bye!\n";
             return;
         }
