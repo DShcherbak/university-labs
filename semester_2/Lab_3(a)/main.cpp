@@ -33,7 +33,6 @@ bool operator <(Point a, Point b){
     }
 }
 
-
 bool operator >(Point a, Point b){
     if(a.dist > b.dist)
         return true;
@@ -198,6 +197,7 @@ std::vector <Point> create_unsorted_vector(int n){
 }
 
 int main() {
+    freopen("benchmark.txt","w",stdout);
     std::vector <Point> a = {*(new Point(5,0,0)),*(new Point(0,3,0)),*(new Point(0,0,4)),};
     std::vector <Point> b = {*(new Point(10,0,0)),*(new Point(1,0,0)),*(new Point(8,0,0)),*(new Point(3,0,0)),
                            *(new Point(6,0,0)),*(new Point(5,0,0)),*(new Point(4,0,0)),*(new Point(7,0,0)),*(new Point(2,0,0)),*(new Point(9,0,0))};
@@ -218,21 +218,23 @@ int main() {
     std::cout << "let's find optimal value of threshold for frankenstein (mixed) sort: \n";
     int n = 10;
     int max_size = 1 << 30;
-    int old_threshold = 1 << 7;
-    int new_threshold = 1 << 7;
+    int best_threshold = 0;
+    double time_threshold = 5.5;
+    int size_threshold = 5;
     std::vector <Point> testing;
     testing.resize(20);
-    for(int new_threshold = 10; new_threshold <= 145; new_threshold+=5){
+
+    for(int new_threshold = 5; new_threshold <= 145; new_threshold+=10){
         std::cout << "New threshold: " << new_threshold << std::endl;
         std::cout << "Count of Points --- random --- sorted --- unsorted\n";
         double diff_rand = 0.0, diff_sort, diff_unsort;
         long long cnt_for_sec = 1;
         auto bench_clock = clock();
-        std::cin >> diff_rand;
+     //   std::cin >> diff_rand;
         diff_rand = 0.0;
         diff_sort = 0.0;
         diff_unsort = 0.0;
-        for(int i = 1; i < max_size && (std::max(diff_rand,std::max(diff_sort,diff_unsort) ) < 0.5);i = i << 1) {
+        for(int i = 1; i < max_size && (std::max(diff_rand,std::max(diff_sort,diff_unsort) ) < 0.2);i = i << 1) {
             testing.clear();
             testing = create_random_vector(i);
             bench_clock = clock();
@@ -260,7 +262,18 @@ int main() {
             std::cout << diff_sort;
             std::cout.width(15);
             std::cout << diff_unsort << "\n";
+            if(size_threshold < i){
+                best_threshold = new_threshold;
+                time_threshold = diff_rand;
+                size_threshold = i;
+            }
+            else if(i == size_threshold && diff_rand < time_threshold){
+                best_threshold = new_threshold;
+                time_threshold = diff_rand;
+                size_threshold = i;
+            }
         }
+        std::cout << "Optimal threshold: " << best_threshold << "\n";
     }
   //  std::vector <Point> test = create_random_vector(n);
  //   std::cout << "Size:" << test.size() << std::endl;
