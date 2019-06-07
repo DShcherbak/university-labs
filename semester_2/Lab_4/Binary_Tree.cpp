@@ -22,6 +22,15 @@ struct Binary_node{
         true_left_son = true;
         true_right_son = true;
     }
+
+    Binary_node(int v){
+        value = v;
+        left = nullptr;
+        right = nullptr;
+        parent = nullptr;
+        true_left_son = true;
+        true_right_son = true;
+    }
 };
 
 void add_node(Binary_node* &root, Binary_node* new_node){
@@ -48,8 +57,7 @@ void add_node(Binary_node* &root, Binary_node* new_node){
 
 }
 
-
-Binary_node* build_binary_tree(Node* root, Binary_node* parent){
+Binary_node* build_binary_tree(Node* root, Binary_node* parent = nullptr){
     if(root == nullptr)
         return nullptr;
     Binary_node* bin_root = new Binary_node(root);
@@ -61,74 +69,66 @@ Binary_node* build_binary_tree(Node* root, Binary_node* parent){
     int n = root->children.size();
     Binary_node* father = bin_root->left;
     for(int i = 1; i < n; i++){
-        father->right = build_binary_tre
-
-                e(root->children[i],father);
+        father->right = build_binary_tree(root->children[i],father);
         father = father->right;
     }
 
     return bin_root;
 }
 
-void sewd_tree(Binary_node* &root){
+void delete_tree(Binary_node* &root){
     if(!root)
         return;
-    Binary_node* prev = nullptr;
-    sewd_tree(root->left);
-    if(prev && !(prev->true_right_son))
-        prev->right = root;
-    if(!root->left)
-        root->left = prev;
-    prev = root;
-    sewd_tree(root->right);
+    if(root->true_left_son)
+        delete_tree(root->left);
+    if(root->true_left_son)
+        delete_tree(root->left);
+    delete root;
 }
 
-Binary_node* next_sewd(Binary_node* root){
+void threaded_tree(Binary_node* &root, Binary_node* &prev){
+    if(!root)
+        return;
+    threaded_tree(root->left,prev);
+    if(prev && !(prev->right)){
+        prev->right = root;
+        prev->true_right_son = false;
+       // std::cout << prev->value << "-R->" << (root ? root->value : -1) << "\n";
+    }
+    if(!root->left){
+        root->left = prev;
+        root->true_left_son = false;
+     //  std::cout << (prev ? prev->value : -1) << "<-L-" << root->value << "\n";
+    }
+    prev = root;
+    threaded_tree(root->right,prev);
+}
+
+Binary_node* next_threaded(Binary_node* root){
     Binary_node* next = root->right;
     if(root->true_right_son){
-        while(next->true_left_son)
+        while(next && next->true_left_son)
             next = next->left;
     }
     return next;
 }
 
-void print_sewd_tree(Binary_node* root){
+void print_threaded_tree(Binary_node* root){
+    if(root == nullptr){
+        std::cout << "Empty tree.\n";
+        return;
+    }
     Binary_node *cur = root, *prev = nullptr;
-    while(cur->true_left_son)
+    while(cur->true_left_son && cur->left){
         cur = cur->left;
+    }
     while(cur){
         std::cout << cur->value << " ";
-        cur = next_sewd(cur);
+        cur = next_threaded(cur);
     }
     std::cout << std::endl;
 }
 
-/*
-Binary_node* build__binary_tree(std::vector <Application*> apps, std::vector <edge> valueances){
-    int n = valueances.size();
-    random_shuffle(valueances);
-    edge p = valueances[0];
-    Binary_node* root = new Binary_node(apps[p.from],apps[p.to],p.cost);
-    for(int i = 1; i <n; i++){
-        p = valueances[i];
-        Binary_node* new_node = new Binary_node(apps[p.from],apps[p.to],p.cost);
-        add_node(root,new_node);
-    }
-    return root;
-
-}
-
-int create_new_node(std::vector <Binary_node*> root, Application* a, Application* b){
-    Binary_node* new_node = new Binary_node(a,b,valueance(a,b));
-    if(randomInt(1,1000)*0.1/100.0 < probability)
-        root.push_back(new_node);
-    else{
-        int par = randomInt(0,root.size()-1);
-        add_node(root[par],new_node);
-    }
-}
-
- */
 void print_binary_tree_right(Binary_node* root){
     std::cout << root->value << " ";
     if(root->left)
@@ -153,22 +153,58 @@ int depth(Binary_node* root){
     return 1+std::max(depth(root->left),depth(root->right));
 }
 
-void delete_node_by_value(Binary_node* root, int val){
-    if(root->value == val){
-        if(root->parent == nullptr) {
-            root->right->parent = root->left;
-        }
+void add_node_to_root(Binary_node* &root, Binary_node* son){
+    son->left = nullptr;
+    son->right = nullptr;
+    if(!root->right){
+        root->right = son;
+        root->true_right_son = true;
+        son->parent = root;
+        return;
+    }if(!root->left){
+        root->left = son;
+        root->true_left_son = true;
+        son->parent = root;
+        return;
     }
+    if(randomInt(0,1))
+        add_node_to_root(root->right,son);
+    else
+        add_node_to_root(root->left,son);
 }
 
-void delete_root_by_value(Binary_node* root, int val){
-    if(root->value == val){
-        //delete
+void add_tree_to_root(Binary_node* &root, Binary_node* son){
+    if(!son)
+        return;
+    add_tree_to_root(root,son->left);
+    add_tree_to_root(root,son->right);
+    add_node_to_root(root,son);
+}
+
+void add_value_to_tree(Binary_node* &root, int v){
+    Node* a = new Node(v);
+    Binary_node* new_node = new Binary_node(a);
+    delete(a);
+    add_node(root,new_node);
+}
+
+void delete_node_by_value(Binary_node* &root, int value){
+    if(!root)
+        return;
+    delete_node_by_value(root->left,value);
+    delete_node_by_value(root->right,value);
+    Binary_node* temp,*son;
+    if(root->value == value){
+        int new_parent = randomInt(0,1);
+        if(new_parent){
+            temp = root->left;
+            son = root->right;
+            delete root;
+            root = temp;
+            add_tree_to_root(root,son);
+        }
+
     }
-    else if(root->value < val)
-        delete_node_by_value(root->left,val);
-    else
-        delete_node_by_value(root->right,val);
 }
 
 
@@ -180,53 +216,8 @@ void print_tree(Binary_node *root, int depth = 0) {
         std::cout << '\t' << '|';
     std::cout << root->value << std::endl;
     print_tree(root->left, depth + 1);
+    for (int i = 0; i < depth; i++)
+        std::cout << '\t' << '|';
+    std::cout << "---\n";
     print_tree(root->right, depth + 1);
 }
-
-void search_precision(Binary_node* root, int left, int right){
-    if(root->value < left){
-        if(root->right)
-            search_precision(root->right,left,right);
-    }
-    else if(root->value > right){
-        if(root->left)
-            search_precision(root->left,left,right);
-    }
-    else{
-        std::cout << "(" << root->value << ")\n";
-        if(root->right)
-            search_precision(root->right,left,right);
-        if(root->left)
-            search_precision(root->left,left,right);
-    }
-}
-
-std::vector <double> search_precision_vec(Binary_node* root , double left, double right){
-    std::vector <double> res;
-    std::vector <double> nw;
-    if(root->value < left){
-        if(root->right){
-            nw = search_precision_vec(root->right,left,right);
-            res.insert(res.end(),nw.begin(),nw.end());
-        }
-    }
-    else if(root->value > right){
-        if(root->left){
-            nw = search_precision_vec(root->left,left,right);
-            res.insert(res.end(),nw.begin(),nw.end());
-        }
-    }
-    else{
-        res.push_back(root->value);
-        if(root->right){
-            nw = search_precision_vec(root->right,left,right);
-            res.insert(res.end(),nw.begin(),nw.end());
-        }
-        if(root->left){
-            nw = search_precision_vec(root->left,left,right);
-            res.insert(res.end(),nw.begin(),nw.end());
-        }
-    }
-    return res;
-}
-

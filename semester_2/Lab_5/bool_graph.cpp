@@ -1,53 +1,50 @@
-//
-// Created by sadoffnick on 16.05.19.
-//
+#include <iostream>
+#include <cmath>
+#include <algorithm>
+#include <vector>
+#include <random>
+#include "bool_graph.h"
 
-const int Nmax = 32;
+int randomInteger(int begin, int end) {
+    static std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<> dis(begin, end);
+    return dis(gen);
+}
 
-struct Graph_bool{
-    int vertices; // ALWAYS LESS THAN 32
-    int adj[Nmax];
-    double min_dist[Nmax][Nmax];
-    std::vector <int> top_sort;
-    bool is_oriented = false;
-
-    Graph_bool(int vert, int edge, bool is_orient = false){
-        int from;
-        int to;
-        vertices = vert;
-        for(int i : adj) i = 0;
-        for(int i = 0; i < vertices; i++)
-            for(int j = 0; j < vertices; j++)
-                min_dist[i][j] = inf;
-        while(edge > 0){
+Graph_bool::Graph_bool(int vert, int cnt_edge, bool is_orient){
+    int from;
+    int to;
+    vertices = vert;
+    for(int i : adj) i = 0;
+    for(int i = 0; i < vertices; i++)
+        for(int j = 0; j < vertices; j++)
+            min_dist[i][j] = inf;
+        while(cnt_edge > 0){
             do{
-                from = randomInt(0,vert-1);
-                to = randomInt(0,vert-1);
+                from = randomInteger(0,vert-1);
+                to = randomInteger(0,vert-1);
             //    std::cout <<edge <<" " <<  from <<" " << to << std::endl;
             //    std::cin >> to;
             //    std::cout << adj[from] <<" & " << (1<<to) << "\n";
             }while(from == to || adj[from]&(1<<to));
-            edge--;
-            int cost = randomInt(1,MAX_COST);
+            cnt_edge--;
             adj[from] |= (1<<to);
             if(!is_orient) adj[to] |= (1 << from);
         }
-    }
+}
 
-    void add_edge(edge e){
-        // std::cout << "new:" << e.from << " => " << e.to << "\n";
-        adj[e.from] |= (1<<e.to);
-        // std::cout << adj[e.from][e.to] << "\n";
-        if(!is_oriented)
-            adj[e.to] |= (1<<e.from);
-    }
+void Graph_bool::add_edge(edge e){     // std::cout << "new:" << e.from << " => " << e.to << "\n";
+    adj[e.from] |= (1<<e.to);
+    if(!is_oriented)
+        adj[e.to] |= (1<<e.from);
+}
 
-    void add_edge(std::vector <edge> edges){
+void Graph_bool::add_edge(std::vector <edge> edges){
         for(auto e : edges)
             add_edge(e);
-    }
+}
 
-};
 
 void dfs(Graph_bool *G, int cur, std::vector <bool> &visited){
     std::cout << cur << " ";
@@ -143,3 +140,48 @@ std::vector <int> topsort(Graph_bool *G){
     }
     reverse (G->top_sort.begin(), G->top_sort.end());
 }
+
+void span_dfs(Graph_bool *G, int cur, std::vector <bool> &visited){
+    visited[cur] = true;
+    for(int i = 0; i < G->vertices; i++)
+        if((G->adj[cur]&(1<<i)) && !visited[i]){
+            std::cout << cur << "-" << i << "\n";
+            dfs(G,i,visited);
+        }
+}
+/*
+void Kruskala(Graph_bool* G){
+    int V = G->vertices, M;
+    std::vector <edge*> edges; // вес - вершина 1 - вершина 2
+
+    int cost = 0;
+    std::vector <std::pair<int,int> > res;
+
+    for(int i = 0; i < V; i++){
+        for(int j = 0; j < V; j++){
+            if(G->adj[i]&(1<<j)){
+                edges.push_back(new edge(i,j,G->adj[i][j]));
+                M++;
+            }
+        }
+    }
+    sort (edges.begin(), edges.end());
+    std::vector<int> tree_id (V);
+    for(int i = 0; i < V; i++)
+        tree_id[i] = i;
+
+    int sum = 0;
+    for (int i = 0; i < V-1; i++){
+        int from = edges[i]->from,  to = edges[i]->to,  cost = edges[i]->weight;
+        if (tree_id[from] != tree_id[to])
+        {
+            sum += cost;
+            std::cout << from << "-" << to << "\n";
+            int old_id = tree_id[to],  new_id = tree_id[from];
+            for(int j = 0; j < M; j++)
+                if (tree_id[j] == old_id)
+                    tree_id[j] = new_id;
+        }
+    }
+}
+*/
