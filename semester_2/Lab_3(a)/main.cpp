@@ -52,8 +52,9 @@ bool operator >(Point a, Point b){
 
 std::ostream& operator<<(std::ostream& os, Point& p)
 {
-    os << "({" << p.x << ", " << p.y << ", " << p.z << "}; " << p.dist << ')';
-    return os;
+   // os << "({" << p.x << ", " << p.y << ", " << p.z << "}; " << p.dist << ')';
+   os << p.dist;
+   return os;
 }
 
 void print(const std::vector<Point> &a){
@@ -66,7 +67,7 @@ void print(const std::vector<int> &a){
     std::cout << std::endl;
 }
 
-void insert_sort(std::vector<Point> &a,int left, int right){
+void insert_sort(std::vector<Point> &a,int left, int right, bool to_print = false){
     int id_max;
     for(int i = right+1; i > left; i--){
         id_max = left;
@@ -75,7 +76,7 @@ void insert_sort(std::vector<Point> &a,int left, int right){
                 id_max = j;
         }
         std::swap(a[id_max], a[i-1]);
-  //      print(a);
+  if(to_print) print(a);
     }
 }
 
@@ -96,16 +97,16 @@ int divide(std::vector<Point> &a,int left, int right){
     }
 }
 
-void quick_sort(std::vector<Point> &a,int left, int right){
+void quick_sort(std::vector<Point> &a,int left, int right, bool to_print = false){
+    if(to_print) print(a);
     int middle = 0;
     if(left < right){
         middle = divide(a,left,right);
-
         quick_sort(a,left,middle);
+        if(to_print) print(a);
         quick_sort(a,middle+1,right);
-
+        if(to_print) print(a);
     }
-   // print(a);
 }
 
 void merge(std::vector <Point> &a, int l1, int r1, int l2, int r2){
@@ -128,23 +129,30 @@ void merge(std::vector <Point> &a, int l1, int r1, int l2, int r2){
         a[l1+i] = b[i];
 }
 
-void merge_sort(std::vector <Point> &a, int left, int right){
+void merge_sort(std::vector <Point> &a, int left, int right, bool to_print = false){
     if(left >= right) return;
+    if(to_print) print(a);
     int middle = (left+right)>>1;
     merge_sort(a,left,middle);
+    if(to_print) print(a);
     merge_sort(a,middle+1,right);
+    if(to_print) print(a);
     merge(a,left,middle,middle+1,right);
- //   print(a);
+    if(to_print) print(a);
 }
 
-void frankenstein_sort(std::vector <Point> &a, int left, int right, int threshold){
+void frankenstein_sort(std::vector <Point> &a, int left, int right, int threshold, bool to_print = false){
+    if(to_print) print(a);
     if(right-left < threshold){
-        insert_sort(a,left,right);
+        insert_sort(a,left,right,to_print);
+        if(to_print) print(a);
         return;
     }
     int middle = (left+right)>>1;
     frankenstein_sort(a,left,middle,threshold);
+    if(to_print) print(a);
     frankenstein_sort(a,middle+1,right,threshold);
+    if(to_print) print(a);
     merge(a,left,middle,middle+1,right);
 }
 
@@ -284,7 +292,7 @@ void benchmark_threshold() {
 
 }
 
-int main() {
+void benchmark() {
     freopen("benchmark.txt","w",stdout);
 
     std::cout << "On a random array: \n";
@@ -439,20 +447,63 @@ int main() {
 
     }
 
-
-    return 0;
 }
 
-/*
-    testing.clear();
-    testing = create_sorted_vector(i);
-    bench_clock = clock();
-    insertion_sort(testing,0,testing.size()-1,new_threshold);
-    diff_sort = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
+void demo(){
+    std::cout << "Enter size of array";
+    int size; std::cin >> size;
+    std::vector <Point> array = create_random_vector(size);
 
-    testing.clear();
-    testing = create_unsorted_vector(i);
-    bench_clock = clock();
-    inserttion_sort(testing,0,testing.size()-1,new_threshold);
-    diff_unsort = (double) (clock() - bench_clock) / CLOCKS_PER_SEC;
-    */
+    std::cout << "Starting array:";
+    print(array);
+    insert_sort(array,0,size-1,true);
+    array.clear();
+
+    std::cout << "--------------\n";
+
+    array = create_random_vector(size);
+    std::cout << "Starting array:";
+    print(array);
+    quick_sort(array,0,size-1,true);
+    array.clear();
+
+    std::cout << "--------------\n";
+
+    array = create_random_vector(size);
+    std::cout << "Starting array:";
+    print(array);
+    merge_sort(array,0,size-1,true);
+    array.clear();
+
+    std::cout << "--------------\n";
+
+    array = create_random_vector(size);
+    frankenstein_sort(array,0,size-1,25,true);
+    array.clear();
+}
+
+
+int main() {
+    int key;
+    while(true) {
+        std::cout << "MAIN MENU\n";
+        std::cout << "Please, choose your mode:\n";
+        std::cout << "Press 1 for demo mode.\n";
+        std::cout << "Press 2 for benchmark mode.\n";
+        std::cout << "Press 3 to exit the program\n";
+        std::cin >> key;
+        switch(key){
+            case 1:
+                demo();
+                return 0;
+            case 2:
+                benchmark();
+                return 0;
+            case 3:
+                return 0;
+            default:
+                std::cout << "Try another command!\n";
+
+        }
+    }
+}
