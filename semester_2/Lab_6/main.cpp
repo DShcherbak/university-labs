@@ -75,14 +75,17 @@ int main() {
             case 1:
                 List* L;
                 demo(L);
+                delete L;
                 return 0;
             case 2:
                 Array_list* A;
                 demo(A);
+                delete A;
                 return 0;
             case 3:
                 Binary_tree* B;
                 demo(B);
+                delete B;
                 return 0;
             case 4:
                 std::cout << "Bye-bye!\n";
