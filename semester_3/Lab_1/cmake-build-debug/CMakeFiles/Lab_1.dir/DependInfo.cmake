@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/binary_node.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/file.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/folder.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/main.cpp.o"

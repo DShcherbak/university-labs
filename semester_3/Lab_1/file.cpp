@@ -28,4 +28,12 @@ file::file(string _name, char _type, int cur_dir){
     parent = cur_dir;
 }
 
+string file::get_name(){
+    return name;
+}
+
+bool operator==(file a, file b){
+    return (a.get_name() == b.get_name());
+}
+
 

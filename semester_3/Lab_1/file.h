@@ -21,6 +21,8 @@ private:
 
 public:
 
+    string get_name();
+
     file(string _name, char _type, int cur_dir);
 
    // string set_time();

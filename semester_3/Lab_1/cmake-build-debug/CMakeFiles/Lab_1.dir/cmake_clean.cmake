@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Lab_1.dir/binary_node.cpp.o"
   "CMakeFiles/Lab_1.dir/file.cpp.o"
   "CMakeFiles/Lab_1.dir/folder.cpp.o"
   "CMakeFiles/Lab_1.dir/main.cpp.o"

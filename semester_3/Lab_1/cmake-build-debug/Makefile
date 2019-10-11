@@ -123,6 +123,33 @@ Lab_1/fast:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/build
 .PHONY : Lab_1/fast
 
+binary_node.o: binary_node.cpp.o
+
+.PHONY : binary_node.o
+
+# target to build an object file
+binary_node.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.o
+.PHONY : binary_node.cpp.o
+
+binary_node.i: binary_node.cpp.i
+
+.PHONY : binary_node.i
+
+# target to preprocess a source file
+binary_node.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.i
+.PHONY : binary_node.cpp.i
+
+binary_node.s: binary_node.cpp.s
+
+.PHONY : binary_node.s
+
+# target to generate assembly for a file
+binary_node.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.s
+.PHONY : binary_node.cpp.s
+
 file.o: file.cpp.o
 
 .PHONY : file.o
@@ -240,6 +267,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Lab_1"
 	@echo "... edit_cache"
+	@echo "... binary_node.o"
+	@echo "... binary_node.i"
+	@echo "... binary_node.s"
 	@echo "... file.o"
 	@echo "... file.i"
 	@echo "... file.s"

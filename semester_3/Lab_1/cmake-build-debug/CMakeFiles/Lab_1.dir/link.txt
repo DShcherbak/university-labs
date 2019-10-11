@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/Lab_1.dir/main.cpp.o CMakeFiles/Lab_1.dir/folder.cpp.o CMakeFiles/Lab_1.dir/file.cpp.o CMakeFiles/Lab_1.dir/tree_node.cpp.o  -o Lab_1 
+/usr/bin/c++  -g   CMakeFiles/Lab_1.dir/main.cpp.o CMakeFiles/Lab_1.dir/folder.cpp.o CMakeFiles/Lab_1.dir/file.cpp.o CMakeFiles/Lab_1.dir/tree_node.cpp.o CMakeFiles/Lab_1.dir/binary_node.cpp.o  -o Lab_1 
