@@ -7,6 +7,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/file.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/folder.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/main.cpp.o"
+  "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/tree_node.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

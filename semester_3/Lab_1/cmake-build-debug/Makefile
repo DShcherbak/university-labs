@@ -204,6 +204,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+tree_node.o: tree_node.cpp.o
+
+.PHONY : tree_node.o
+
+# target to build an object file
+tree_node.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.o
+.PHONY : tree_node.cpp.o
+
+tree_node.i: tree_node.cpp.i
+
+.PHONY : tree_node.i
+
+# target to preprocess a source file
+tree_node.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.i
+.PHONY : tree_node.cpp.i
+
+tree_node.s: tree_node.cpp.s
+
+.PHONY : tree_node.s
+
+# target to generate assembly for a file
+tree_node.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.s
+.PHONY : tree_node.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -222,6 +249,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... tree_node.o"
+	@echo "... tree_node.i"
+	@echo "... tree_node.s"
 .PHONY : help
 
 

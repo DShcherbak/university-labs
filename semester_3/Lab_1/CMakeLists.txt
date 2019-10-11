@@ -3,4 +3,7 @@ project(Lab_1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Lab_1 main.cpp folder.h folder.cpp file.h file.cpp)
+add_executable(Lab_1 main.cpp
+                folder.h folder.cpp
+                file.h file.cpp
+                tree_node.h tree_node.cpp)
