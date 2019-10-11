@@ -5,10 +5,27 @@
 #ifndef LAB_1_FILE_H
 #define LAB_1_FILE_H
 
+#include <string>
+
+class folder;
+
+using namespace std;
 
 class file {
+private:
+    string name;
+    string creation_time;
+    string change_time;
+    int parent;
+    char type;
 
+public:
+
+    file(string _name, char _type, int cur_dir);
+
+   // string set_time();
 };
 
-
 #endif //LAB_1_FILE_H
+
+
