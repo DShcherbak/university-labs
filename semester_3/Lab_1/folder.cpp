@@ -96,7 +96,7 @@ void folder::delete_folder(){
 void add_value_to_tree(Node* &root, int v){
     std::cout << "a" << (root ? "b" : "c") << "\n";
     Node* new_node = new Node(v);
-    add_node_to_root(root,new_node,probability);
+//    add_node_to_root(root,new_node,probability);
 }
 
 void print_node_right(Node* root){

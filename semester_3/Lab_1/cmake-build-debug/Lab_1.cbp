@@ -111,6 +111,9 @@
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h">
 			<Option target="Lab_1"/>
 		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc">
+			<Option target="Lab_1"/>
+		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>

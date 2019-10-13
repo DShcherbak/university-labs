@@ -7,4 +7,5 @@ add_executable(Lab_1 main.cpp
                 folder.h folder.cpp
                 file.h file.cpp
                 tree_node.h tree_node.cpp
-                binary_node.h binary_node.cpp)
+                binary_node.h binary_node.cpp
+                tree_node.inc)

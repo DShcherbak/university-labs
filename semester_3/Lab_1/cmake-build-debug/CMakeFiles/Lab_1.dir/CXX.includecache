@@ -6,34 +6,16 @@
 
 #IncludeRegexTransform: 
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.cpp
-file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.h
-cctype
--
-vector
--
-string
--
-iostream
--
-fstream
--
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.cpp
+binary_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.h
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.h
+tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.h
 string
--
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.cpp
-folder.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h
-vector
--
-algorithm
--
-random
--
-iostream
 -
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h
@@ -47,4 +29,26 @@ string
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
 folder.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h
+tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
+iostream
+-
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.cpp
+tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
+vector
+-
+tree_node.inc
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc
+iostream
+-
+vector
+-
+queue
+-
 
