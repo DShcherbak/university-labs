@@ -3,17 +3,21 @@
 
 #include <vector>
 
-using namespace std;
-
 template <class T>
 class tree_node {
     T value;
-    tree_node* parent;
-    vector <tree_node*> children;
+    tree_node<T>* parent;
+    std::vector <tree_node<T>*> children;
 
-    void add_son(T new_son);
+    void set_parent(tree_node<T>* new_parent);
 
-    void delete_son();
+    void add_son(tree_node<T>* new_son);
+
+    void delete_son(T val);
+
+    void delete_son(int num);
+
+    tree_node* search_for_value(T val);
 };
 
 
