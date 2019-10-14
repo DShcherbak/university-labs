@@ -123,87 +123,6 @@ Lab_1/fast:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/build
 .PHONY : Lab_1/fast
 
-binary_node.o: binary_node.cpp.o
-
-.PHONY : binary_node.o
-
-# target to build an object file
-binary_node.cpp.o:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.o
-.PHONY : binary_node.cpp.o
-
-binary_node.i: binary_node.cpp.i
-
-.PHONY : binary_node.i
-
-# target to preprocess a source file
-binary_node.cpp.i:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.i
-.PHONY : binary_node.cpp.i
-
-binary_node.s: binary_node.cpp.s
-
-.PHONY : binary_node.s
-
-# target to generate assembly for a file
-binary_node.cpp.s:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/binary_node.cpp.s
-.PHONY : binary_node.cpp.s
-
-file.o: file.cpp.o
-
-.PHONY : file.o
-
-# target to build an object file
-file.cpp.o:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/file.cpp.o
-.PHONY : file.cpp.o
-
-file.i: file.cpp.i
-
-.PHONY : file.i
-
-# target to preprocess a source file
-file.cpp.i:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/file.cpp.i
-.PHONY : file.cpp.i
-
-file.s: file.cpp.s
-
-.PHONY : file.s
-
-# target to generate assembly for a file
-file.cpp.s:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/file.cpp.s
-.PHONY : file.cpp.s
-
-folder.o: folder.cpp.o
-
-.PHONY : folder.o
-
-# target to build an object file
-folder.cpp.o:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/folder.cpp.o
-.PHONY : folder.cpp.o
-
-folder.i: folder.cpp.i
-
-.PHONY : folder.i
-
-# target to preprocess a source file
-folder.cpp.i:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/folder.cpp.i
-.PHONY : folder.cpp.i
-
-folder.s: folder.cpp.s
-
-.PHONY : folder.s
-
-# target to generate assembly for a file
-folder.cpp.s:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/folder.cpp.s
-.PHONY : folder.cpp.s
-
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -231,32 +150,113 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-tree_node.o: tree_node.cpp.o
+sources/binary_node.o: sources/binary_node.cpp.o
 
-.PHONY : tree_node.o
+.PHONY : sources/binary_node.o
 
 # target to build an object file
-tree_node.cpp.o:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.o
-.PHONY : tree_node.cpp.o
+sources/binary_node.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o
+.PHONY : sources/binary_node.cpp.o
 
-tree_node.i: tree_node.cpp.i
+sources/binary_node.i: sources/binary_node.cpp.i
 
-.PHONY : tree_node.i
+.PHONY : sources/binary_node.i
 
 # target to preprocess a source file
-tree_node.cpp.i:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.i
-.PHONY : tree_node.cpp.i
+sources/binary_node.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/binary_node.cpp.i
+.PHONY : sources/binary_node.cpp.i
 
-tree_node.s: tree_node.cpp.s
+sources/binary_node.s: sources/binary_node.cpp.s
 
-.PHONY : tree_node.s
+.PHONY : sources/binary_node.s
 
 # target to generate assembly for a file
-tree_node.cpp.s:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/tree_node.cpp.s
-.PHONY : tree_node.cpp.s
+sources/binary_node.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/binary_node.cpp.s
+.PHONY : sources/binary_node.cpp.s
+
+sources/file.o: sources/file.cpp.o
+
+.PHONY : sources/file.o
+
+# target to build an object file
+sources/file.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.o
+.PHONY : sources/file.cpp.o
+
+sources/file.i: sources/file.cpp.i
+
+.PHONY : sources/file.i
+
+# target to preprocess a source file
+sources/file.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.i
+.PHONY : sources/file.cpp.i
+
+sources/file.s: sources/file.cpp.s
+
+.PHONY : sources/file.s
+
+# target to generate assembly for a file
+sources/file.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.s
+.PHONY : sources/file.cpp.s
+
+sources/folder.o: sources/folder.cpp.o
+
+.PHONY : sources/folder.o
+
+# target to build an object file
+sources/folder.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/folder.cpp.o
+.PHONY : sources/folder.cpp.o
+
+sources/folder.i: sources/folder.cpp.i
+
+.PHONY : sources/folder.i
+
+# target to preprocess a source file
+sources/folder.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/folder.cpp.i
+.PHONY : sources/folder.cpp.i
+
+sources/folder.s: sources/folder.cpp.s
+
+.PHONY : sources/folder.s
+
+# target to generate assembly for a file
+sources/folder.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/folder.cpp.s
+.PHONY : sources/folder.cpp.s
+
+sources/tree_node.o: sources/tree_node.cpp.o
+
+.PHONY : sources/tree_node.o
+
+# target to build an object file
+sources/tree_node.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o
+.PHONY : sources/tree_node.cpp.o
+
+sources/tree_node.i: sources/tree_node.cpp.i
+
+.PHONY : sources/tree_node.i
+
+# target to preprocess a source file
+sources/tree_node.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/tree_node.cpp.i
+.PHONY : sources/tree_node.cpp.i
+
+sources/tree_node.s: sources/tree_node.cpp.s
+
+.PHONY : sources/tree_node.s
+
+# target to generate assembly for a file
+sources/tree_node.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/tree_node.cpp.s
+.PHONY : sources/tree_node.cpp.s
 
 # Help Target
 help:
@@ -267,21 +267,21 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Lab_1"
 	@echo "... edit_cache"
-	@echo "... binary_node.o"
-	@echo "... binary_node.i"
-	@echo "... binary_node.s"
-	@echo "... file.o"
-	@echo "... file.i"
-	@echo "... file.s"
-	@echo "... folder.o"
-	@echo "... folder.i"
-	@echo "... folder.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... tree_node.o"
-	@echo "... tree_node.i"
-	@echo "... tree_node.s"
+	@echo "... sources/binary_node.o"
+	@echo "... sources/binary_node.i"
+	@echo "... sources/binary_node.s"
+	@echo "... sources/file.o"
+	@echo "... sources/file.i"
+	@echo "... sources/file.s"
+	@echo "... sources/folder.o"
+	@echo "... sources/folder.i"
+	@echo "... sources/folder.s"
+	@echo "... sources/tree_node.o"
+	@echo "... sources/tree_node.i"
+	@echo "... sources/tree_node.s"
 .PHONY : help
 
 

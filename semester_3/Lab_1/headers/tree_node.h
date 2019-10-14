@@ -7,10 +7,10 @@ class tree_node {
 private:
     T value;
     tree_node<T>* parent;
-    std::vector <tree_node<T>*> children;
 public:
+    std::vector <tree_node<T>*> children;
 
-    tree_node<T>(T value);
+    explicit tree_node<T>(T value);
 
     T get_value();
 
@@ -18,9 +18,9 @@ public:
 
     void add_son(tree_node<T>* new_son);
 
-    void delete_son(T val);
+    void delete_son(T val, bool _r);
 
-    void delete_son_by_id(int num);
+    void delete_son_by_id(int id, bool _r);
 
     tree_node* search_for_value_dfs(T val);
 
@@ -28,6 +28,6 @@ public:
 
 };
 
-#include "tree_node.inc"
+#include "../includes/tree_node.inc"
 
 #endif //LAB_1_TREE_NODE_H

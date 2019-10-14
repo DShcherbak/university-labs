@@ -6,49 +6,41 @@
 
 #IncludeRegexTransform: 
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.cpp
-binary_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.h
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.h
-tree_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
 string
 -
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h
 file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
 vector
 -
 string
 -
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
-folder.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h
-tree_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
-iostream
--
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.cpp
-tree_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 vector
 -
-tree_node.inc
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc
+../includes/tree_node.inc
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
 iostream
 -
 vector
 -
 queue
 -
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
+headers/folder.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h
+headers/tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
+iostream
+-
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp
+../headers/tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 

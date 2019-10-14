@@ -84,34 +84,37 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.cpp">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/binary_node.h">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/binary_node.h">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.cpp">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/file.h">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.cpp">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/binary_node.inc">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/folder.h">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.cpp">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/binary_node.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.h">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/tree_node.inc">
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp">
+			<Option target="Lab_1"/>
+		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/CMakeLists.txt">

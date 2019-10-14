@@ -28,9 +28,15 @@ void tree_node<T>::add_son(tree_node<T>* new_son){
 }
 
 template <class T>
-void tree_node<T>::delete_son(T val){
-    for(int i = 0; i < children[i].size(); i++){
-        if(val == children[i]){
+void tree_node<T>::delete_son(T val, bool _r){
+    for(int i = 0; i < children.size(); i++){
+        if(val == children[i]->get_value()){
+            if(_r)
+                delete_recursively(children[i]);
+            else{
+                save_sons(children[i]);
+                delete children[i];
+            }
             children.erase(children.begin()+i);
             return;
         }
@@ -38,23 +44,31 @@ void tree_node<T>::delete_son(T val){
 }
 
 template <class T>
-void tree_node<T>::delete_son_by_id(int id){
+void tree_node<T>::delete_son_by_id(int id, bool _r){
     if(children.size() <= id){
         std::cout << "ERROR. No such sun to delete.";
         return;
     }
+    if(_r)
+        delete_recursively(children[id]);
+    else{
+        save_sons(children[id]);
+        delete children[id];
+    }
     children.erase(children.begin()+id);
+    return;
 }
 
 template <class T>
 tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
+    std::cout << "dfs: " << value << std::endl;
     if(value == val){
         return this;
     }
     else{
         tree_node<T> *cur = nullptr;
         for(int i = 0; i < children.size(); i++){
-            cur = children[i]->search_for_value(val);
+            cur = children[i]->search_for_value_dfs(val);
             if(cur != nullptr)
                 return cur;
         }
@@ -65,16 +79,17 @@ tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
 
 template <class T>
 tree_node<T>* tree_node<T>::search_for_value_bfs(T val) {
-    std::queue <int> Q;
+    std::queue <tree_node<T>*> Q;
     Q.push(this);
     tree_node<T>* cur;
     while(!Q.empty()){
         cur = Q.front();
+        std::cout << "bfs: " << cur->value << std::endl;
         Q.pop();
-        if(cur->value == val)
+        if(cur->get_value() == val)
             return cur;
-        for(int i = 0; i < children.size(); i++)
-            Q.push(children[i]);
-
+        for(int i = 0; i < cur->children.size(); i++)
+            Q.push(cur->children[i]);
     }
+    return nullptr;
 }
