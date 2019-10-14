@@ -29,10 +29,10 @@ int main(){
     auto res1 = root->search_for_value_bfs(1);
     cout << (res1 == nullptr ? -1 : 3) << endl;
 
-    root->delete_son(0,true);
+    root->delete_son(0,false);
 
-    res = root->search_for_value_dfs(1);
-    cout << (res == nullptr ? -1 : 1) << endl;
+    res = root->search_for_value_dfs(4);
+    cout << (res == nullptr ? -1 : 4) << endl;
 
 
     return 0;

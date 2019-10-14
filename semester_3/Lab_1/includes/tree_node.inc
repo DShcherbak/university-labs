@@ -27,6 +27,22 @@ void tree_node<T>::add_son(tree_node<T>* new_son){
     children.push_back(new_son);
 }
 
+
+template <class T>
+void save_sons(tree_node<T>* parent, tree_node<T>* cur){
+    for(int i = 0; i < cur->children.size(); i++){
+        parent->add_son(cur->children[i]);
+    }
+}
+
+
+template <class T>
+void delete_recursively(tree_node<T>* cur){
+    for(int i = 0; i < cur->children.size(); i++)
+        delete_recursively(cur->children[i]);
+    delete cur;
+}
+
 template <class T>
 void tree_node<T>::delete_son(T val, bool _r){
     for(int i = 0; i < children.size(); i++){
@@ -34,7 +50,7 @@ void tree_node<T>::delete_son(T val, bool _r){
             if(_r)
                 delete_recursively(children[i]);
             else{
-                save_sons(children[i]);
+                save_sons(this, children[i]);
                 delete children[i];
             }
             children.erase(children.begin()+i);
@@ -74,7 +90,6 @@ tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
         }
         return nullptr;
     }
-
 }
 
 template <class T>
