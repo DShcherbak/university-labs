@@ -9,6 +9,8 @@
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
 string
 -
+map
+-
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h
 file.h
@@ -20,6 +22,8 @@ string
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 vector
+-
+string
 -
 ../includes/tree_node.inc
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
@@ -38,5 +42,7 @@ headers/folder.h
 headers/tree_node.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 iostream
+-
+map
 -
 

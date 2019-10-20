@@ -15,6 +15,11 @@ T tree_node<T>::get_value() {
     return value;
 }
 
+template <class T>
+tree_node<T>* tree_node<T>::get_parent() {
+    return parent;
+}
+
 
 template <class T>
 void tree_node<T>::set_parent(tree_node<T>* new_parent) {
@@ -29,10 +34,12 @@ void tree_node<T>::add_son(tree_node<T>* new_son){
 
 
 template <class T>
-void save_sons(tree_node<T>* parent, tree_node<T>* cur){
+void save_sons_and_delete(tree_node<T>* parent, tree_node<T>* cur){
     for(int i = 0; i < cur->children.size(); i++){
         parent->add_son(cur->children[i]);
+        std::cout << parent->get_value() << " -> " << cur->children[i]->get_value() << std::endl;
     }
+    delete cur;
 }
 
 
@@ -46,13 +53,11 @@ void delete_recursively(tree_node<T>* cur){
 template <class T>
 void tree_node<T>::delete_son(T val, bool _r){
     for(int i = 0; i < children.size(); i++){
-        if(val == children[i]->get_value()){
+        if(fits_value(children[i],val)){
             if(_r)
                 delete_recursively(children[i]);
-            else{
-                save_sons(this, children[i]);
-                delete children[i];
-            }
+            else
+                save_sons_and_delete(this, children[i]);
             children.erase(children.begin()+i);
             return;
         }
@@ -68,17 +73,20 @@ void tree_node<T>::delete_son_by_id(int id, bool _r){
     if(_r)
         delete_recursively(children[id]);
     else{
-        save_sons(children[id]);
-        delete children[id];
+        save_sons_and_delete(this, children[id]);
     }
     children.erase(children.begin()+id);
     return;
+}
+template <class T>
+bool fits_value(tree_node<T>* cur, T val){
+    return true;
 }
 
 template <class T>
 tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
     std::cout << "dfs: " << value << std::endl;
-    if(value == val){
+    if(fits_value(this,val)){
         return this;
     }
     else{
@@ -101,10 +109,20 @@ tree_node<T>* tree_node<T>::search_for_value_bfs(T val) {
         cur = Q.front();
         std::cout << "bfs: " << cur->value << std::endl;
         Q.pop();
-        if(cur->get_value() == val)
+        if(fits_value(cur,val))
             return cur;
         for(int i = 0; i < cur->children.size(); i++)
             Q.push(cur->children[i]);
     }
     return nullptr;
+}
+
+
+template <class T>
+void find_and_delete(tree_node<T>* root, T val, bool _r){
+    tree_node<T>* target = root->search_for_value_bfs(val);
+    if(_r)
+        delete_recursively(root);
+    else
+        save_sons_and_delete(root->get_parent(), root);
 }

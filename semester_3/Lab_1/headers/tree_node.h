@@ -2,6 +2,7 @@
 #define LAB_1_TREE_NODE_H
 
 #include <vector>
+#include <string>
 template <class T>
 class tree_node {
 private:
@@ -13,6 +14,8 @@ public:
     explicit tree_node<T>(T value);
 
     T get_value();
+
+    tree_node<T>* get_parent();
 
     void set_parent(tree_node<T>* new_parent);
 
@@ -27,6 +30,7 @@ public:
     tree_node* search_for_value_bfs(T val);
 
 };
+
 
 #include "../includes/tree_node.inc"
 

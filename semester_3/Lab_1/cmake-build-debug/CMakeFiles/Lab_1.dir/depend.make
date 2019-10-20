@@ -18,6 +18,7 @@ CMakeFiles/Lab_1.dir/sources/folder.cpp.o: ../headers/file.h
 CMakeFiles/Lab_1.dir/sources/folder.cpp.o: ../headers/folder.h
 CMakeFiles/Lab_1.dir/sources/folder.cpp.o: ../sources/folder.cpp
 
+CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../headers/file.h
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../headers/tree_node.h
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../includes/tree_node.inc
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../sources/tree_node.cpp
