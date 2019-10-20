@@ -231,6 +231,33 @@ sources/folder.cpp.s:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/folder.cpp.s
 .PHONY : sources/folder.cpp.s
 
+sources/interactive.o: sources/interactive.cpp.o
+
+.PHONY : sources/interactive.o
+
+# target to build an object file
+sources/interactive.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/interactive.cpp.o
+.PHONY : sources/interactive.cpp.o
+
+sources/interactive.i: sources/interactive.cpp.i
+
+.PHONY : sources/interactive.i
+
+# target to preprocess a source file
+sources/interactive.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/interactive.cpp.i
+.PHONY : sources/interactive.cpp.i
+
+sources/interactive.s: sources/interactive.cpp.s
+
+.PHONY : sources/interactive.s
+
+# target to generate assembly for a file
+sources/interactive.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/interactive.cpp.s
+.PHONY : sources/interactive.cpp.s
+
 sources/tree_node.o: sources/tree_node.cpp.o
 
 .PHONY : sources/tree_node.o
@@ -279,6 +306,9 @@ help:
 	@echo "... sources/folder.o"
 	@echo "... sources/folder.i"
 	@echo "... sources/folder.s"
+	@echo "... sources/interactive.o"
+	@echo "... sources/interactive.i"
+	@echo "... sources/interactive.s"
 	@echo "... sources/tree_node.o"
 	@echo "... sources/tree_node.i"
 	@echo "... sources/tree_node.s"

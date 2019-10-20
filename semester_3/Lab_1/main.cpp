@@ -2,15 +2,68 @@
 // Created by sadoffnick on 11.10.19.
 //
 
-#include "headers/folder.h"
+#include "headers/file.h"
 #include "headers/tree_node.h"
+#include "headers/interactive.h"
 
 #include <iostream>
 #include <map>
+#include <stdlib.h>
 
 
 int main(){
-    std::cout << "Let's test that!\n";
+    print_greetings();
+    int DIR_COUNTER = 0;
+    std::string username = "sadoffnick";
+    std::string comp = "@laptop:";
+    std::string current_dir = "~";
+    std::string command;
+
+    file root_file = *(new file("root","folder",DIR_COUNTER));
+    tree_node<file>* root = new tree_node<file>(root_file);
+    tree_node<file>* cur = root;
+    vector <tree_node<file>*> catalog;
+    catalog.push_back(root);
+
+    bool wait_for_commands = true;
+    while(wait_for_commands){
+        std::cout << "\n" << username << comp << current_dir << "# ";
+        std::cin >> command;
+        if(command == "man")
+        {
+            print_manual();
+        }
+        else if (command == "cd"){
+            std::string dir;
+            std::cin >> dir;
+          //  change_dir(cur,dir);
+            std::cout << "Changing directory to " << current_dir << "/" << dir;
+        }
+        else if(command == "mkdir"){
+            std::string dir;
+            std::cin >> dir;
+
+            //creating new directory in current directory
+        }
+        else if(command == "touch"){
+            std::string filename;
+            std::cin >> filename;
+            //create new file
+        }
+        else if(command == "exit"){
+            wait_for_commands = false;
+            std::cout << "Good bye!\n";
+        }
+        else{
+            std::cout << "Unknown command: \"" + command + "\". \n";
+            std::cout << "Please, try again, or read the manual to see the list of possible commands (simply write \"man\" into terminal.\n";
+        }
+    }
+
+    return 0;
+}
+
+/*std::cout << "Let's test that!\n";
     tree_node<int> *root;
     root = new tree_node<int>(3);
     std::cout << root->get_value() << std::endl;
@@ -34,28 +87,4 @@ int main(){
 
     res = root->search_for_value_dfs(4);
     std::cout << (res == nullptr ? -1 : 4) << std::endl;
-
-
-
-    std::map <int, pair<int,std::string>> dict;
-
-    int id = 0;
-
-    std::string s = "A";
-    //std::string predicat = parse_string("name='a' | type='b' & name='c'",dict);
-    std::string predicat = parse_string("((name='al+lo' | type='illla')  ! (type='illa' & name='name'))", dict);
-
-    //
-    std::cout << predicat << std::endl;
-
-    file* f = new file("name", "illa", 0);
-
-    std::string bool_eqw =paste_predicat(f,predicat, dict);
-
-    std::cout << bool_eqw << std::endl;
-
-   cout << (calculate_bool(bool_eqw) ? "Fits.\n" : "Doesn't fit.\n");
-
-
-    return 0;
-}
+*/

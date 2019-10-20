@@ -27,7 +27,7 @@ file::file(std::string _name, std::string _type, int cur_dir){
     creation_time = get_time();
     change_time = creation_time;
     type = _type;
-    parent = cur_dir;
+//    parent = cur_dir;
 }
 
 string file::get_name(){
@@ -42,12 +42,12 @@ string file::get_change_time(){
     return change_time;
 }
 
-
+/*
 int file::get_parent(){
     return parent;
 }
 
-
+*/
 string file::get_type(){
     return type;
 }
@@ -55,7 +55,6 @@ string file::get_type(){
 bool operator==(file a, file b){
     return (a.get_name() == b.get_name());
 }
-
 
 int index(string param){
     if(param == "name")
@@ -70,7 +69,6 @@ int index(string param){
         return 4;
     std::cout << "Unknown type error!\n";
     return 8;// unknown type error
-
 }
 
 void throw_error(std::string e){
@@ -101,7 +99,6 @@ std::string word_with_brackets(std::string s, int &id, int len){
     return word;
 }
 
-
 bool is_operator(char c){
     return c == '!'
            || c == '&'
@@ -111,7 +108,7 @@ bool is_operator(char c){
            || c == ')';
 }
 
-std::string parse_string(std::string request, std::map <int, pair<int,std::string>> &dict){
+std::string parse_string(const std::string &request, std::map <int, pair<int,std::string>> &dict){
     int len = request.length();
     int id = 0, counter = 0;
     std::set <std::string> values;
@@ -170,8 +167,8 @@ bool bool_value(file* f, int hash, std::map <int, pair<int,std::string>> &dict){
             return f->get_creation_time() == v.second;
         case 2:
             return f->get_change_time() == v.second;
-        case 3:
-            return f->get_parent() == get_inter(v.second,id);
+//        case 3:
+  //          return f->get_parent() == get_inter(v.second,id);
         case 4:
             return f->get_type() == v.second;
         default:
@@ -179,18 +176,18 @@ bool bool_value(file* f, int hash, std::map <int, pair<int,std::string>> &dict){
     }
 }
 
-std::string paste_predicat(file* f, std::string predicat, std::map <int, pair<int,std::string>> dict){
+std::string paste_predicate(file* f, const std::string &predicate, std::map <int, pair<int,std::string>> &dict){
     std::string result = "";
-    int len = predicat.length(), id = 0;
+    int len = predicate.length(), id = 0;
     while(id < len){
-        if(predicat[id] == '['){
+        if(predicate[id] == '['){
             id++;
-            int hash = get_inter(predicat,id);
+            int hash = get_inter(predicate,id);
             result += std::to_string(bool_value(f, hash, dict));
             id++;
         }
         else
-            result += predicat[id++];
+            result += predicate[id++];
     }
     return result;
 }
@@ -219,7 +216,7 @@ void perform(char op, stack<bool> &operands){
 
 }
 
-bool calculate_bool(std::string &bool_eqw){
+bool calculate_bool(const std::string &bool_eqw){
     std::stack <char> operators;
     std::stack <bool> operands;
     int id = 0, len = bool_eqw.length();
@@ -269,6 +266,15 @@ bool calculate_bool(std::string &bool_eqw){
     return operands.top();
 }
 
+bool file_filter(std::string request, file* f){
+    std::map <int, pair<int,std::string>> dict;
+
+    std::string predicate = parse_string(request, dict);
+
+    std::string bool_eqw =paste_predicate(f,predicate, dict);
+
+    return calculate_bool(bool_eqw);
+}
 
 
 

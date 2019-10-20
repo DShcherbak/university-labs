@@ -93,6 +93,9 @@
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h">
 			<Option target="Lab_1"/>
 		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h">
+			<Option target="Lab_1"/>
+		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h">
 			<Option target="Lab_1"/>
 		</Unit>
@@ -112,6 +115,9 @@
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp">
+			<Option target="Lab_1"/>
+		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp">

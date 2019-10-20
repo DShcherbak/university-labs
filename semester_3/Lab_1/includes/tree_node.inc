@@ -84,6 +84,11 @@ bool fits_value(tree_node<T>* cur, T val){
 }
 
 template <class T>
+bool fits_value(tree_node<T>* cur, std::string name){
+    return cur->get_value() == name;
+}
+
+template <class T>
 tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
     std::cout << "dfs: " << value << std::endl;
     if(fits_value(this,val)){
