@@ -22,13 +22,19 @@ string get_time(){
     return convert_time(gmtm);
 }
 
-file::file(std::string _name, std::string _type, int cur_dir){
+bool operator==(file* a, std::string b){
+    return a->get_name() == b;
+}
+
+file::file(std::string _name, std::string _type){
     name = _name;
     creation_time = get_time();
     change_time = creation_time;
     type = _type;
 //    parent = cur_dir;
 }
+
+
 
 string file::get_name(){
     return name;
@@ -42,18 +48,16 @@ string file::get_change_time(){
     return change_time;
 }
 
-/*
-int file::get_parent(){
-    return parent;
-}
-
-*/
 string file::get_type(){
     return type;
 }
 
 bool operator==(file a, file b){
     return (a.get_name() == b.get_name());
+}
+
+std::string to_string(file* a){
+    return a->get_name();
 }
 
 int index(string param){

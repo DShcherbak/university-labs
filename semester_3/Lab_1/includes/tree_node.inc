@@ -1,17 +1,19 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
+#include "../headers/file.h"
 
 
 template <class T>
-tree_node<T>::tree_node(T val) {
+tree_node<T>::tree_node(T* val, int _id, int _level) {
     value = val;
     parent = nullptr;
+    id = _id;
+    level = _level;
 }
 
 template <class T>
-T tree_node<T>::get_value() {
+T* tree_node<T>::get_value() {
     return value;
 }
 
@@ -19,11 +21,32 @@ template <class T>
 tree_node<T>* tree_node<T>::get_parent() {
     return parent;
 }
+template <class T>
+std::string tree_node<T>::get_path() {
+    return path;
+}
+
+template <class T>
+int tree_node<T>::get_id() {
+    return id;
+}
+
+template <class T>
+int tree_node<T>::get_level() {
+    return level;
+}
+
 
 
 template <class T>
 void tree_node<T>::set_parent(tree_node<T>* new_parent) {
     parent = new_parent;
+    path = parent->get_path() + "/" +  to_string(get_value());
+}
+
+template <class T>
+void tree_node<T>::set_path(std::string _path) {
+    path = _path;
 }
 
 template <class T>
@@ -124,10 +147,10 @@ tree_node<T>* tree_node<T>::search_for_value_bfs(T val) {
 
 
 template <class T>
-void find_and_delete(tree_node<T>* root, T val, bool _r){
+void find_and_delete(tree_node<T>* root, T* val, bool _r){
     tree_node<T>* target = root->search_for_value_bfs(val);
     if(_r)
-        delete_recursively(root);
+        delete_recursively(target);
     else
-        save_sons_and_delete(root->get_parent(), root);
+        save_sons_and_delete(target->get_parent(), target);
 }
