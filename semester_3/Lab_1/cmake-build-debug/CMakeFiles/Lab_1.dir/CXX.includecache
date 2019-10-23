@@ -60,3 +60,11 @@ stdlib.h
 iostream
 -
 
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp
+../headers/tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
+../headers/file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+string
+-
+

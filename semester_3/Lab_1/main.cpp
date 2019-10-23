@@ -88,6 +88,12 @@ int main(){
                 }
             }
         }
+        else if(command == "src"){
+            std::string path;
+            std::cin >> path;
+            if(!find_path(cur,path,mod))
+                std::cout << "No such file or directory: "  << path << "\n";
+        }
         else if(command == "exit"){
             wait_for_commands = false;
             std::cout << "Good bye!\n";

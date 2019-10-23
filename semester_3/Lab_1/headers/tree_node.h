@@ -30,8 +30,8 @@ public:
     void delete_son(T val, bool _r);
     void delete_son_by_id(int id, bool _r);
 
-    tree_node* search_for_value_dfs(T val);
-    tree_node* search_for_value_bfs(T val);
+    tree_node* search_for_value_dfs(std::string val);
+    tree_node* search_for_value_bfs(std::string val);
 
 };
 

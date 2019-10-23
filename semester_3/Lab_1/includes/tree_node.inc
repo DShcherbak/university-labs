@@ -112,8 +112,8 @@ bool fits_value(tree_node<T>* cur, std::string name){
 }
 
 template <class T>
-tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
-    std::cout << "dfs: " << value << std::endl;
+tree_node<T>* tree_node<T>::search_for_value_dfs(std::string val) {
+   // std::cout << "dfs: " << value << std::endl;
     if(fits_value(this,val)){
         return this;
     }
@@ -129,13 +129,13 @@ tree_node<T>* tree_node<T>::search_for_value_dfs(T val) {
 }
 
 template <class T>
-tree_node<T>* tree_node<T>::search_for_value_bfs(T val) {
+tree_node<T>* tree_node<T>::search_for_value_bfs(std::string val) {
     std::queue <tree_node<T>*> Q;
     Q.push(this);
     tree_node<T>* cur;
     while(!Q.empty()){
         cur = Q.front();
-        std::cout << "bfs: " << cur->value << std::endl;
+   //     std::cout << "bfs: " << to_string(cur->get_value()) << std::endl;
         Q.pop();
         if(fits_value(cur,val))
             return cur;
