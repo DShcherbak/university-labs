@@ -12,6 +12,15 @@
 map <std::string, int> command_dict = {{"exit", 0},{"man", 1}, {"ls", 2}, {"cd",3}, {"mkdir", 4}, {"touch", 5}, {"src", 6}, {"mv", 7}, {"cp" ,8}};
 set <std::string> exists = {"exit", "man", "ls", "cd", "mkdir", "touch", "src", "mv", "cp"};
 
+void User::list(bool o, bool l){
+    if(l){
+        //TODO: implement listing with all information
+    }else{
+        char ser = (o ? '\n' : ' ');
+
+    }
+}
+
 std::string get_word(std::string source, int id){
     int len = source.length(); std::string result = "";
     while(id < len && source[id] == ' ')
@@ -34,6 +43,7 @@ int get_command_and_go(User* user){
         return 1;
     }
 
+    //TODO: write reading the -specifiers and argument(s) of a function
 
     int command_code = command_dict[command];
     switch(command_code){
@@ -43,7 +53,8 @@ int get_command_and_go(User* user){
             print_manual();
             return true;
         case 2:
-
+            user->list();
+        //TODO: finish all the cases with corresponding methods in User class
     }
 
 }

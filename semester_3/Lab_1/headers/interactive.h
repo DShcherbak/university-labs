@@ -18,6 +18,8 @@ public:
     tree_node<file>* root = new tree_node<file>(new file("root","folder"), DIR_COUNTER++, mod);
     tree_node<file>* cur = root;
 
+    void list(bool o = false, bool l = false);
+
 };
 
 int get_command_and_go(User* user);
