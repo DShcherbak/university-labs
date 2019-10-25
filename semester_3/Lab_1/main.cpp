@@ -14,9 +14,6 @@
 int main(){
     print_greetings();
     int DIR_COUNTER = 0;
-    std::string username = "sadoffnick";
-    std::string comp = "@laptop:";
-    std::string current_dir = "~";
     std::string command;
     int mod = 1;
 
@@ -27,10 +24,17 @@ int main(){
     vector <tree_node<file>*> catalog;
     catalog.push_back(root);
 
+    User *user = new User();
+
     bool wait_for_commands = true;
-    while(wait_for_commands){
-        std::cout << "\n" << username << comp << cur->get_path() << "# ";
-        std::cin >> command;
+    while(wait_for_commands) {
+        std::cout << "\n" << user->username << user->comp << user->get_path() << "# ";
+        if (get_command_and_go(user) == 0){
+            break;
+        }
+    }
+
+    /*
         if(command == "man")
         {
             print_manual();
@@ -103,6 +107,7 @@ int main(){
             std::cout << "Please, try again, or read the manual to see the list of possible commands (simply write \"man\" into terminal.\n";
         }
     }
+     */
     delete_recursively(root);
     return 0;
 }

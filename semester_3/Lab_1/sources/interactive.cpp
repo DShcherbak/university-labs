@@ -6,8 +6,47 @@
 #include "../headers/file.h"
 #include "../headers/tree_node.h"
 #include <iostream>
+#include <map>
+#include <set>
+
+map <std::string, int> command_dict = {{"exit", 0},{"man", 1}, {"ls", 2}, {"cd",3}, {"mkdir", 4}, {"touch", 5}, {"src", 6}, {"mv", 7}, {"cp" ,8}};
+set <std::string> exists = {"exit", "man", "ls", "cd", "mkdir", "touch", "src", "mv", "cp"};
+
+std::string get_word(std::string source, int id){
+    int len = source.length(); std::string result = "";
+    while(id < len && source[id] == ' ')
+        id++;
+    while(id < len && source[id] != ' ')
+        result += source[id++];
+    while(id < len && source[id] == ' ')
+        id++;
+
+}
+
+int get_command_and_go(User* user){
+    std::string line, command, temp;
+    getline(std::cin, line);
+    std::vector <std::string> argv;
+    int argc = 0, id = 0;
+    command = get_word(line, id);
+    if(exists.count(command) == 0){
+        std::cout << "Error! No such command: \"" << command << "\"\n";
+        return 1;
+    }
 
 
+    int command_code = command_dict[command];
+    switch(command_code){
+        case 0:
+            return false;
+        case 1:
+            print_manual();
+            return true;
+        case 2:
+
+    }
+
+}
 
 void print_greetings(){
     std::cout << "Hello, dear user!\n";

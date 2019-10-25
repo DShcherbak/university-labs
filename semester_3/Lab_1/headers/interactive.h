@@ -8,6 +8,21 @@
 #include "tree_node.h"
 #include "file.h"
 
+class User{
+public:
+    std::string username = "user";
+    std::string comp = "@laptop";
+    std::string current_dir = "~";
+    int DIR_COUNTER = 0;
+    int mod = 1;
+    tree_node<file>* root = new tree_node<file>(new file("root","folder"), DIR_COUNTER++, mod);
+    tree_node<file>* cur = root;
+
+};
+
+int get_command_and_go(User* user);
+
+
 void print_greetings();
 
 void print_manual();

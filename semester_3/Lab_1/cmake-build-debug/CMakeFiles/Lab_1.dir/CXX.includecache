@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/binary_node.h
+../includes/binary_node.inc
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/binary_node.inc
+
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
 string
 -
@@ -25,6 +29,14 @@ string
 -
 ../includes/tree_node.inc
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/binary_node.inc
+iostream
+-
+vector
+-
+queue
+-
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
 iostream
@@ -48,6 +60,38 @@ iostream
 map
 -
 stdlib.h
+-
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/binary_node.cpp
+../headers/binary_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/binary_node.h
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp
+../headers/file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+cctype
+-
+vector
+-
+string
+-
+iostream
+-
+map
+-
+set
+-
+stack
+-
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp
+vector
+-
+algorithm
+-
+random
+-
+iostream
 -
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp
