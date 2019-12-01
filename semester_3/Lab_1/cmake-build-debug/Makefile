@@ -177,33 +177,6 @@ sources/binary_node.cpp.s:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/binary_node.cpp.s
 .PHONY : sources/binary_node.cpp.s
 
-sources/file.o: sources/file.cpp.o
-
-.PHONY : sources/file.o
-
-# target to build an object file
-sources/file.cpp.o:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.o
-.PHONY : sources/file.cpp.o
-
-sources/file.i: sources/file.cpp.i
-
-.PHONY : sources/file.i
-
-# target to preprocess a source file
-sources/file.cpp.i:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.i
-.PHONY : sources/file.cpp.i
-
-sources/file.s: sources/file.cpp.s
-
-.PHONY : sources/file.s
-
-# target to generate assembly for a file
-sources/file.cpp.s:
-	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/file.cpp.s
-.PHONY : sources/file.cpp.s
-
 sources/folder.o: sources/folder.cpp.o
 
 .PHONY : sources/folder.o
@@ -258,6 +231,33 @@ sources/interactive.cpp.s:
 	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/interactive.cpp.s
 .PHONY : sources/interactive.cpp.s
 
+sources/my_file.o: sources/my_file.cpp.o
+
+.PHONY : sources/my_file.o
+
+# target to build an object file
+sources/my_file.cpp.o:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/my_file.cpp.o
+.PHONY : sources/my_file.cpp.o
+
+sources/my_file.i: sources/my_file.cpp.i
+
+.PHONY : sources/my_file.i
+
+# target to preprocess a source file
+sources/my_file.cpp.i:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/my_file.cpp.i
+.PHONY : sources/my_file.cpp.i
+
+sources/my_file.s: sources/my_file.cpp.s
+
+.PHONY : sources/my_file.s
+
+# target to generate assembly for a file
+sources/my_file.cpp.s:
+	$(MAKE) -f CMakeFiles/Lab_1.dir/build.make CMakeFiles/Lab_1.dir/sources/my_file.cpp.s
+.PHONY : sources/my_file.cpp.s
+
 sources/tree_node.o: sources/tree_node.cpp.o
 
 .PHONY : sources/tree_node.o
@@ -300,15 +300,15 @@ help:
 	@echo "... sources/binary_node.o"
 	@echo "... sources/binary_node.i"
 	@echo "... sources/binary_node.s"
-	@echo "... sources/file.o"
-	@echo "... sources/file.i"
-	@echo "... sources/file.s"
 	@echo "... sources/folder.o"
 	@echo "... sources/folder.i"
 	@echo "... sources/folder.s"
 	@echo "... sources/interactive.o"
 	@echo "... sources/interactive.i"
 	@echo "... sources/interactive.s"
+	@echo "... sources/my_file.o"
+	@echo "... sources/my_file.i"
+	@echo "... sources/my_file.s"
 	@echo "... sources/tree_node.o"
 	@echo "... sources/tree_node.i"
 	@echo "... sources/tree_node.s"

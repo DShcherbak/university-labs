@@ -9,7 +9,7 @@ const int FOLDER_SIZE = 1;
 void folder::add_subfolder(folder* f){
     subfolders.push_back(f);
 }
-void folder::add_file(file* f){
+void folder::add_file(my_file* f){
     files.push_back(f);
 }
 
@@ -63,7 +63,7 @@ void add_folder_to_root(folder* &root, folder* &new_folder) {
 
 }
 
-void add_file_to_root(folder* &root, file* &new_file) {
+void add_file_to_root(folder* &root, my_file* &new_file) {
     if(root == nullptr){
         cout << "ERROR! No such directory!\n";
         return;

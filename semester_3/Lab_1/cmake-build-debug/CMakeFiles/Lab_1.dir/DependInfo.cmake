@@ -6,9 +6,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/main.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/binary_node.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o"
-  "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/file.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/folder.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/interactive.cpp.o"
+  "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/my_file.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/my_file.cpp.o"
   "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp" "/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

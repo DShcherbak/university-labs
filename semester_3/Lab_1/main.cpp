@@ -2,7 +2,7 @@
 // Created by sadoffnick on 11.10.19.
 //
 
-#include "headers/file.h"
+#include "headers/my_file.h"
 #include "headers/tree_node.h"
 #include "headers/interactive.h"
 
@@ -17,97 +17,22 @@ int main(){
     std::string command;
     int mod = 1;
 
-    file* root_file = new file("root","folder");
-    tree_node<file>* root = new tree_node<file>(root_file, DIR_COUNTER++, mod);
+    auto root_file = new my_file("root", "folder");
+    auto root = new tree_node<my_file>(root_file, DIR_COUNTER++, mod);
     root->set_path("~");
-    tree_node<file>* cur = root;
-    vector <tree_node<file>*> catalog;
-    catalog.push_back(root);
+    tree_node<my_file>* cur = root;
+
 
     User *user = new User();
+    user->catalog.push_back(root);
 
     bool wait_for_commands = true;
     while(wait_for_commands) {
-        std::cout << "\n" << user->username << user->comp << user->get_path() << "# ";
-        if (get_command_and_go(user) == 0){
-            break;
+        if (user->get_command_and_go() == 0){
+            wait_for_commands = false;
         }
     }
 
-    /*
-        if(command == "man")
-        {
-            print_manual();
-        }
-        else if (command == "cd"){
-            std::string dir;
-            std::cin >> dir;
-            if(!change_dir(cur,dir,mod))
-                std::cout << "No such file or directory: "  << dir << "\n";
-        }
-        else if(command == "ls"){
-            for(int i = 0; i < cur->children.size(); i++){
-                std::cout << "~~" << to_string(cur->children[i]->get_value()) << std::endl;
-            }
-        }
-        else if(command == "mkdir"){
-            std::string dir;
-            std::cin >> dir;
-            auto new_dir = new file(dir,"folder");
-            auto new_node = new tree_node<file>(new_dir, DIR_COUNTER++,mod);
-            catalog.push_back(new_node);
-            cur->add_son(new_node);//creating new directory in current directory
-        }
-        else if(command == "touch"){
-            std::string filename;
-            std::cin >> filename;
-            auto new_file = new file(filename,"file");
-            auto new_node = new tree_node<file>(new_file, DIR_COUNTER++,mod);
-            catalog.push_back(new_node);
-            cur->add_son(new_node);
-        }
-        else if(command == "chmod"){
-            std::cout << "Enter your login: ";
-            std::cin >> username;
-            std::cout << "Enter your pass: ";
-            std::string pass;
-            std::cin >> pass;
-            int level = get_level(pass);
-            if(level > mod){
-                std::cout << "You have increased your user rights\n";
-                mod = level;
-            }
-            else if (level == mod){
-                std::cout << "You have changed user.\n";
-            }
-            else{
-                std::cout << "Your user rights were decreased.\n";
-                mod = level;
-                if(mod < cur->get_level()) {
-                    std::cout << "You don't have rights to interact with this folder.\n";
-                    std::cout << "You will be thrown to a folder with lower permission level.\n";
-                    while (mod < cur->get_level()) {
-                        cur = cur->get_parent();
-                    }
-                }
-            }
-        }
-        else if(command == "src"){
-            std::string path;
-            std::cin >> path;
-            if(!find_path(cur,path,mod))
-                std::cout << "No such file or directory: "  << path << "\n";
-        }
-        else if(command == "exit"){
-            wait_for_commands = false;
-            std::cout << "Good bye!\n";
-        }
-        else{
-            std::cout << "Unknown command: \"" + command + "\". \n";
-            std::cout << "Please, try again, or read the manual to see the list of possible commands (simply write \"man\" into terminal.\n";
-        }
-    }
-     */
     delete_recursively(root);
     return 0;
 }

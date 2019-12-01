@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/Lab_1.dir/main.cpp.o CMakeFiles/Lab_1.dir/sources/interactive.cpp.o CMakeFiles/Lab_1.dir/sources/folder.cpp.o CMakeFiles/Lab_1.dir/sources/file.cpp.o CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o  -o Lab_1 
+/usr/bin/c++  -g   CMakeFiles/Lab_1.dir/main.cpp.o CMakeFiles/Lab_1.dir/sources/interactive.cpp.o CMakeFiles/Lab_1.dir/sources/folder.cpp.o CMakeFiles/Lab_1.dir/sources/my_file.cpp.o CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o  -o Lab_1 

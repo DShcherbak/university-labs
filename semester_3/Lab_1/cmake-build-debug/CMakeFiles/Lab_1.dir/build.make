@@ -96,18 +96,18 @@ CMakeFiles/Lab_1.dir/sources/folder.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Lab_1.dir/sources/folder.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp -o CMakeFiles/Lab_1.dir/sources/folder.cpp.s
 
-CMakeFiles/Lab_1.dir/sources/file.cpp.o: CMakeFiles/Lab_1.dir/flags.make
-CMakeFiles/Lab_1.dir/sources/file.cpp.o: ../sources/file.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Lab_1.dir/sources/file.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab_1.dir/sources/file.cpp.o -c /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp
+CMakeFiles/Lab_1.dir/sources/my_file.cpp.o: CMakeFiles/Lab_1.dir/flags.make
+CMakeFiles/Lab_1.dir/sources/my_file.cpp.o: ../sources/my_file.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Lab_1.dir/sources/my_file.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/Lab_1.dir/sources/my_file.cpp.o -c /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/my_file.cpp
 
-CMakeFiles/Lab_1.dir/sources/file.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Lab_1.dir/sources/file.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp > CMakeFiles/Lab_1.dir/sources/file.cpp.i
+CMakeFiles/Lab_1.dir/sources/my_file.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/Lab_1.dir/sources/my_file.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/my_file.cpp > CMakeFiles/Lab_1.dir/sources/my_file.cpp.i
 
-CMakeFiles/Lab_1.dir/sources/file.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Lab_1.dir/sources/file.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp -o CMakeFiles/Lab_1.dir/sources/file.cpp.s
+CMakeFiles/Lab_1.dir/sources/my_file.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/Lab_1.dir/sources/my_file.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/my_file.cpp -o CMakeFiles/Lab_1.dir/sources/my_file.cpp.s
 
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: CMakeFiles/Lab_1.dir/flags.make
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../sources/tree_node.cpp
@@ -140,7 +140,7 @@ Lab_1_OBJECTS = \
 "CMakeFiles/Lab_1.dir/main.cpp.o" \
 "CMakeFiles/Lab_1.dir/sources/interactive.cpp.o" \
 "CMakeFiles/Lab_1.dir/sources/folder.cpp.o" \
-"CMakeFiles/Lab_1.dir/sources/file.cpp.o" \
+"CMakeFiles/Lab_1.dir/sources/my_file.cpp.o" \
 "CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o" \
 "CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o"
 
@@ -150,7 +150,7 @@ Lab_1_EXTERNAL_OBJECTS =
 Lab_1: CMakeFiles/Lab_1.dir/main.cpp.o
 Lab_1: CMakeFiles/Lab_1.dir/sources/interactive.cpp.o
 Lab_1: CMakeFiles/Lab_1.dir/sources/folder.cpp.o
-Lab_1: CMakeFiles/Lab_1.dir/sources/file.cpp.o
+Lab_1: CMakeFiles/Lab_1.dir/sources/my_file.cpp.o
 Lab_1: CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o
 Lab_1: CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o
 Lab_1: CMakeFiles/Lab_1.dir/build.make

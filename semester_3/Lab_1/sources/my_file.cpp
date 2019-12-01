@@ -1,4 +1,4 @@
-#include "../headers/file.h"
+#include "../headers/my_file.h"
 #include <cctype>
 #include <vector>
 #include <string>
@@ -22,11 +22,11 @@ string get_time(){
     return convert_time(gmtm);
 }
 
-bool operator==(file* a, std::string b){
+bool operator==(my_file* a, std::string b){
     return a->get_name() == b;
 }
 
-file::file(std::string _name, std::string _type){
+my_file::my_file(std::string _name, std::string _type){
     name = _name;
     creation_time = get_time();
     change_time = creation_time;
@@ -36,27 +36,27 @@ file::file(std::string _name, std::string _type){
 
 
 
-string file::get_name(){
+string my_file::get_name(){
     return name;
 }
 
-string file::get_creation_time(){
+string my_file::get_creation_time(){
     return creation_time;
 }
 
-string file::get_change_time(){
+string my_file::get_change_time(){
     return change_time;
 }
 
-string file::get_type(){
+string my_file::get_type(){
     return type;
 }
 
-bool operator==(file a, file b){
+bool operator==(my_file a, my_file b){
     return (a.get_name() == b.get_name());
 }
 
-std::string to_string(file* a){
+std::string to_string(my_file* a){
     return a->get_name();
 }
 
@@ -161,7 +161,7 @@ int get_inter(std::string s, int &id){
     return result;
 }
 
-bool bool_value(file* f, int hash, std::map <int, pair<int,std::string>> &dict){
+bool bool_value(my_file* f, int hash, std::map <int, pair<int,std::string>> &dict){
     auto v = dict[hash];
     int id = 0;
     switch(v.first){
@@ -180,7 +180,7 @@ bool bool_value(file* f, int hash, std::map <int, pair<int,std::string>> &dict){
     }
 }
 
-std::string paste_predicate(file* f, const std::string &predicate, std::map <int, pair<int,std::string>> &dict){
+std::string paste_predicate(my_file* f, const std::string &predicate, std::map <int, pair<int,std::string>> &dict){
     std::string result = "";
     int len = predicate.length(), id = 0;
     while(id < len){
@@ -270,7 +270,7 @@ bool calculate_bool(const std::string &bool_eqw){
     return operands.top();
 }
 
-bool file_filter(std::string request, file* f){
+bool file_filter(std::string request, my_file* f){
     std::map <int, pair<int,std::string>> dict;
 
     std::string predicate = parse_string(request, dict);
