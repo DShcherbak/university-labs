@@ -34,12 +34,12 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
@@ -57,12 +57,12 @@
 				<Option type="1"/>
 				<Option compiler="gcc"/>
 				<Compiler>
-					<Add directory="/usr/include/c++/7"/>
-					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
-					<Add directory="/usr/include/c++/7/backward"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/include/c++/8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/8"/>
+					<Add directory="/usr/include/c++/8/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include"/>
 					<Add directory="/usr/local/include"/>
-					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/8/include-fixed"/>
 					<Add directory="/usr/include/x86_64-linux-gnu"/>
 					<Add directory="/usr/include"/>
 				</Compiler>
@@ -87,13 +87,13 @@
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/binary_node.h">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h">
-			<Option target="Lab_1"/>
-		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/folder.h">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h">
+			<Option target="Lab_1"/>
+		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h">
@@ -111,13 +111,13 @@
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/binary_node.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
-		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/file.cpp">
-			<Option target="Lab_1"/>
-		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/folder.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp">
+			<Option target="Lab_1"/>
+		</Unit>
+		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/my_file.cpp">
 			<Option target="Lab_1"/>
 		</Unit>
 		<Unit filename="/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp">

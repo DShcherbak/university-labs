@@ -6,17 +6,19 @@
 
 #IncludeRegexTransform: 
 
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
+set
+-
+tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
+my_file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
+
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
 string
 -
 map
 -
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
-tree_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
-file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 vector
@@ -33,12 +35,12 @@ vector
 -
 queue
 -
-../headers/file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+../headers/my_file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
-headers/file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+headers/my_file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
 headers/tree_node.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 headers/interactive.h
@@ -53,18 +55,16 @@ stdlib.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp
 ../headers/interactive.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
-../headers/file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
+../headers/my_file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
 ../headers/tree_node.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 iostream
 -
-
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp
-../headers/tree_node.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
-../headers/file.h
-/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/file.h
-string
+map
+-
+set
+-
+iomanip
 -
 

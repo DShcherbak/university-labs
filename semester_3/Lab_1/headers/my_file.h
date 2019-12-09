@@ -2,8 +2,8 @@
 // Created by sadoffnick on 11.10.19.
 //
 
-#ifndef LAB_1_FILE_H
-#define LAB_1_FILE_H
+#ifndef LAB_1_MY_FILE_H
+#define LAB_1_MY_FILE_H
 
 #include <string>
 #include <map>
@@ -12,7 +12,7 @@ class folder;
 
 using namespace std;
 
-class file {
+class my_file {
 private:
     string name;
     string creation_time;
@@ -30,22 +30,22 @@ public:
     string get_type();
     int get_size();
 
-    file(std::string _name, std::string _type);
+    my_file(std::string _name, std::string _type);
 
 };
-std::string to_string(file* a);
+std::string to_string(my_file* a);
 
 int get_inter(std::string s, int &id);
 
 std::string parse_string(const std::string &request, std::map <int, pair<int,std::string>> &dict);
 
-std::string paste_predicate(file* f, const std::string &predicate, std::map <int, pair<int,std::string>> &dict);
+std::string paste_predicate(my_file* f, const std::string &predicate, std::map <int, pair<int,std::string>> &dict);
 
 bool calculate_bool(const std::string &bool_eqw);
 
-bool operator==(file* a, std::string b);
+bool operator==(my_file* a, std::string b);
 
 
-#endif //LAB_1_FILE_H
+#endif //LAB_1_MY_FILE_H
 
 
