@@ -8,21 +8,61 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <iomanip>
 
-map <std::string, int> command_dict = { {"exit", 0},{"man", 1}, {"ls", 2}, {"cd",3}, {"mkdir", 4}, {"touch", 5}, {"src", 6}, {"chmod", 7}};//, {"mv", 8}, {"cp" ,9} };
-map <std::string, set <std::string>> possible_specifiers = { {"exit", {}},{"man", {}}, {"ls", {"l", "o"}}, {"cd",{}}, {"mkdir", {}}, {"touch", {}}, {"src", {"b","f","r"}}, {"chmod", {}}};
-set <std::string> exists = {"exit", "man", "ls", "cd", "mkdir", "touch", "src", "mv", "cp"};
 
-void User::list(bool o, bool l){
-    if(l){
-        //TODO: implement listing with all information
-    }else{
-        char ser = (o ? '\n' : ' ');
-        for(int i = 0, n = cur->children.size(); i < n; i++){
-            std::cout << cur->children[i]->get_value()->get_name() << ser;
+
+
+command::command(std::string _name, int _code, set<std::string> _possible, int _amount_of_specifiers, int _amount_of_arguments)
+                : name (_name),
+                  code (_code),
+                  possible_specifiers (std::move(_possible)),
+                  amount_of_specifiers (_amount_of_specifiers),
+                  amount_of_arguments (_amount_of_arguments){
+}
+
+map <int, set <std::string>> possible_specifiers = { {0, {}},{1, {}}, {2, {"l", "o"}}, {3,{}}, {4, {}}, {5, {}}, {6, {"b","f","r"}}, {7, {}}};
+set <std::string> exists = {"exit", "man", "ls", "cd", "mkdir", "touch", "src", "chmod", "rm"};
+
+User::User() {
+    root->set_path("~");
+    commands[0] = new command("exit", 0, {}, 0, 0);
+    commands[1] = new command("man", 1, {}, 0, 0);
+    commands[2] = new command("ls", 2, {"l", "o"}, 2, 0);
+    commands[3] = new command("cd", 3, {}, 0, 1);
+    commands[4] = new command("mkdir", 4, {}, 0, 1);
+    commands[5] = new command("touch", 5, {}, 0, 1);
+    commands[6] = new command("src", 6, {"b", "d", "r"}, 3, 1);
+    commands[7] = new command("chmod", 7, {}, 0, 0);
+    commands[8] = new command("rm", 8, {"r"}, 1, 0);
+
+}
+
+map <std::string, int> command_dict = { {"exit", 0},{"man", 1}, {"ls", 2}, {"cd",3}, {"mkdir", 4}, {"touch", 5}, {"src", 6}, {"chmod", 7}, {"rm", 8}};//, {"mv", 9}, {"cp" ,10} };
+
+
+User::~User(){
+    delete_recursively(root);
+}
+
+void User::list(std::vector <bool> specifiers){
+
+        char separator;
+        std::string additional_info;
+        if(specifiers[0]){
+            std::cout << std:: setw(10) << "type " << " | " << std::setw(18) << "creation time " << " | " << std:: setw(18) << "change time " <<  " | " << std:: setw(10) << "name" << std::endl;
+            std::cout << "------------------------------------------------------------------------------------------\n";
         }
-
-    }
+    for(auto & child : cur->children){
+            if(specifiers[0]){
+                std::cout << std:: setw(10) << child->get_value()->get_type() << " | ";
+                std::cout << std:: setw(18) << child->get_value()->get_creation_time() << " | ";
+                std::cout << std:: setw(18) << child->get_value()->get_change_time() << " | ";
+            }
+            separator = (specifiers[0] || specifiers[1] ? '\n' : ' ');
+            std::cout  << child->get_value()->get_name() << separator;
+        }
+    std::cout << std::endl;
 }
 
 std::string get_word(std::string source, int &id){
@@ -36,8 +76,39 @@ std::string get_word(std::string source, int &id){
     return result;
 }
 
+int get_id(int command, std::string specifier){
+    if(command == 2){
+        if(specifier == "l")
+            return 0;
+        if(specifier == "o")
+            return 1;
+        return -1;
+    }
+    if(command == 6){
+        if(specifier == "b")
+            return 0;
+        if(specifier == "d")
+            return 1;
+        if(specifier == "r")
+            return 2;
+        return -1;
+    }
+    return -1;
+}
+
+std::vector <bool> specifiers_into_vector(int command_code, std::vector <std::string> spec){
+    if(command_code == 2 || command_code == 6) {
+        std::vector <bool> result(possible_specifiers[command_code].size());
+        for(int i = 0; i < spec.size(); i++)
+            result[get_id(command_code,spec[i])] = true;
+        return result;
+    }
+    else
+        return {};
+}
+
 int User::get_command_and_go(){
-    std::cout << "\n" << username << comp << get_path() << "# ";
+    std::cout << username << comp << get_path() << "# ";
     std::string line, command, temp;
     getline(std::cin, line);
     std::vector <std::string> specifier_values, argv;
@@ -47,25 +118,37 @@ int User::get_command_and_go(){
         std::cout << "Error! No such command: \"" << command << "\"\n";
         return 1;
     }
+    auto current_command = commands[command_dict[command]];
+
+
     while(id < line.length() && line[id] == '-'){
             specifier_values.push_back(get_word(line,id));
             specifier_counter++;
-
     }
+    for(auto & s : specifier_values){
+        if(current_command->possible_specifiers.count(s) == 0){
+            std::cout << "No such specifier: -" << s << std::endl;
+            return 1;
+        }
+    }
+
+
     while(id < line.length()){
-            argv.push_back(get_word(line,id));
-            argc++;
+        argv.push_back(get_word(line,id));
+        argc++;
     }
+    if(argc > current_command->amount_of_arguments)
+        std::cout << "Too many arguments!\n";
+    else if (argc < current_command->amount_of_arguments)
+        std::cout << "Not enough arguments!\n";
+    if(argc != current_command->amount_of_arguments)
+        return 1;
 
 
-    std::string dir;
-    std::string file;
-    std::string path;
     my_file* new_dir;
     std::string pass;
     int level;
     tree_node<my_file>* new_node;
-    auto new_file = new my_file(file, "my_file");
     int command_code = command_dict[command];
     switch(command_code){
         case 0:
@@ -74,10 +157,10 @@ int User::get_command_and_go(){
             print_manual();
             return 1;
         case 2:
-            list();
+            list(specifiers_into_vector(command_code,specifier_values));
             return 1;
         case 3:
-            change_dir(argv[0]); // TODO: not change directory if file not folder
+            change_dir(argv[0]);
             return 1;
         case 4:
             new_dir = new my_file(argv[0], "folder");
@@ -92,8 +175,8 @@ int User::get_command_and_go(){
             cur->add_son(new_node);//creating new file in current directory
             return 1;
         case 6:
-            if (!find_path(path))
-                std::cout << "No such my_file or directory: " << path << "\n";
+            if (!find_path(argv[0]))
+                std::cout << "No such my_file or directory: " << argv[0] << "\n";
         case 7:
             std::cout << "Enter your login: ";
             std::cin >> username;
@@ -113,6 +196,7 @@ int User::get_command_and_go(){
                     std::cout << "You will be thrown to a folder with lower permission level.\n";
                     while (level < cur->get_level()) {
                         cur = cur->get_parent();
+                        current_path = cur->get_path();
                     }
                 }
             }
@@ -137,6 +221,12 @@ void print_manual(){
     std::cout << "Here's the list of possible commands:\n";
 }
 
+tree_node<my_file>* node_by_path(){
+
+}
+
+
+
 bool User::change_dir(const std::string &ch_dir){
     auto new_dir = cur;
     std::string changed_path = current_path;
@@ -149,12 +239,9 @@ bool User::change_dir(const std::string &ch_dir){
         }
         if(cur_dir == ".."){
             if(new_dir->get_parent() != nullptr){
-                std::cout << "Changed path: " << changed_path << std::endl;
                 new_dir = new_dir->get_parent();
                 while(changed_path[changed_path.length()-1] == '/')
                     changed_path.pop_back();
-                std::cout << "Changed path: " << changed_path << std::endl;
-
             }
             id++;
             continue;
@@ -164,15 +251,20 @@ bool User::change_dir(const std::string &ch_dir){
         bool found = false;
         for(int i = 0; i < new_dir->children.size(); i++)
             if(fits_value(new_dir->children[i], cur_dir)){
-                if(new_dir->children[i]->get_level() <= mod){
-                    std::cout << "Changed path: " << changed_path << std::endl;
-                    changed_path += cur_dir;
-                    std::cout << "Changed path: " << changed_path << std::endl;
-
-                    new_dir = new_dir->children[i];
-                    found = true;
-                }else{
-                    std::cout << "You don't have rights to interact with directory: \"" + cur_dir + "\".\n";
+                if(new_dir->children[i]->get_value()->get_type() == "folder") {
+                    if (new_dir->children[i]->get_level() <= mod) {
+                        changed_path += "/" + cur_dir;
+                        new_dir = new_dir->children[i];
+                        new_dir->set_path(changed_path);
+                        found = true;
+                    } else {
+                        std::cout << "You don't have rights to interact with directory: \"" + cur_dir + "\".\n";
+                        cur = new_dir;
+                        return true;
+                    }
+                }
+                else{
+                    std::cout << "No such directory: \"" + cur_dir + "\".\n";
                     cur = new_dir;
                     return true;
                 }
@@ -186,7 +278,6 @@ bool User::change_dir(const std::string &ch_dir){
     current_path = cur->get_path();
     return true;
 }
-
 
 bool User::find_path(std::string &ch_dir){
     std::cout << "Would you like to use bfs or dfs for the search? Type 'b' if bfs and 'd' otherwise: ";
@@ -227,10 +318,8 @@ int get_level(const std::string &pass){
     for(int i = 1, n = std::min(5,len); i < n; i++){
         if((pass[i] - '0') == i+1)
             l++;
-        else{
-            std::cout << "no : " << (pass[i] - '0') << " != " << i+1 << std::endl;
+        else
             return l;
-        }
     }
-
 }
+

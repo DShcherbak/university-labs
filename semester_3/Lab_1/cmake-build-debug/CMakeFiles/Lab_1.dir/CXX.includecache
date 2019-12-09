@@ -7,6 +7,8 @@
 #IncludeRegexTransform: 
 
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
+set
+-
 tree_node.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
 my_file.h
@@ -36,6 +38,20 @@ queue
 ../headers/my_file.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
 
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
+headers/my_file.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
+headers/tree_node.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
+headers/interactive.h
+/home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
+iostream
+-
+map
+-
+stdlib.h
+-
+
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp
 ../headers/interactive.h
 /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/interactive.h
@@ -48,5 +64,7 @@ iostream
 map
 -
 set
+-
+iomanip
 -
 

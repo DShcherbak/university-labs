@@ -31,7 +31,6 @@ my_file::my_file(std::string _name, std::string _type){
     creation_time = get_time();
     change_time = creation_time;
     type = _type;
-//    parent = cur_dir;
 }
 
 

@@ -4,6 +4,7 @@
 #include "../headers/my_file.h"
 
 
+
 template <class T>
 tree_node<T>::tree_node(T* val, int _id, int _level) {
     value = val;
@@ -52,6 +53,7 @@ void tree_node<T>::set_path(std::string _path) {
 template <class T>
 void tree_node<T>::add_son(tree_node<T>* new_son){
     new_son->set_parent(this);
+    new_son->set_path(this->get_path() + "/" + new_son->get_value()->get_name());
     children.push_back(new_son);
 }
 
