@@ -13,7 +13,7 @@
 
 
 
-command::command(std::string _name, int _code, set<std::string> _possible, int _amount_of_specifiers, int _amount_of_arguments)
+command::command(std::string _name, int _code, set<char> _possible, int _amount_of_specifiers, int _amount_of_arguments)
                 : name (_name),
                   code (_code),
                   possible_specifiers (std::move(_possible)),
@@ -28,13 +28,13 @@ User::User() {
     root->set_path("~");
     commands[0] = new command("exit", 0, {}, 0, 0);
     commands[1] = new command("man", 1, {}, 0, 0);
-    commands[2] = new command("ls", 2, {"l", "o"}, 2, 0);
+    commands[2] = new command("ls", 2, {'l', 'o'}, 2, 0);
     commands[3] = new command("cd", 3, {}, 0, 1);
     commands[4] = new command("mkdir", 4, {}, 0, 1);
     commands[5] = new command("touch", 5, {}, 0, 1);
-    commands[6] = new command("src", 6, {"b", "d", "r"}, 3, 1);
+    commands[6] = new command("src", 6, {'b', 'd', 'r'}, 3, 1);
     commands[7] = new command("chmod", 7, {}, 0, 0);
-    commands[8] = new command("rm", 8, {"r"}, 1, 0);
+    commands[8] = new command("rm", 8, {'r'}, 1, 0);
 
 }
 
@@ -46,15 +46,14 @@ User::~User(){
 }
 
 void User::list(std::vector <bool> specifiers){
-
         char separator;
         std::string additional_info;
-        if(specifiers[0]){
+        if(specifiers[1]){
             std::cout << std:: setw(10) << "type " << " | " << std::setw(18) << "creation time " << " | " << std:: setw(18) << "change time " <<  " | " << std:: setw(10) << "name" << std::endl;
             std::cout << "------------------------------------------------------------------------------------------\n";
         }
     for(auto & child : cur->children){
-            if(specifiers[0]){
+            if(specifiers[1]){
                 std::cout << std:: setw(10) << child->get_value()->get_type() << " | ";
                 std::cout << std:: setw(18) << child->get_value()->get_creation_time() << " | ";
                 std::cout << std:: setw(18) << child->get_value()->get_change_time() << " | ";
@@ -76,20 +75,20 @@ std::string get_word(std::string source, int &id){
     return result;
 }
 
-int get_id(int command, std::string specifier){
+int get_id(int command, char specifier){
     if(command == 2){
-        if(specifier == "l")
+        if(specifier == 'l')
             return 0;
-        if(specifier == "o")
+        if(specifier == 'o')
             return 1;
         return -1;
     }
     if(command == 6){
-        if(specifier == "b")
+        if(specifier == 'b')
             return 0;
-        if(specifier == "d")
+        if(specifier == 'd')
             return 1;
-        if(specifier == "r")
+        if(specifier == 'r')
             return 2;
         return -1;
     }
@@ -99,8 +98,9 @@ int get_id(int command, std::string specifier){
 std::vector <bool> specifiers_into_vector(int command_code, std::vector <std::string> spec){
     if(command_code == 2 || command_code == 6) {
         std::vector <bool> result(possible_specifiers[command_code].size());
-        for(int i = 0; i < spec.size(); i++)
-            result[get_id(command_code,spec[i])] = true;
+        for(auto & word : spec)
+            for(auto & letter : word)
+            result[get_id(command_code,letter)] = true;
         return result;
     }
     else
@@ -125,9 +125,10 @@ int User::get_command_and_go(){
             specifier_values.push_back(get_word(line,id));
             specifier_counter++;
     }
-    for(auto & s : specifier_values){
-        if(current_command->possible_specifiers.count(s) == 0){
-            std::cout << "No such specifier: -" << s << std::endl;
+    for(auto & word : specifier_values){
+        for (auto & letter : word)
+            if(current_command->possible_specifiers.count(letter) == 0){
+                std::cout << "No such specifier: -" << letter << std::endl;
             return 1;
         }
     }
@@ -147,6 +148,7 @@ int User::get_command_and_go(){
 
     my_file* new_dir;
     std::string pass;
+    std::string found_path;
     int level;
     tree_node<my_file>* new_node;
     int command_code = command_dict[command];
@@ -175,8 +177,12 @@ int User::get_command_and_go(){
             cur->add_son(new_node);//creating new file in current directory
             return 1;
         case 6:
-            if (!find_path(argv[0]))
+            found_path = find_path(argv[0]);
+            if (found_path == "")
                 std::cout << "No such my_file or directory: " << argv[0] << "\n";
+            else
+                std::cout << "Found a directory " << found_path << "\n";
+            return 1;
         case 7:
             std::cout << "Enter your login: ";
             std::cin >> username;
@@ -214,11 +220,23 @@ std::string User::get_path(){
 
 void print_greetings(){
     std::cout << "Hello, dear user!\n";
-    std::cout << "...\n";
+    std::cout << "Please, write \"man\" to see the list of possible commands.\n\n";
 }
 
 void print_manual(){
     std::cout << "Here's the list of possible commands:\n";
+    std::cout << "\t* man - Display the list of possible commands\n";
+    std::cout << "\t* ls - List the content of current directory\n";
+    std::cout << "\t\t -l Display it in the form of list\n";
+    std::cout << "\t\t -o Display all info\n";
+    std::cout << "\t* cd <path> - Change directory by given path, if possible\n";
+    std::cout << "\t* mkdir <dir_name> - Create a new directory\n";
+    std::cout << "\t* touch <file_name> - Create a new file\n";
+    std::cout << "\t* src <path> - Search file or directory by name or path\n";
+    std::cout << "\t* chmod - Change USERS mod. Depending on your password, you will be given your ";
+                std::cout << "access level. Users with lower level can't access files and directories ";
+                std::cout << "created by higher-level users.\n";
+    std::cout << "\t- exit - завершення роботи програми\n";
 }
 
 tree_node<my_file>* node_by_path(){
@@ -279,11 +297,7 @@ bool User::change_dir(const std::string &ch_dir){
     return true;
 }
 
-bool User::find_path(std::string &ch_dir){
-    std::cout << "Would you like to use bfs or dfs for the search? Type 'b' if bfs and 'd' otherwise: ";
-    char c;
-    std::cin >> c;
-
+std::string User::find_path(std::string &ch_dir){
     auto new_dir= cur;
     auto src_dir = cur;
     int len = ch_dir.length(), id = 0;
@@ -296,19 +310,19 @@ bool User::find_path(std::string &ch_dir){
         src_dir = new_dir->search_for_value_bfs(cur_dir);
         if(src_dir == nullptr) {
             ch_dir = cur_dir;
-            return false;
+            return "";
         }
         else if(src_dir->get_level() <= mod){
             new_dir = src_dir;
         }else{
             std::cout << "You don't have rights to interact with directory: \"" + cur_dir + "\".\n";
             cur = new_dir;
-            return true;
+            return "";
         }
         id++;
     }
     cur = new_dir;
-    return true;
+    return cur->get_path();
 }
 
 int get_level(const std::string &pass){

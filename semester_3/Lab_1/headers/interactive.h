@@ -13,10 +13,10 @@ class command{
 public:
     std::string name;
     int code;
-    set <std::string> possible_specifiers;
+    set <char> possible_specifiers;
     int amount_of_specifiers;
     int amount_of_arguments;
-    command(std::string _name, int _code, set<std::string> _possible, int _amount_of_specifiers, int _amount_of_arguments);
+    command(std::string _name, int _code, set<char> _possible, int _amount_of_specifiers, int _amount_of_arguments);
 
 };
 
@@ -41,7 +41,7 @@ public:
 
 
     bool change_dir(const std::string &ch_dir);
-    bool find_path(std::string &src_dir);
+    std::string find_path(std::string &src_dir);
     int get_command_and_go();
     std::string get_path();
 
