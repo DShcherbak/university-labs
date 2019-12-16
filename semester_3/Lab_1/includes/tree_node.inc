@@ -154,6 +154,16 @@ tree_node<T>* tree_node<T>::search_for_value_bfs(std::string val) {
     return nullptr;
 }
 
+template <class T>
+void tree_node<T>::print_tree(int depth) {
+    std::cout << '|';
+    for (int i = 0; i < depth; i++)
+        std::cout << '\t' << '|';
+    std::cout << to_string(this->get_value()) << "\n";
+    for(auto ch : this->children)
+        ch->print_tree(depth+1);
+}
+
 
 template <class T>
 void find_and_delete(tree_node<T>* root, T* val, bool _r){

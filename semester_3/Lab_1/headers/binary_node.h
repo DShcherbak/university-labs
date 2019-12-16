@@ -23,9 +23,7 @@ public:
 
     void add_son(binary_node<T>* new_son);
 
-    void delete_son(T val);
-
-    void delete_son_by_id(int id);
+    void delete_son(T val, bool _r);
 
     binary_node* search_for_value_dfs(T val);
 

@@ -39,45 +39,41 @@ void binary_node<T>::add_son(binary_node<T>* new_son){
         std::cout << "Error! Couldn't add son to " << get_value();
     }
 
-}/*
-
-template <class T>
-void binary_node<T>::delete_son(T val){
-    if(left->get_value() == val)
-
-    for(int i = 0; i < children[i].size(); i++){
-        if(val == children[i]){
-            children.erase(children.begin()+i);
-            return;
-        }
-    }
 }
-
 template <class T>
-void binary_node<T>::delete_son_by_id(int id){
-    if(children.size() <= id){
-        std::cout << "ERROR. No such sun to delete.";
-        return;
+void binary_node<T>::delete_son(T val, bool _r){
+    if(fits_value(left,val)) {
+        if (_r)
+            delete_recursively(left);
+        else
+            save_sons_and_delete(this, left);
+        left = nullptr;
     }
-    children.erase(children.begin()+id);
+    if(fits_value(right,val)){
+        if(_r)
+            delete_recursively(right);
+        else
+            save_sons_and_delete(this, right);
+        right = nullptr;
+    }
 }
 
 template <class T>
 binary_node<T>* binary_node<T>::search_for_value_dfs(T val) {
-    std::cout << "dfs: " << value << std::endl;
-    if(value == val){
+    // std::cout << "dfs: " << value << std::endl;
+    if(fits_value(this,val)){
         return this;
     }
     else{
         binary_node<T> *cur = nullptr;
-        for(int i = 0; i < children.size(); i++){
-            cur = children[i]->search_for_value_dfs(val);
-            if(cur != nullptr)
-                return cur;
-        }
+        cur = left->search_for_value_dfs();
+        if(cur != nullptr)
+            return cur;
+        cur = right->search_for_value_dfs();
+        if(cur != nullptr)
+            return cur;
         return nullptr;
     }
-
 }
 
 template <class T>
@@ -87,13 +83,14 @@ binary_node<T>* binary_node<T>::search_for_value_bfs(T val) {
     binary_node<T>* cur;
     while(!Q.empty()){
         cur = Q.front();
-        std::cout << "bfs: " << cur->value << std::endl;
+        //     std::cout << "bfs: " << to_string(cur->get_value()) << std::endl;
         Q.pop();
-        if(cur->get_value() == val)
+        if(fits_value(cur,val))
             return cur;
-        for(int i = 0; i < cur->children.size(); i++)
-            Q.push(cur->children[i]);
+        Q.push(cur->left);
+        Q.push(cur->right);
+
     }
     return nullptr;
 }
-*/
+

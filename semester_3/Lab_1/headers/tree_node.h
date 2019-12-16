@@ -33,6 +33,7 @@ public:
     tree_node* search_for_value_dfs(std::string val);
     tree_node* search_for_value_bfs(std::string val);
 
+    void print_tree(int depth = 0);
 };
 
 

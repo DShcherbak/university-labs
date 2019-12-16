@@ -29,11 +29,11 @@ User::User() {
     root->set_path("~");
     commands[0] = new command("exit", 0, {}, 0, 0);
     commands[1] = new command("man", 1, {}, 0, 0);
-    commands[2] = new command("ls", 2, {'l', 'o'}, 2, 0);
+    commands[2] = new command("ls", 2, {'l', 'o', 'r'}, 3, 0);
     commands[3] = new command("cd", 3, {}, 0, 1);
     commands[4] = new command("mkdir", 4, {}, 0, 1);
     commands[5] = new command("touch", 5, {}, 0, 1);
-    commands[6] = new command("src", 6, {'b', 'd', 'r'}, 3, 1);
+    commands[6] = new command("src", 6, {'b', 'd'}, 2, 1);
     commands[7] = new command("chmod", 7, {}, 0, 0);
     commands[8] = new command("rm", 8, {'r'}, 1, 0);
 
@@ -49,6 +49,10 @@ User::~User(){
 void User::list(std::vector <bool> specifiers){
         char separator;
         std::string additional_info;
+        if(specifiers[2]){
+            cur->print_tree();
+            return;
+        }
         if(specifiers[1]){
             std::cout << std:: setw(10) << "type " << " | " << std::setw(18) << "creation time " << " | " << std:: setw(18) << "change time " <<  " | " << std:: setw(10) << "name" << std::endl;
             std::cout << "------------------------------------------------------------------------------------------\n";
@@ -82,6 +86,8 @@ int get_id(int command, char specifier){
             return 0;
         if(specifier == 'o')
             return 1;
+        if(specifier == 'r')
+            return 2;
         return -1;
     }
     if(command == 6){
@@ -89,14 +95,12 @@ int get_id(int command, char specifier){
             return 0;
         if(specifier == 'd')
             return 1;
-        if(specifier == 'r')
-            return 2;
         return -1;
     }
     return -1;
 }
 
-std::vector <bool> specifiers_into_vector(int command_code, std::vector <std::string> spec){
+std::vector <bool> specifiers_into_vector(int command_code, std::vector <std::string>& spec){
     if(command_code == 2 || command_code == 6) {
         std::vector <bool> result(possible_specifiers[command_code].size());
         for(auto & word : spec)
@@ -213,6 +217,8 @@ int User::get_command_and_go(){
             }
             mod = level;
             return 1;
+        case 8:
+            cur->print_tree();
         default:
             return 0;
     }
@@ -316,7 +322,6 @@ bool User::change_dir(const std::string &ch_dir){
 }
 
 std::string User::find_path(std::string &ch_dir, bool only_this_dir){
-    auto new_dir= cur;
     auto src_dir = cur;
     int len = ch_dir.length(), id = 0;
     std::string cur_dir;
@@ -331,25 +336,23 @@ std::string User::find_path(std::string &ch_dir, bool only_this_dir){
 
     while(id < len){
         cur_dir = "";
-        while(id < len && ch_dir[id] != '/'){
+        while(id < len){
             cur_dir += ch_dir[id++];
         }
-        src_dir = new_dir->search_for_value_bfs(cur_dir);
+        src_dir = cur->search_for_value_bfs(ch_dir);
         if(src_dir == nullptr) {
-            std::cout << "No such directory: \"" + ch_dir + "\".\n";
+            std::cout << "No such file or directory: \"" + ch_dir + "\".\n";
             ch_dir = cur_dir;
             return "";
         }
-        else if(src_dir->get_level() <= mod){
-            new_dir = src_dir;
-        }else{
+        else if(src_dir->get_level() > mod){
             std::cout << "You don't have rights to interact with directory: \"" + cur_dir + "\".\n";
             return "";
         }
         id++;
     }
     //cur = new_dir;
-    return new_dir->get_path();
+    return src_dir->get_path();
 }
 
 
