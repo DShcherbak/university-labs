@@ -5,9 +5,10 @@
 #include "../headers/interactive.h"
 #include "../headers/my_file.h"
 #include "../headers/tree_node.h"
-#include <iostream>
-#include <map>
+#include <string>
 #include <set>
+#include <map>
+#include <iostream>
 #include <iomanip>
 
 
@@ -149,6 +150,7 @@ int User::get_command_and_go(){
     my_file* new_dir;
     std::string pass;
     std::string found_path;
+    std::string new_name;
     int level;
     tree_node<my_file>* new_node;
     int command_code = command_dict[command];
@@ -165,13 +167,16 @@ int User::get_command_and_go(){
             change_dir(argv[0]);
             return 1;
         case 4:
-            new_dir = new my_file(argv[0], "folder");
-            new_node = new tree_node<my_file>(new_dir,DIR_COUNTER++,mod); //TODO: stop creating same-named files
+            new_name = get_brand_new_name(argv[0]);
+            new_dir = new my_file(new_name, "folder");
+
+            new_node = new tree_node<my_file>(new_dir,DIR_COUNTER++,mod);
             catalog.push_back(new_node);
             cur->add_son(new_node);//creating new directory in current directory
             return 1;
         case 5:
-            new_dir = new my_file(argv[0], "my_file");
+            new_name = get_brand_new_name(argv[0]);
+            new_dir = new my_file(new_name, "my_file");
             new_node = new tree_node<my_file>(new_dir, DIR_COUNTER++,mod);
             catalog.push_back(new_node);
             cur->add_son(new_node);//creating new file in current directory
@@ -214,6 +219,16 @@ int User::get_command_and_go(){
 //{"src", 6}, {"mv", 7}, {"cp" ,8} };
 }
 
+std::string User::get_brand_new_name(const std::string &regular_name){
+    std::string new_name = regular_name;
+    std::string found_path = find_path(new_name, true);
+    while(found_path != ""){
+        new_name += '*';
+        found_path = find_path(new_name, true);
+    }
+    return new_name;
+}
+
 std::string User::get_path(){
     return current_path;
 }
@@ -233,10 +248,13 @@ void print_manual(){
     std::cout << "\t* mkdir <dir_name> - Create a new directory\n";
     std::cout << "\t* touch <file_name> - Create a new file\n";
     std::cout << "\t* src <path> - Search file or directory by name or path\n";
+    std::cout << "\t\t you can also user regular expression in such form:";
+    std::cout << "\t\t (?:.*) - anything\n";
+    std::cout << "\t\t (?:abc) - abc string\n";
     std::cout << "\t* chmod - Change USERS mod. Depending on your password, you will be given your ";
                 std::cout << "access level. Users with lower level can't access files and directories ";
                 std::cout << "created by higher-level users.\n";
-    std::cout << "\t- exit - завершення роботи програми\n";
+    std::cout << "\t* exit - завершення роботи програми\n";
 }
 
 tree_node<my_file>* node_by_path(){
@@ -297,11 +315,20 @@ bool User::change_dir(const std::string &ch_dir){
     return true;
 }
 
-std::string User::find_path(std::string &ch_dir){
+std::string User::find_path(std::string &ch_dir, bool only_this_dir){
     auto new_dir= cur;
     auto src_dir = cur;
     int len = ch_dir.length(), id = 0;
     std::string cur_dir;
+
+    if(only_this_dir){
+        for(auto & child : cur->children){
+            if(to_string(child->get_value()) == ch_dir)
+                return child->get_path();
+        }
+        return "";
+    }
+
     while(id < len){
         cur_dir = "";
         while(id < len && ch_dir[id] != '/'){
@@ -309,6 +336,7 @@ std::string User::find_path(std::string &ch_dir){
         }
         src_dir = new_dir->search_for_value_bfs(cur_dir);
         if(src_dir == nullptr) {
+            std::cout << "No such directory: \"" + ch_dir + "\".\n";
             ch_dir = cur_dir;
             return "";
         }
@@ -316,14 +344,14 @@ std::string User::find_path(std::string &ch_dir){
             new_dir = src_dir;
         }else{
             std::cout << "You don't have rights to interact with directory: \"" + cur_dir + "\".\n";
-            cur = new_dir;
             return "";
         }
         id++;
     }
-    cur = new_dir;
-    return cur->get_path();
+    //cur = new_dir;
+    return new_dir->get_path();
 }
+
 
 int get_level(const std::string &pass){
     int l = 1, len = pass.length();

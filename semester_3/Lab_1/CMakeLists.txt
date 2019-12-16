@@ -3,6 +3,7 @@ project(Lab_1)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
 add_executable(Lab_1 main.cpp
         sources/interactive.cpp headers/interactive.h
         headers/folder.h sources/folder.cpp

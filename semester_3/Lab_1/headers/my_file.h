@@ -28,7 +28,6 @@ public:
     string get_change_time();
    // std::string get_path();
     string get_type();
-    int get_size();
 
     my_file(std::string _name, std::string _type);
 

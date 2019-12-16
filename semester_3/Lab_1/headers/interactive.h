@@ -5,9 +5,10 @@
 #ifndef LAB_1_INTERACTIVE_H
 #define LAB_1_INTERACTIVE_H
 
-#include <set>
 #include "tree_node.h"
 #include "my_file.h"
+#include <vector>
+#include <set>
 
 class command{
 public:
@@ -29,7 +30,7 @@ public:
     int mod = 1;
     tree_node<my_file>* root = new tree_node<my_file>(new my_file("root", "folder"), DIR_COUNTER++, mod);
     tree_node<my_file>* cur = root;
-    vector <tree_node<my_file>*> catalog = {root};
+    std::vector <tree_node<my_file>*> catalog = {root};
     command* commands[8]{};
 
     User();
@@ -41,9 +42,10 @@ public:
 
 
     bool change_dir(const std::string &ch_dir);
-    std::string find_path(std::string &src_dir);
+    std::string find_path(std::string &src_dir, bool only_this_dir = false);
     int get_command_and_go();
     std::string get_path();
+    std::string get_brand_new_name(const std::string &regular_name);
 
 };
 

@@ -16,7 +16,7 @@ std::string convert_time(tm* t){
     return std::to_string((*t).tm_hour+3) +':'+ std::to_string((*t).tm_min) +':'+ std::to_string((*t).tm_sec) + " " + std::to_string((*t).tm_mday) +'.'+ convert_month((*t).tm_mon) +'.'+ std::to_string((*t).tm_year+1900);
 }
 
-string get_time(){
+std::string get_time(){
     time_t now = time(nullptr);
     tm *gmtm = gmtime(&now);
     return convert_time(gmtm);
@@ -35,21 +35,23 @@ my_file::my_file(std::string _name, std::string _type){
 
 
 
-string my_file::get_name(){
+std::string my_file::get_name(){
     return name;
 }
 
-string my_file::get_creation_time(){
+std::string my_file::get_creation_time(){
     return creation_time;
 }
 
-string my_file::get_change_time(){
+std::string my_file::get_change_time(){
     return change_time;
 }
 
-string my_file::get_type(){
+std::string my_file::get_type(){
     return type;
 }
+
+
 
 bool operator==(my_file a, my_file b){
     return (a.get_name() == b.get_name());

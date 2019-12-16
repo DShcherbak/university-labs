@@ -6,6 +6,7 @@ CMakeFiles/Lab_1.dir/main.cpp.o
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
+ /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/library/verbalexpressions.hpp
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/main.cpp
 CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/binary_node.h
@@ -18,6 +19,7 @@ CMakeFiles/Lab_1.dir/sources/interactive.cpp.o
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
+ /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/library/verbalexpressions.hpp
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/interactive.cpp
 CMakeFiles/Lab_1.dir/sources/my_file.cpp.o
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
@@ -26,4 +28,5 @@ CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/my_file.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/headers/tree_node.h
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/includes/tree_node.inc
+ /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/library/verbalexpressions.hpp
  /home/sadoffnick/Documents/University_Labs/semester_3/Lab_1/sources/tree_node.cpp

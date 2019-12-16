@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include "../headers/my_file.h"
+#include "../library/verbalexpressions.hpp"
 
 
 
@@ -110,7 +111,13 @@ bool fits_value(tree_node<T>* cur, T val){
 
 template <class T>
 bool fits_value(tree_node<T>* cur, std::string name){
-    return cur->get_value() == name;
+    verex::verex expr = verex::verex()
+            .search_one_line()
+            .start_of_line()
+            .add(name)
+            .end_of_line();
+    std::string val= to_string(cur->get_value());
+    return expr.test(val);// == name;
 }
 
 template <class T>

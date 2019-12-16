@@ -5,6 +5,7 @@ CMakeFiles/Lab_1.dir/main.cpp.o: ../headers/interactive.h
 CMakeFiles/Lab_1.dir/main.cpp.o: ../headers/my_file.h
 CMakeFiles/Lab_1.dir/main.cpp.o: ../headers/tree_node.h
 CMakeFiles/Lab_1.dir/main.cpp.o: ../includes/tree_node.inc
+CMakeFiles/Lab_1.dir/main.cpp.o: ../library/verbalexpressions.hpp
 CMakeFiles/Lab_1.dir/main.cpp.o: ../main.cpp
 
 CMakeFiles/Lab_1.dir/sources/binary_node.cpp.o: ../headers/binary_node.h
@@ -17,6 +18,7 @@ CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../headers/interactive.h
 CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../headers/my_file.h
 CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../headers/tree_node.h
 CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../includes/tree_node.inc
+CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../library/verbalexpressions.hpp
 CMakeFiles/Lab_1.dir/sources/interactive.cpp.o: ../sources/interactive.cpp
 
 CMakeFiles/Lab_1.dir/sources/my_file.cpp.o: ../headers/my_file.h
@@ -25,5 +27,6 @@ CMakeFiles/Lab_1.dir/sources/my_file.cpp.o: ../sources/my_file.cpp
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../headers/my_file.h
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../headers/tree_node.h
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../includes/tree_node.inc
+CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../library/verbalexpressions.hpp
 CMakeFiles/Lab_1.dir/sources/tree_node.cpp.o: ../sources/tree_node.cpp
 
