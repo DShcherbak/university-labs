@@ -24,6 +24,7 @@ private:
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,15 +43,15 @@ private slots:
     void save();
     void quit();
 
+    void on_submitedCode_itemClicked(QListWidgetItem *item);
+
 private:
     QAction *openAction;
     QAction *saveAction;
     QAction *exitAction;
     QMenu *fileMenu;
-
-
-private:
     Ui::MainWindow *ui;
+    bool any_file_opened = false;
 
 };
 #endif // MAINWINDOW_H

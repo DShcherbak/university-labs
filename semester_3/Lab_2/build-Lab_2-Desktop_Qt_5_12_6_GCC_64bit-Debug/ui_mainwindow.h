@@ -30,7 +30,9 @@ public:
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
     QListWidget *submitedCode;
-    QTextBrowser *Remarks;
+    QVBoxLayout *verticalLayout_2;
+    QTextBrowser *currentLineComment;
+    QTextBrowser *generalComment;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *OkButton;
     QPushButton *WrongCodeButton;
@@ -55,10 +57,20 @@ public:
 
         horizontalLayout->addWidget(submitedCode);
 
-        Remarks = new QTextBrowser(centralwidget);
-        Remarks->setObjectName(QString::fromUtf8("Remarks"));
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        currentLineComment = new QTextBrowser(centralwidget);
+        currentLineComment->setObjectName(QString::fromUtf8("currentLineComment"));
 
-        horizontalLayout->addWidget(Remarks);
+        verticalLayout_2->addWidget(currentLineComment);
+
+        generalComment = new QTextBrowser(centralwidget);
+        generalComment->setObjectName(QString::fromUtf8("generalComment"));
+
+        verticalLayout_2->addWidget(generalComment);
+
+
+        horizontalLayout->addLayout(verticalLayout_2);
 
 
         verticalLayout->addLayout(horizontalLayout);
@@ -105,10 +117,12 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
-        OkButton->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
-        WrongCodeButton->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
-        UnaceptableBehaviourButton->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
-        SendMessageButton->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
+        currentLineComment->setPlaceholderText(QApplication::translate("MainWindow", "No comments for current line so far.", nullptr));
+        generalComment->setPlaceholderText(QApplication::translate("MainWindow", "No general comments so far.", nullptr));
+        OkButton->setText(QApplication::translate("MainWindow", "OK", nullptr));
+        WrongCodeButton->setText(QApplication::translate("MainWindow", "Wrong code", nullptr));
+        UnaceptableBehaviourButton->setText(QApplication::translate("MainWindow", "Unacceptable code", nullptr));
+        SendMessageButton->setText(QApplication::translate("MainWindow", "Send comments", nullptr));
     } // retranslateUi
 
 };

@@ -60,6 +60,7 @@ void MainWindow::open()
                 current_line += file_insides[i];
         }
         file.close();
+        any_file_opened = true;
     }
 }
 
@@ -71,4 +72,10 @@ void MainWindow::save()
 void MainWindow::quit()
 {
 
+}
+
+void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)
+{
+    if(any_file_opened)
+        std::cout << ui->submitedCode->row(item) << std::endl;
 }

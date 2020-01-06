@@ -21,7 +21,22 @@
        <widget class="QListWidget" name="submitedCode"/>
       </item>
       <item>
-       <widget class="QTextBrowser" name="Remarks"/>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QTextBrowser" name="currentLineComment">
+          <property name="placeholderText">
+           <string>No comments for current line so far.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTextBrowser" name="generalComment">
+          <property name="placeholderText">
+           <string>No general comments so far.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -30,28 +45,28 @@
       <item>
        <widget class="QPushButton" name="OkButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>OK</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="WrongCodeButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>Wrong code</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="UnaceptableBehaviourButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>Unacceptable code</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="SendMessageButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>Send comments</string>
         </property>
        </widget>
       </item>
