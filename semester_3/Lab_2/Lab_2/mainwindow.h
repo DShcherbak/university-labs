@@ -25,6 +25,7 @@ private:
 
 #include <QMainWindow>
 #include <QListWidget>
+#include <vector>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,7 +52,10 @@ private:
     QAction *exitAction;
     QMenu *fileMenu;
     Ui::MainWindow *ui;
-    bool any_file_opened = false;
+    bool anyFileOpened = false;
+    int currentLineId = -1;
+    std::vector <std::string> lineComments;
+
 
 };
 #endif // MAINWINDOW_H

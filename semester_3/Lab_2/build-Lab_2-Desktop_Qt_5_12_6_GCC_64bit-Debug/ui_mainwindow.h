@@ -17,7 +17,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTextBrowser>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -31,8 +31,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QListWidget *submitedCode;
     QVBoxLayout *verticalLayout_2;
-    QTextBrowser *currentLineComment;
-    QTextBrowser *generalComment;
+    QTextEdit *currentLineComment;
+    QTextEdit *generalComments;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *OkButton;
     QPushButton *WrongCodeButton;
@@ -59,15 +59,15 @@ public:
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        currentLineComment = new QTextBrowser(centralwidget);
+        currentLineComment = new QTextEdit(centralwidget);
         currentLineComment->setObjectName(QString::fromUtf8("currentLineComment"));
 
         verticalLayout_2->addWidget(currentLineComment);
 
-        generalComment = new QTextBrowser(centralwidget);
-        generalComment->setObjectName(QString::fromUtf8("generalComment"));
+        generalComments = new QTextEdit(centralwidget);
+        generalComments->setObjectName(QString::fromUtf8("generalComments"));
 
-        verticalLayout_2->addWidget(generalComment);
+        verticalLayout_2->addWidget(generalComments);
 
 
         horizontalLayout->addLayout(verticalLayout_2);
@@ -118,7 +118,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         currentLineComment->setPlaceholderText(QApplication::translate("MainWindow", "No comments for current line so far.", nullptr));
-        generalComment->setPlaceholderText(QApplication::translate("MainWindow", "No general comments so far.", nullptr));
+        generalComments->setPlaceholderText(QApplication::translate("MainWindow", "No general comments so far.", nullptr));
         OkButton->setText(QApplication::translate("MainWindow", "OK", nullptr));
         WrongCodeButton->setText(QApplication::translate("MainWindow", "Wrong code", nullptr));
         UnaceptableBehaviourButton->setText(QApplication::translate("MainWindow", "Unacceptable code", nullptr));

@@ -23,14 +23,14 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QTextBrowser" name="currentLineComment">
+         <widget class="QTextEdit" name="currentLineComment">
           <property name="placeholderText">
            <string>No comments for current line so far.</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QTextBrowser" name="generalComment">
+         <widget class="QTextEdit" name="generalComments">
           <property name="placeholderText">
            <string>No general comments so far.</string>
           </property>

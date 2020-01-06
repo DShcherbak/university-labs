@@ -60,12 +60,17 @@ void MainWindow::open()
                 current_line += file_insides[i];
         }
         file.close();
-        any_file_opened = true;
+        anyFileOpened = true;
+        lineComments.resize(cnt, "");
+        lineComments[0] = "Hello!";
     }
 }
 
 void MainWindow::save()
 {
+    if(anyFileOpened){
+        lineComments[currentLineId] = ui->currentLineComment->toPlainText().toStdString();
+    }
 
 }
 
@@ -76,6 +81,12 @@ void MainWindow::quit()
 
 void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)
 {
-    if(any_file_opened)
-        std::cout << ui->submitedCode->row(item) << std::endl;
+    if(currentLineId >= 0){
+        std::string stringToSave = ui->currentLineComment->toPlainText().toStdString();
+        lineComments[currentLineId] = stringToSave;
+        ui->currentLineComment->clear();
+    }
+    currentLineId = ui->submitedCode->row(item);
+    QString currentComment = QString::fromStdString(lineComments[currentLineId]);
+    ui->currentLineComment->setText(currentComment);
 }
