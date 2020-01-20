@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->submitedCode->setItem(0,0,emptyItem);
     openAction = new QAction(tr("&Open"), this);
         saveAction = new QAction(tr("&Save"), this);
-        exitAction = new QAction(tr("E&xit"), this);
+        exitAction = new QAction(tr("&Exit"), this);
 
         connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
         connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
         fileMenu->addAction(saveAction);
         fileMenu->addSeparator();
         fileMenu->addAction(exitAction);
-        setWindowTitle(tr("Notepad"));
+        setWindowTitle(tr("My Little Checker"));
 
 
 }
@@ -53,10 +53,14 @@ void MainWindow::open()
         QTextStream in(&file);
         QString fileInsides = in.readAll();
         int len = fileInsides.length();
-        ui->submitedCode->setRowCount(len);
         QString currentLine = "";
         QTableWidgetItem* currentLineItem;
         int lineNumber = 0;
+        for(int i = 0; i < len; i++)
+            if(fileInsides[i] == '\n')
+                lineNumber++;
+        ui->submitedCode->setRowCount(lineNumber);
+        lineNumber = 0;
         for(int i = 0; i < len; i++){
             if(fileInsides[i] == '\n'){
                 currentLineItem = new QTableWidgetItem(currentLine);
@@ -70,7 +74,7 @@ void MainWindow::open()
         file.close();
         anyFileOpened = true;
         lineComments.resize(lineNumber, "");
-        lineComments[0] = "Hello!";
+        lineComments[0] = "Hel lo!";
     }
 }
 
@@ -89,12 +93,17 @@ void MainWindow::quit()
 
 void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)
 {
+
+}
+
+void MainWindow::on_submitedCode_itemClicked(QTableWidgetItem *item)
+{
     if(currentLineId >= 0){
         std::string stringToSave = ui->currentLineComment->toPlainText().toStdString();
         lineComments[currentLineId] = stringToSave;
         ui->currentLineComment->clear();
     }
-   // currentLineId = ui->submitedCode->row(item);
+    currentLineId = ui->submitedCode->row(item);
     QString currentComment = QString::fromStdString(lineComments[currentLineId]);
     ui->currentLineComment->setText(currentComment);
 }

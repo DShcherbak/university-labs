@@ -25,6 +25,7 @@ private:
 
 #include <QMainWindow>
 #include <QListWidget>
+#include <QTableWidget>
 #include <vector>
 
 QT_BEGIN_NAMESPACE
@@ -45,6 +46,8 @@ private slots:
     void quit();
 
     void on_submitedCode_itemClicked(QListWidgetItem *item);
+
+    void on_submitedCode_itemClicked(QTableWidgetItem *item);
 
 private:
     QAction *openAction;
