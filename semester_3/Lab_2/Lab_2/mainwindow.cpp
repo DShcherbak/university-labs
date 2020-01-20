@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QTextStream>
 #include <iostream>
+#include <QWidget>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -11,7 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    ui->submitedCode->addItem("No program is chosen.");
+    QTableWidgetItem* emptyItem = new QTableWidgetItem("No program is chosen.");
+    ui->submitedCode->setItem(0,0,emptyItem);
     openAction = new QAction(tr("&Open"), this);
         saveAction = new QAction(tr("&Save"), this);
         exitAction = new QAction(tr("E&xit"), this);
@@ -26,7 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
         fileMenu->addSeparator();
         fileMenu->addAction(exitAction);
         setWindowTitle(tr("Notepad"));
+
+
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -39,29 +44,32 @@ void MainWindow::open()
 
     if (fileName != "") {
         ui->submitedCode->clear();
+        ui->submitedCode->setRowCount(0);
         QFile file(fileName);
         if (!file.open(QIODevice::ReadOnly)) {
             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
             return;
         }
         QTextStream in(&file);
-        QString file_insides = in.readAll();
-        int len = file_insides.length();
-        QString current_line = "";
-        int cnt = 0;
+        QString fileInsides = in.readAll();
+        int len = fileInsides.length();
+        ui->submitedCode->setRowCount(len);
+        QString currentLine = "";
+        QTableWidgetItem* currentLineItem;
+        int lineNumber = 0;
         for(int i = 0; i < len; i++){
-            if(file_insides[i] == '\n'){
-                ui->submitedCode->addItem(current_line);
-                //std::cout << current_line.toStdString() + std::to_string(cnt) + "\n";
-                cnt++;
-                current_line = "";
+            if(fileInsides[i] == '\n'){
+                currentLineItem = new QTableWidgetItem(currentLine);
+                ui->submitedCode->setItem(0,lineNumber,currentLineItem);
+                lineNumber++;
+                currentLine = "";
             }
             else
-                current_line += file_insides[i];
+                currentLine += fileInsides[i];
         }
         file.close();
         anyFileOpened = true;
-        lineComments.resize(cnt, "");
+        lineComments.resize(lineNumber, "");
         lineComments[0] = "Hello!";
     }
 }
@@ -86,7 +94,7 @@ void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)
         lineComments[currentLineId] = stringToSave;
         ui->currentLineComment->clear();
     }
-    currentLineId = ui->submitedCode->row(item);
+   // currentLineId = ui->submitedCode->row(item);
     QString currentComment = QString::fromStdString(lineComments[currentLineId]);
     ui->currentLineComment->setText(currentComment);
 }
