@@ -25,6 +25,7 @@ private:
 
 #include "student.h"
 #include "newuserwindow.h"
+#include "chooseuserwindow.h"
 #include <QMainWindow>
 #include <QListWidget>
 #include <QTableWidget>

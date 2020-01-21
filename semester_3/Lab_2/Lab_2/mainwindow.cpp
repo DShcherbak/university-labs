@@ -16,12 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     QTableWidgetItem* emptyItem = new QTableWidgetItem("No program is chosen.");
+
     ui->submitedCode->setItem(0,0,emptyItem);
     openAction = new QAction(tr("Open"), this);
         saveAction = new QAction(tr("Save"), this);
         exitAction = new QAction(tr("Exit"), this);
         newUserAction = new QAction(tr("New Student"), this);
-        openUserAction = new QAction(tr("Open by Student"), this);
+        openUserAction = new QAction(tr("Choose Student"), this);
 
         connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
         connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
@@ -153,7 +154,9 @@ void MainWindow::newUser()
 
 void MainWindow::openUser()
 {
-
+    ChooseUserWindow window(this, students);
+    window.setModal(true);
+    window.exec();
 }
 
 void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)

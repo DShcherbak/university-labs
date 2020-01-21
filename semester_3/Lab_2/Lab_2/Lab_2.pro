@@ -16,17 +16,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    chooseuserwindow.cpp \
     main.cpp \
     mainwindow.cpp \
     newuserwindow.cpp \
     student.cpp
 
 HEADERS += \
+    chooseuserwindow.h \
     mainwindow.h \
     newuserwindow.h \
     student.h
 
 FORMS += \
+    chooseuserwindow.ui \
     mainwindow.ui \
     newuserwindow.ui
 
