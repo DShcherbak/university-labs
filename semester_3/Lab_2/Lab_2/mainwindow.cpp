@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "string"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
@@ -14,20 +15,37 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QTableWidgetItem* emptyItem = new QTableWidgetItem("No program is chosen.");
     ui->submitedCode->setItem(0,0,emptyItem);
-    openAction = new QAction(tr("&Open"), this);
-        saveAction = new QAction(tr("&Save"), this);
-        exitAction = new QAction(tr("&Exit"), this);
+    openAction = new QAction(tr("Open"), this);
+        saveAction = new QAction(tr("Save"), this);
+        exitAction = new QAction(tr("Exit"), this);
+        newUserAction = new QAction(tr("New User"), this);
+        openUserAction = new QAction(tr("Open User File"), this);
 
         connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
         connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
+        connect(newUserAction, SIGNAL(triggered()), this, SLOT(newUser()));
+        connect(openUserAction, SIGNAL(triggered()), this, SLOT(openUser()));
         connect(exitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
 
-        fileMenu = menuBar()->addMenu(tr("&File"));
+        fileMenu = menuBar()->addMenu(tr("File"));
         fileMenu->addAction(openAction);
         fileMenu->addAction(saveAction);
         fileMenu->addSeparator();
         fileMenu->addAction(exitAction);
+        userMenu = menuBar()->addMenu(tr("User"));
+        userMenu->addAction(newUserAction);
+        userMenu->addAction(openUserAction);
         setWindowTitle(tr("My Little Checker"));
+
+        freopen("student.txt", "r", stdin);
+        std::cin >> numberStudents;
+        students.resize(numberStudents);
+        for(int i = 0; i < numberStudents; i++){
+            //std:string buffer;
+           // std::cin >> buffer;
+            //students[i]->name = QString::fromStdString(buffer);
+        }
+
 
 
 }
@@ -91,6 +109,16 @@ void MainWindow::quit()
 
 }
 
+void MainWindow::newUser()
+{
+
+}
+
+void MainWindow::openUser()
+{
+
+}
+
 void MainWindow::on_submitedCode_itemClicked(QListWidgetItem *item)
 {
 
@@ -101,6 +129,8 @@ void MainWindow::on_submitedCode_itemClicked(QTableWidgetItem *item)
     if(currentLineId >= 0){
         std::string stringToSave = ui->currentLineComment->toPlainText().toStdString();
         lineComments[currentLineId] = stringToSave;
+        if(stringToSave.size() > 0)
+            ui->submitedCode->item(currentLineId,0)->setBackgroundColor(Qt::yellow);
         ui->currentLineComment->clear();
     }
     currentLineId = ui->submitedCode->row(item);
