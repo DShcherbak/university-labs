@@ -1,9 +1,9 @@
 #include "student.h"
 
-Student::Student(QString _name, QString _group, QString _org, int _id)
+Student::Student(QString _name, QString _group, QString _org, QString _contact)
 {
     name = _name;
     group = _group;
     organization = _org;
-    id = _id;
+    contact = _contact;
 }

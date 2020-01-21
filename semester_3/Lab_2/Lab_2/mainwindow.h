@@ -24,6 +24,7 @@ private:
 #define MAINWINDOW_H
 
 #include "student.h"
+#include "newuserwindow.h"
 #include <QMainWindow>
 #include <QListWidget>
 #include <QTableWidget>
@@ -53,19 +54,30 @@ private slots:
     void on_submitedCode_itemClicked(QTableWidgetItem *item);
 
 private:
+
+
     QAction *openAction;
     QAction *saveAction;
     QAction *exitAction;
     QAction *newUserAction;
     QAction *openUserAction;
+
     QMenu *fileMenu;
     QMenu *userMenu;
+
     Ui::MainWindow *ui;
+
     bool anyFileOpened = false;
     int currentLineId = -1;
+    int numberStudents = 0;
+
     std::vector <std::string> lineComments;
     std::vector <Student*> students;
-    int numberStudents = 0;
+
+    Student* newStudent = nullptr;
+
+
+    void saveStudents();
 
 
 };

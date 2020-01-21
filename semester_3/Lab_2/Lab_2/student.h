@@ -6,11 +6,11 @@
 class Student
 {
 public:
-    Student(QString _name, QString _group, QString _org, int _id);
+    Student(QString _name = "", QString _group = "", QString _org = "", QString _contact = "");
     QString name = "";
     QString group = "";
     QString organization = "";
-    int id = -1;
+    QString contact = "";
 };
 
 #endif // STUDENT_H

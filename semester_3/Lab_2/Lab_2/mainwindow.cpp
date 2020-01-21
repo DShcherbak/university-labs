@@ -1,11 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "string"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
 #include <iostream>
 #include <QWidget>
+#include <string>
+#include <fstream>
+#include <iostream>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -18,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     openAction = new QAction(tr("Open"), this);
         saveAction = new QAction(tr("Save"), this);
         exitAction = new QAction(tr("Exit"), this);
-        newUserAction = new QAction(tr("New User"), this);
-        openUserAction = new QAction(tr("Open User File"), this);
+        newUserAction = new QAction(tr("New Student"), this);
+        openUserAction = new QAction(tr("Open by Student"), this);
 
         connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
         connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
@@ -32,20 +34,32 @@ MainWindow::MainWindow(QWidget *parent)
         fileMenu->addAction(saveAction);
         fileMenu->addSeparator();
         fileMenu->addAction(exitAction);
-        userMenu = menuBar()->addMenu(tr("User"));
+        userMenu = menuBar()->addMenu(tr("Student"));
         userMenu->addAction(newUserAction);
         userMenu->addAction(openUserAction);
         setWindowTitle(tr("My Little Checker"));
 
-        freopen("student.txt", "r", stdin);
-        std::cin >> numberStudents;
-        students.resize(numberStudents);
+        std::ifstream infile("../Lab_2/students.txt", std::ios::in);
+        std::string buffer;
+        infile >> numberStudents;
+        getline(infile, buffer);//skip \n
         for(int i = 0; i < numberStudents; i++){
-            //std:string buffer;
-           // std::cin >> buffer;
-            //students[i]->name = QString::fromStdString(buffer);
-        }
+            students.push_back(new Student());
+            getline(infile,buffer);
+            std::cout << buffer << std::endl;
+            students[i]->name = QString::fromStdString(buffer);
 
+            getline(infile,buffer);
+            students[i]->group = QString::fromStdString(buffer);
+
+            getline(infile,buffer);
+            students[i]->organization = QString::fromStdString(buffer);
+
+            getline(infile,buffer);
+            students[i]->contact = QString::fromStdString(buffer);
+
+        }
+        infile.close();
 
 
 }
@@ -109,9 +123,32 @@ void MainWindow::quit()
 
 }
 
+void MainWindow::saveStudents(){
+    std::ofstream file;
+    file.open("../Lab_2/students.txt", std::ios::out);
+    file.clear();
+    file << numberStudents << std::endl;
+    for(int i = 0; i < numberStudents; i++){
+        file << students[i]->name.toStdString() << std::endl;
+        file << students[i]->group.toStdString() << std::endl;
+        file << students[i]->organization.toStdString() << std::endl;
+        file << students[i]->contact.toStdString() << std::endl;
+    }
+}
+
 void MainWindow::newUser()
 {
-
+    NewUserWindow window;
+    window.setModal(true);
+    window.exec();
+    if(window.result()){
+        newStudent = window.getNewStudent();
+        QTableWidgetItem* newName = new QTableWidgetItem(newStudent->name);
+        ui->submitedCode->setItem(0,0, newName);
+        students.push_back(newStudent);
+        numberStudents++;
+        saveStudents();
+    }
 }
 
 void MainWindow::openUser()
