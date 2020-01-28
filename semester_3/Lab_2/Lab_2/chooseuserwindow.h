@@ -4,7 +4,7 @@
 #include "student.h"
 #include <QDialog>
 #include <vector>
-
+#include <QListWidget>
 namespace Ui {
 class ChooseUserWindow;
 }
@@ -17,8 +17,14 @@ public:
     explicit ChooseUserWindow(QWidget *parent = nullptr, std::vector <Student*> students = {});
     ~ChooseUserWindow();
 
+private slots:
+
+    void on_studentListWidget_itemDoubleClicked(QListWidgetItem *item);
+
 private:
     Ui::ChooseUserWindow *ui;
+    int chosenStudent = -1;
+
 };
 
 #endif // CHOOSEUSERWINDOW_H

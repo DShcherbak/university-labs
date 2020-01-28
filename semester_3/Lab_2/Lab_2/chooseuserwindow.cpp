@@ -13,7 +13,13 @@ ChooseUserWindow::ChooseUserWindow(QWidget *parent, std::vector <Student*> stude
     setWindowTitle(tr("Choose your student"));
 }
 
-ChooseUserWindow::~ChooseUserWindow()
+ChooseUserWindow::~ChпooseUserWindow()
 {
     delete ui;
+}
+
+void ChooseUserWindow::on_studentListWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    chosenStudent = ui->studentListWidget->row(item);
+    delete this;
 }
