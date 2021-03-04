@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3cb10d78-c90e-49b4-9926-d90ef5a60f39" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../../Algorithms" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Algorithms" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/BD_15/doctor.dat" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/BD_15/doctor.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/BD_15/hospital.dat" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/BD_15/hospital.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/BD_15/hospital.ind" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/BD_15/hospital.ind" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/movie_database.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/movie_database.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/movie_database.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/movie_database.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/operations.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/operations.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/operations.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/DB_Core/operations.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/IO/io_functions.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/IO/io_functions.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/binary_files.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/binary_files.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/binary_files.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/binary_files.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/index_table.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/index_table.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/index_table.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/file_writing/index_table.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/src/additional.fl" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/src/additional.fl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/src/mov.fl" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/src/mov.fl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/src/mov.ind" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/src/mov.ind" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../BD/Lab_1/src/role.fl" beforeDir="false" afterPath="$PROJECT_DIR$/../../../BD/Lab_1/src/role.fl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/Lab_1.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/Lab_1.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/VisualElements.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/VisualElements.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/paintevent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/paintevent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/paintevent.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/paintevent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/polygon.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/polygon.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/polygon.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/polygon.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/visualelements.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/visualelements.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.ui" beforeDir="false" afterPath="$PROJECT_DIR$/../../../KompGraph/Lab_1/Lab_1/widget.ui" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../exam/Exam" beforeDir="false" afterPath="$PROJECT_DIR$/../../../exam/Exam" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/lib/go-1.14" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1ox0FgbZWEYxiOi5dvWcMu534sr" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+  </component>
+  <component name="RunManager">
+    <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="Lab_3C" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <directory value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build main.go" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="774" y="300" width="424" height="520" key="FileChooserDialogImpl" timestamp="1614807410930">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="774" y="300" width="424" height="520" key="FileChooserDialogImpl/72.27.1848.1053@72.27.1848.1053" timestamp="1614807410930" />
+    <state width="1802" height="823" key="GridCell.Tab.0.bottom" timestamp="1614251274079">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state width="1802" height="823" key="GridCell.Tab.0.bottom/72.27.1848.1053@72.27.1848.1053" timestamp="1614251274079" />
+    <state width="1802" height="823" key="GridCell.Tab.0.center" timestamp="1614251274079">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state width="1802" height="823" key="GridCell.Tab.0.center/72.27.1848.1053@72.27.1848.1053" timestamp="1614251274079" />
+    <state width="1802" height="823" key="GridCell.Tab.0.left" timestamp="1614251274079">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state width="1802" height="823" key="GridCell.Tab.0.left/72.27.1848.1053@72.27.1848.1053" timestamp="1614251274079" />
+    <state width="1802" height="823" key="GridCell.Tab.0.right" timestamp="1614251274079">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state width="1802" height="823" key="GridCell.Tab.0.right/72.27.1848.1053@72.27.1848.1053" timestamp="1614251274079" />
+  </component>
+</project>
