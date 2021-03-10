@@ -7,12 +7,7 @@ public class Main {
 
     public static char GetRandomChar(){
         int r = new Random().nextInt(4);
-        return switch (r) {
-            case 0 -> 'A';
-            case 1 -> 'B';
-            case 2 -> 'C';
-            default -> 'D';
-        };
+        return (char) ('A' + r);
     }
 
     public static String GenerateRandomString(){
