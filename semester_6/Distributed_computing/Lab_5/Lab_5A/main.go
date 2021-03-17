@@ -61,7 +61,7 @@ func printPolk(polk []bool) {
 }
 
 func main() {
-	polk := generatePolk(10)
+	polk := generatePolk(100)
 	divisions := breakPolk(polk)
 	barrierChannel := make(chan bool)
 	var barrier *PseudoCyclicBarrier
