@@ -4,8 +4,8 @@ export class RouteObject extends React.Component{
 
     constructor(props) {
         super(props);
-        this.routeMap = props.route
-        this.myNumber = props.number
+        this.routeNumber = props.routeProps["routeId"]
+        this.routeMap = props.routeProps["stops"]
     }
     /*
     const object = {'a': 1, 'b': 2, 'c' : 3};
@@ -18,14 +18,14 @@ for (const [key, value] of Object.entries(object)) {
         let prevStop = "-";
         let list = []
         let id = 0;
-        this.routeMap.forEach((value, key) => {
+        this.routeMap.forEach(key => {
             if(prevStop !== "-"){
-                list.push(<li key = {++id}>{prevStop} => {key} :: {value}</li>);
+                list.push(<li key = {++id}>{prevStop} => {key}</li>);/* :: {value}*/
             }
             prevStop = key;
         });
         return(
-            <div>I'm a route number {this.myNumber} and I go like this:
+            <div>I'm a route number {this.routeNumber} and I go like this:
                 {<ul>{list}</ul>}
             </div>
         );
