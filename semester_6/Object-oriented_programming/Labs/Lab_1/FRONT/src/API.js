@@ -28,7 +28,7 @@ function sendPostRequest(){
     // Simple POST request with a JSON body using fetch
         console.log("Trying to push a request here!");
         const requestOptions = {
-        method: 'Get',
+        method: 'Post',
         headers: { 'Content-Type': 'application/json' },    
         body: JSON.stringify({ title: 'React Get Request Example' })
         };

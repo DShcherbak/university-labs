@@ -16,6 +16,7 @@ import Stations from "./pages/Stations/Stations.js";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { NavBar, Footer, Loading } from "./components";
+import Editor from "./pages/Editor/Editor";
 
 //import "./app.css";
 
@@ -33,7 +34,7 @@ const App = () => {
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/routes" component={Routes} />
                     <Route path="/timetables" component={GeneralTimeTables} />
-                    <Route exact path="/stations" component={Stations} />
+                    <Route exact path="/editor" component={Editor} />
                 </Switch>
             </div>
             <Footer />
