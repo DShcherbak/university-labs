@@ -11,7 +11,7 @@ import {
 //Pages
 import MainPage from "./pages/Main/MainPage.js";
 import Routes from "./pages/Routes/Routes.js";
-import TimeTables from "./pages/TimeTables/TimeTables";
+import {GeneralTimeTables} from "./pages/TimeTables/TimeTables";
 import Stations from "./pages/Stations/Stations.js";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -32,7 +32,7 @@ const App = () => {
                 <Switch>
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/routes" component={Routes} />
-                    <Route exact path="/timetables" component={TimeTables} />
+                    <Route path="/timetables" component={GeneralTimeTables} />
                     <Route exact path="/stations" component={Stations} />
                 </Switch>
             </div>

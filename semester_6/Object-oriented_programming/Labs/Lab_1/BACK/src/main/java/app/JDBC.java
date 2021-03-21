@@ -19,10 +19,10 @@ public class JDBC {
         return conn.createStatement();
     }
 
-    public ArrayList<RouteModel> getRoutes(){
+    private ArrayList<RouteModel> getRoutesInternal(String query){
         ArrayList<RouteModel> routes = new ArrayList<>();
         try{
-            CachedRowSet rs = getQuery("select * from routes");
+            CachedRowSet rs = getQuery(query);
             try{
                 while (rs.next()) {
                     RouteModel route = parseRoute(rs);
@@ -37,6 +37,14 @@ public class JDBC {
         return routes;
     }
 
+    public ArrayList<RouteModel> getRoute(int id) {
+        return getRoutesInternal("select * from routes where route_number = " + id);
+    }
+
+    public ArrayList<RouteModel> getRoutes() {
+        return getRoutesInternal("select * from routes order by route_id");
+    }
+
     private RouteModel parseRoute(ResultSet rs) throws SQLException {
         int routeNumber = rs.getInt(2);
         Object[] stops = (Object[]) rs.getArray(3).getArray();
@@ -44,7 +52,8 @@ public class JDBC {
         String endTime = rs.getString(5);
         int interval = rs.getInt(6);
         int type = rs.getInt(7);
-        return new RouteModel(routeNumber, stops, startTime, endTime, interval, type);
+        Object[] timetable = (Object[]) rs.getArray(8).getArray();
+        return new RouteModel(routeNumber, stops, startTime, endTime, interval, type, timetable);
     }
 
     public HashMap<Integer, String> getStops()  {

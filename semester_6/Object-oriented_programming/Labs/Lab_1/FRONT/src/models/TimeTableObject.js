@@ -1,20 +1,24 @@
 import React from "react";
+import {Redirect} from "react-router-dom";
+import * as API from "../API";
+
 
 export class TimeTableObject extends React.Component{
     constructor(props) {
         super(props);
-        this.number = 145;
-        this.startTime = 60*5 + 40;
-        this.endTime = 24*60 + 20;
-        this.interval = 10
-        this.stops = new Map([["Station 1", 0], ["Station 2", 7], ["Station 4", 7]]);
+        this.state = {
+            number : props.routeId,
+            startTime : "06:40",
+            endTime : "00:20",
+            interval : 10,
+            stops : new Map()
+        }
     }
 
     getCurrentTime(){
         let timeStr = new Date().toLocaleString().split(",")[1]
         let result = parseInt(timeStr.split(':')[0]) * 60 + parseInt(timeStr.split(':')[1])
         let pm = timeStr.split(" ")[2]
-        console.log("PM: " + pm)
         if(pm === "PM"){
             result += (12 * 60);
         }
@@ -24,10 +28,10 @@ export class TimeTableObject extends React.Component{
     toNormalTime(value){
         let hours = (Math.floor(value/60) % 24)
         return(Math.floor(hours/10)).toString() +
-                ((hours) % 10).toString() +
-                ":" +
-                (Math.floor((value % 60)/10)).toString() +
-                ((value % 60) % 10).toString();
+            ((hours) % 10).toString() +
+            ":" +
+            (Math.floor((value % 60)/10)).toString() +
+            ((value % 60) % 10).toString();
 
     }
 
@@ -41,37 +45,30 @@ export class TimeTableObject extends React.Component{
         }
     }
 
+    timeToInt(timeStr){
+        return parseInt(timeStr.split(':')[0]) * 60 + parseInt(timeStr.split(':')[1])
+    }
+
     countTimeToStops(){
         let timeToStops = new Map();
 
         let currentTime = this.getCurrentTime()
-        let currentBus = this.endTime;
+        let currentBus = this.timeToInt(this.state.endTime);
+        while(currentBus - this.state.interval > currentTime) currentBus-=this.state.interval;
 
-        console.log("DEBUG:");
-        console.log("CurrentTime:" + currentTime);
-        while(currentBus - this.interval > currentTime) currentBus-=this.interval;
-
-        console.log("Current stops:" + this.stops);
-        console.log("Current total:" + this.totalTime);
 
         while(currentBus + this.totalTime > currentTime){
-            console.log("Current Bus:" + currentBus);
             let a = 0;
-            for (let [key, value] of  this.stops.entries()) {
+            for (let [key, value] of  this.state.stops.entries()) {
                 a += value;
-                console.log("Current stop:" + key + " new time: " + (currentBus + a - currentTime).toString());
                 if(currentBus + a - currentTime  >= 0){
                     timeToStops.set(key, currentBus + a - currentTime);
                 }
 
             }
-            currentBus -= this.interval;
+            currentBus -= this.state.interval;
         }
 
-        console.log("Size " + timeToStops.size)
-        for (let [key, value] of  timeToStops.entries()) {
-            console.log("Result: " + key + " :: " + value);
-        }
         return timeToStops;
     }
 
@@ -83,22 +80,58 @@ export class TimeTableObject extends React.Component{
         );
     }
 
+    componentDidMount = () => {
+        this.GetTimeTable().then((routes) => {
+            if(routes.length === 0){
+                this.setState({
+                    incorrectRoute: true
+                })
+            } else {
+                let newStops = new Map()
+                let stopsNames = routes[0]["stops"]
+                let tt = routes[0]["timetable"]
+                newStops.set(stopsNames[0], 0)
+                for(let i = 0; i < tt.length; i++){
+                    newStops.set(stopsNames[i+1], tt[i])
+                }
+                this.setState({
+                    number : routes[0]["routeId"],
+                    startTime : routes[0]["startTime"],
+                    endTime : routes[0]["endTime"],
+                    interval : routes[0]["interval"],
+                    stops : newStops
+                }, function () {
+                    console.log("ST: " + this.state.startTime)
+                })
+
+            }
+
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
+    async GetTimeTable() {
+        return await API.getRouteById(this.state.number)
+    }
 
     render(){
+
         this.totalTime = 0;
 
-        this.stops.forEach((value, key) => this.totalTime += value);
+        this.state.stops.forEach((value, key) => this.totalTime += value);
         let currentTime = this.getCurrentTime();
         let timeToStops = this.countTimeToStops();
         let listStopTimes = this.listTime(timeToStops)
         return (
-            <div>
-                <p>Current time is {this.toNormalTime(currentTime)}</p>
 
-                <p>Route number: {this.number}</p>
-                <p>First departure at: {this.toNormalTime(this.startTime)}</p>
-                <p>Last departure at: {this.toNormalTime(this.endTime)}</p>
-                <p>Time between departures: {this.toTimePeriod(this.interval)}</p>
+            <div>
+                <Redirect to={"/timetables"}/>
+                <p>Current time is {this.toNormalTime(currentTime)}</p>
+                <p>Route number: {this.state.number}</p>
+                <p>First departure at: {this.state.startTime}</p>
+                <p>Last departure at: {this.state.endTime}</p>
+                <p>Time between departures: {this.toTimePeriod(this.state.interval)}</p>
                 <div>Next bus should appear in: <br/>{listStopTimes}</div>
             </div>
         )

@@ -16,19 +16,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-@WebServlet(name = "RoutesServlet", urlPatterns = "/routes")
-public class RoutesServlet extends HttpServlet {
+@WebServlet(name = "AllRoutesServlet", urlPatterns = "/routes")
+public class AllRoutesServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         JDBC jdbc = new JDBC();
         var routes = jdbc.getRoutes();
-        var stops = jdbc.getStops();
-        updateRoutes(routes, stops);
-        PrintWriter out = resp.getWriter();
-        resp.setContentType("application/json");
-        resp.setCharacterEncoding("UTF-8");
-        String employeeJsonString = new Gson().toJson(routes);
-        out.print(employeeJsonString);
+        var out = GeneralRouteServlet.updateResp(resp);
+        out.print(GeneralRouteServlet.updateRoutes(jdbc, routes));
         out.flush();
     }
 

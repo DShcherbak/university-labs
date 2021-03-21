@@ -1,31 +1,47 @@
 import React from "react";
+import Checkbox from '../components/additional-components/Checkbox';
+
+
 
 export class RouteObject extends React.Component{
 
     constructor(props) {
+        console.log("CREATING ELEMENT: " + props.routeProps["routeId"])
         super(props);
-        this.routeNumber = props.routeProps["routeId"]
-        this.routeMap = props.routeProps["stops"]
+        this.state = {
+            routeNumber : props.routeProps["routeId"],
+            routeMap : props.routeProps["stops"],
+            type : this.getType(props.routeProps["type"]),
+            visible : true
+        }
+
     }
-    /*
-    const object = {'a': 1, 'b': 2, 'c' : 3};
-for (const [key, value] of Object.entries(object)) {
-  console.log(key, value);
-}
-     */
+
+    getType(number){
+        switch (number) {
+            case 1:
+                return "Тролейбус";
+            case 2:
+                return "Автобус";
+            case 3:
+                return "Трамвай";
+            default:
+                return "Тролейбус";
+        }
+    }
+
+
 
     render(){
-        console.log("SUKA")
-        console.log(this.routeMap)
         let list = []
         let id = 0;
-        this.routeMap.forEach(key => {
+        this.state.routeMap.forEach(key => {
             list.push(<li key = {++id}>{key}</li>);
         });
         return(
-            <div>I'm a route number {this.routeNumber} and I go like this:
-                {<ul>{list}</ul>}
-            </div>
+                <div>Я {this.state.type} номер {this.state.routeNumber} і маю наступний маршрут:
+                    {<ul>{list}</ul>}
+                </div>
         );
     }
 

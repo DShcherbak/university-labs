@@ -3,7 +3,34 @@ import React from "react";
 /* We simply can use an array and loop and print each user */
 import styles from "./TimeTables.module.css"
 import {TimeTableObject} from "../../models/TimeTableObject";
+import { Redirect } from 'react-router-dom'
 
+export class GeneralTimeTables extends React.Component{
+    constructor(props) {
+        super(props);
+        let id = this.getRouteId(window.location.href)
+        this.state = {
+            routeId : id
+        }
+    }
+
+    getRouteId(url){
+        let id = url.lastIndexOf('=')
+        let numberStr = url.substring(id + 1)
+        let number = parseInt(numberStr)
+        return number
+    }
+
+    render() {
+        return (
+            <div>
+                <TimeTableObject routeId = {this.state.routeId}/>
+            </div>
+
+
+        );
+    }
+}
 
 class TimeTables extends React.Component {
 
@@ -16,15 +43,16 @@ class TimeTables extends React.Component {
 
     constructor(props) {
         super(props);
-        this.routes = this.GetRoutes();
+        this.state = {
+            routeId : props.routeId
+        }
     }
-
-
 
     render() {
         return (
             <div>
-                <TimeTableObject/>
+                <Redirect to={"/timetables"}/>
+                <TimeTableObject routeId = {this.state.routeId}/>
             </div>
 
 
@@ -32,4 +60,4 @@ class TimeTables extends React.Component {
     }
 }
 
-export default TimeTables;
+//export default TimeTables;

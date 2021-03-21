@@ -6,6 +6,10 @@ export async function getRoutes() {
     return await sendGetRequest(backUrl + 'routes');
 }
 
+export async function getRouteById(id){
+    return await sendGetRequest(backUrl + 'route/' + id);
+}
+
 
 function sendGetRequest(requestUrl){
     // Simple POST request with a JSON body using fetch
