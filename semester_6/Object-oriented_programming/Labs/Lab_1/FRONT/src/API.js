@@ -1,12 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 
 let backUrl = 'http://localhost:8080/'
 
 export async function getRoutes() {
-        var getData = await sendGetRequest(backUrl + 'routes')
-        console.log("HERE")
-        console.log(getData)
-        return getData;
+    return await sendGetRequest(backUrl + 'routes');
 }
 
 
@@ -19,8 +16,6 @@ function sendGetRequest(requestUrl){
         };
         return fetch(requestUrl, requestOptions).then(response => response.json())
             .then((responseData) => {
-                    console.log("There")
-                    console.log(responseData);
                     return responseData;
             })
 }

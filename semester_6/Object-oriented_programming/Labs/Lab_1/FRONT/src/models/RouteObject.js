@@ -15,14 +15,12 @@ for (const [key, value] of Object.entries(object)) {
      */
 
     render(){
-        let prevStop = "-";
+        console.log("SUKA")
+        console.log(this.routeMap)
         let list = []
         let id = 0;
         this.routeMap.forEach(key => {
-            if(prevStop !== "-"){
-                list.push(<li key = {++id}>{prevStop} => {key}</li>);/* :: {value}*/
-            }
-            prevStop = key;
+            list.push(<li key = {++id}>{key}</li>);
         });
         return(
             <div>I'm a route number {this.routeNumber} and I go like this:
