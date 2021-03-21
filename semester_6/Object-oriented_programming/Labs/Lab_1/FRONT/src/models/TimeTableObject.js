@@ -1,6 +1,9 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
 import * as API from "../API";
+import { withRouter } from 'react-router-dom';
+import TimeTableForm from "../components/additional-components/TimeTableForm";
+
 
 
 export class TimeTableObject extends React.Component{
@@ -56,7 +59,6 @@ export class TimeTableObject extends React.Component{
         let currentBus = this.timeToInt(this.state.endTime);
         while(currentBus - this.state.interval > currentTime) currentBus-=this.state.interval;
 
-
         while(currentBus + this.totalTime > currentTime){
             let a = 0;
             for (let [key, value] of  this.state.stops.entries()) {
@@ -99,7 +101,8 @@ export class TimeTableObject extends React.Component{
                     startTime : routes[0]["startTime"],
                     endTime : routes[0]["endTime"],
                     interval : routes[0]["interval"],
-                    stops : newStops
+                    stops : newStops,
+                    incorrectRoute : false
                 }, function () {
                     console.log("ST: " + this.state.startTime)
                 })
@@ -115,8 +118,29 @@ export class TimeTableObject extends React.Component{
         return await API.getRouteById(this.state.number)
     }
 
+    submitForm (e) {
+        e.preventDefault()
+        this.props.history.push('/thank-you'); // <--- The page you want to redirect your user to.
+    }
+
+    AddButton(){
+        return (
+            <div>
+                <TimeTableForm currentId = {this.state.number}/>
+            </div>
+        )
+    }
+
     render(){
 
+        if(this.state.incorrectRoute){
+            return (
+                <div>
+                    {this.AddButton()}
+                    <h1>Маршуруту з номером {this.state.number} не знайдено.</h1>
+                </div>
+            )
+        }
         this.totalTime = 0;
 
         this.state.stops.forEach((value, key) => this.totalTime += value);
@@ -127,6 +151,7 @@ export class TimeTableObject extends React.Component{
 
             <div>
                 <Redirect to={"/timetables"}/>
+                {this.AddButton()}
                 <p>Current time is {this.toNormalTime(currentTime)}</p>
                 <p>Route number: {this.state.number}</p>
                 <p>First departure at: {this.state.startTime}</p>
