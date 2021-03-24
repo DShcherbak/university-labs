@@ -1,6 +1,8 @@
 package app.servlets;
 
 import app.JDBC;
+import app.models.RouteModel;
+import com.google.gson.Gson;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 
 @WebServlet(name = "RouteServlet", urlPatterns = "/route/*")
@@ -28,14 +32,31 @@ public class RouteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("views/add.jsp");
-        PrintWriter writer = resp.getWriter();
-        String name = req.getParameter("name");
-        String password = req.getParameter("pass");
-        req.setAttribute("name", name);
-        req.setAttribute("pass", password);
-        writer.println("You have posted: " + name + ", " + password);
-        requestDispatcher.forward(req, resp);
+        StringBuffer jb = new StringBuffer();
+        String line = null;
+        try {
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null)
+                jb.append(line);
+        } catch (Exception e) {
+            System.out.println("Couldn't parse post request: " + e.getMessage());
+        }
+
+        Gson gson = new Gson();
+        RouteModel routeModel = gson.fromJson(jb.toString(), RouteModel.class);
+        System.out.println(routeModel);
+        int id = routeModel.routeId;
+        JDBC jdbc = new JDBC();
+        try {
+            jdbc.updateRoute(id, routeModel);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        var routes = jdbc.getRoute(id);
+        var out = GeneralRouteServlet.updateResp(resp);
+        out.print(GeneralRouteServlet.updateRoutes(jdbc, routes));
+        out.flush();
+        //AirportDAO.addAirport(airport);
     }
 
 

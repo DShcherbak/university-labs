@@ -18,7 +18,7 @@ export class TimeTableObject extends React.Component{
         }
     }
 
-    getCurrentTime(){
+    getCurrentTime() {
         let timeStr = new Date().toLocaleString().split(",")[1]
         let result = parseInt(timeStr.split(':')[0]) * 60 + parseInt(timeStr.split(':')[1])
         let pm = timeStr.split(" ")[2]
@@ -116,11 +116,6 @@ export class TimeTableObject extends React.Component{
 
     async GetTimeTable() {
         return await API.getRouteById(this.state.number)
-    }
-
-    submitForm (e) {
-        e.preventDefault()
-        this.props.history.push('/thank-you'); // <--- The page you want to redirect your user to.
     }
 
     AddButton(){

@@ -10,6 +10,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -29,21 +31,19 @@ public class AllRoutesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("views/add.jsp");
-        PrintWriter writer = resp.getWriter();
-        String name = req.getParameter("name");
-        String password = req.getParameter("pass");
-        req.setAttribute("name", name);
-        req.setAttribute("pass", password);
-        writer.println("You have posted: " + name + ", " + password);
-        requestDispatcher.forward(req, resp);
-    }
-
-    private void updateRoutes(ArrayList<RouteModel> routes, HashMap<Integer, String> stops){
-        for (RouteModel route: routes) {
-            for(int i = 0; i < route.stops.length; i++){
-                route.stops[i] = stops.get((Integer) route.stops[i]);
-            }
+        StringBuffer jb = new StringBuffer();
+        String line = null;
+        try {
+            BufferedReader reader = req.getReader();
+            while ((line = reader.readLine()) != null)
+                jb.append(line);
+        } catch (Exception e) {
+            System.out.println("Couldn't parse post request: " + e.getMessage());
         }
+
+        Gson gson = new Gson();
+        RouteModel routeModel = gson.fromJson(jb.toString(), RouteModel.class);
+        System.out.println(routeModel);
+        //AirportDAO.addAirport(airport);
     }
 }
