@@ -1,5 +1,3 @@
-import React from "react";
-
 let backUrl = 'http://localhost:8080/'
 
 export async function getRoutes() {
@@ -11,21 +9,25 @@ export async function getRouteById(id){
 }
 
 export async function getStops() {
-    let c = await sendGetRequest(backUrl + 'stops');
-    return c
+    return await sendGetRequest(backUrl + 'stops')
 }
 
 export async function updateRoute(state){
-    sendPostRequest(backUrl + 'route/' + state.number, state)
+    console.log("update" + state.oldId)
+    return await sendPostRequest(backUrl + 'route/' + state.oldId, state)
 }
 
 export async function checkAvailable(id) {
     let c = await sendGetRequest(backUrl + 'route/' + id);
-    return c === undefined || c === []
+    return (!c) || (Object.keys(c).length === 0)
 }
 
-export async function deleteRoute(id){
-    
+export async function deleteRoute(id, state){
+    return await sendPostRequest(backUrl + 'delete/route/' + id, state)
+}
+
+export async function insertRoute(route){
+    return await sendPostRequest(backUrl + 'route/' + route.number, route)
 }
 
 
@@ -43,8 +45,6 @@ function sendGetRequest(requestUrl){
 }
 
 function convertStopsToInt(stops, allStops) {
-    console.log("Converting...." + stops)
-    console.log("Converting...." + allStops)
     let result = []
     for(let i = 0; i < stops.length; i++){
         for(let j = 0; j < allStops.length; j++){
@@ -53,16 +53,21 @@ function convertStopsToInt(stops, allStops) {
             }
         }
     }
-    console.log("converted: " + result)
+    return result
+}
+
+function convertTimeTable(timeTable){
+    let result = []
+    for(let i = 0; i < timeTable.length; i++){
+        result.push(parseInt(timeTable[i]))
+    }
     return result
 }
 
 function sendPostRequest(url, state){
     // Simple POST request with a JSON body using fetch
-        console.log("Trying to push a request here!");
-        console.log(state.timeTable)
         let intStops = convertStopsToInt(state.stops, state.allStops)
-    console.log(intStops)
+    let intTimeTable = convertTimeTable(state.timeTable.slice(1))
     const requestOptions = {
         method: 'Post',
         headers: { 'Content-Type': 'application/json' },
@@ -73,10 +78,12 @@ function sendPostRequest(url, state){
             "endTime": state.endTime,
             "interval": state.interval,
             "type": typeToInt(state.type),
-            "timetable": state.timeTable.slice(1)})
+            "timetable": intTimeTable})
     };
-    fetch(url, requestOptions).
-    then(response => response.json()).then(data => console.log("POST RESPONSE " + data));
+    return fetch(url, requestOptions).then(response => response.json())
+        .then((responseData) => {
+            return responseData;
+        })
 }
 
 function typeToInt(type){

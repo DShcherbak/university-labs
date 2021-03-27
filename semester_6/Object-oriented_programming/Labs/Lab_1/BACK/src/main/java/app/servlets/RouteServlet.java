@@ -45,14 +45,23 @@ public class RouteServlet extends HttpServlet {
         Gson gson = new Gson();
         RouteModel routeModel = gson.fromJson(jb.toString(), RouteModel.class);
         System.out.println(routeModel);
-        int id = routeModel.routeId;
+        String url = String.valueOf(req.getRequestURL());
+        String num = url.substring(url.lastIndexOf("/") + 1);
+        int id = Integer.parseInt(num);
         JDBC jdbc = new JDBC();
         try {
+        if(id == 0){
+            jdbc.insertRoute(routeModel);
+        } else {
             jdbc.updateRoute(id, routeModel);
+        }
+
+
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        var routes = jdbc.getRoute(id);
+        var routes = jdbc.getRoute(routeModel.routeId);
         var out = GeneralRouteServlet.updateResp(resp);
         out.print(GeneralRouteServlet.updateRoutes(jdbc, routes));
         out.flush();

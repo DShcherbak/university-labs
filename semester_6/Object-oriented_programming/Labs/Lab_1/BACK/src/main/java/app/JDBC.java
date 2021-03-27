@@ -43,7 +43,7 @@ public class JDBC {
     }
 
     public ArrayList<RouteModel> getRoutes() {
-        return getRoutesInternal("select * from routes order by route_id");
+        return getRoutesInternal("select * from routes order by route_number");
     }
 
     public ArrayList<StopModel> getStopsModel(){
@@ -150,7 +150,8 @@ public class JDBC {
 
     public void updateRoute(int id, RouteModel route) throws SQLException {
         String query = "update routes set # where route_number = " + id;
-        String updates = "stops = Array [";
+
+        String updates = "route_number = " + route.routeId + ", stops = Array [";
         for (var stop: route.stops) {
             int t = (int)Math.round((Double) stop);
             updates += t + ", ";
@@ -170,6 +171,39 @@ public class JDBC {
         query = query.replaceFirst("#", updates);
         System.out.println(query);
         updateQuery(query);
+    }
 
+    public void deleteElem(String table_name, int id) throws SQLException {
+        String query = "delete from "+ table_name + " where route_number = " + id;
+        updateQuery(query);
+    }
+
+    public void insertRoute(RouteModel route) throws SQLException {
+        String updates = "insert into routes (route_number, stops, " +
+                "starttime, endtime, interval, routetype, timetable) values (";
+
+        updates += route.routeId + ", Array [";
+        for (var stop: route.stops) {
+            int t = (int)Math.round((Double) stop);
+            updates += t + ", ";
+        }
+        updates = updates.substring(0, updates.length() - 2);
+        updates += "], '" + route.startTime + "', '";
+        updates +=  route.endTime + "', ";
+        updates +=  route.interval + ", ";
+        updates +=  route.type + ", ";
+        updates += " Array [";
+        try {
+            for (var tt : route.timetable) {
+                int t = (int) Math.round((Double) tt);
+                updates += t + ", ";
+            }
+        }catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        updates = updates.substring(0, updates.length() - 2);
+        updates += "])";
+        System.out.println(updates);
+        updateQuery(updates);
     }
 }

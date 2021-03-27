@@ -18,6 +18,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { NavBar, Footer, Loading } from "./components";
 import Editor from "./pages/Editor/Editor";
 import {Edit} from "./pages/Edit/Edit"
+import {AddRoute} from "./pages/AddRoute/AddRoute";
 
 //import "./app.css";
 
@@ -37,6 +38,7 @@ const App = () => {
                     <Route path="/timetables" component={GeneralTimeTables} />
                     <Route exact path="/editor" component={Editor} />
                     <Route path="/edit" component={Edit}/>
+                    <Route path="/addRoute" component={AddRoute}/>
                 </Switch>
             </div>
             <Footer />

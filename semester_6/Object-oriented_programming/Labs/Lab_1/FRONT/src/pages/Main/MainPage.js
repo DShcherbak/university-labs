@@ -19,8 +19,8 @@ function MainPage(){
         history.push(path);
     }
 
-    const goToStations = () =>{
-        let path = '/stations';
+    const goToEdit = () =>{
+        let path = '/editor';
         history.push(path);
     }
 
@@ -28,8 +28,7 @@ function MainPage(){
             <div className={styles.container}>
                 <button className={styles.MainPageButton} onClick={goToRoutes}> Маршрути</button>
                 <button className={styles.MainPageButton} onClick={goToTimeTables}> Розклади</button>
-                <button className={styles.MainPageButton} onClick={goToStations}> Коли буде мій транспорт?</button>
-                <button className={styles.MainPageButton}> Побудувати маршрут</button>
+                <button className={styles.MainPageButton} onClick={goToEdit}> Сторінка адміністратора </button>
             </div>
         );
 

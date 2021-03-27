@@ -124,6 +124,9 @@ class Editor extends React.Component {
         if(this.state.counted){
             return (
                 <div>
+                    <Link to={"/addRoute"}>
+                        <button>Додати новий маршрут</button>
+                    </Link>
                     {this.createCheckboxes()}
                     <div className={styles.container}>
                         {list}
@@ -133,12 +136,11 @@ class Editor extends React.Component {
         } else {
             return (
                 <div>
+                    <Link to={"/addRoute"}>
+                        <button>Додати новий маршрут</button>
+                    </Link>
                     {this.createCheckboxes()}
-                    <div className={styles.container}>
-                        <ul>
-                            <li>No list here</li>
-                        </ul>
-                    </div>
+                    <div className={styles.container}/>
                 </div>
             );
         }
