@@ -3,6 +3,7 @@ import React from "react";
 /* We simply can use an array and loop and print each user */
 import styles from "./MainPage.module.css"
 import { useHistory } from 'react-router-dom';
+import NavBar from "../../components/nav-bar";
 
 
 
@@ -24,11 +25,15 @@ function MainPage(){
         history.push(path);
     }
 
+
         return (
-            <div className={styles.container}>
-                <button className={styles.MainPageButton} onClick={goToRoutes}> Маршрути</button>
-                <button className={styles.MainPageButton} onClick={goToTimeTables}> Розклади</button>
-                <button className={styles.MainPageButton} onClick={goToEdit}> Сторінка адміністратора </button>
+            <div>
+                <NavBar fatherlink={''}/>
+                <div className={styles.container}>
+                    <button className={styles.MainPageButton} onClick={goToRoutes}> Маршрути</button>
+                    <button className={styles.MainPageButton} onClick={goToTimeTables}> Розклади</button>
+                    <button className={styles.MainPageButton} onClick={goToEdit}> Сторінка адміністратора </button>
+                </div>
             </div>
         );
 

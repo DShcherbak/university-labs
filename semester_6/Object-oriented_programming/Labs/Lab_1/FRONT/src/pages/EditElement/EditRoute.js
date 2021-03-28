@@ -3,9 +3,38 @@ import {Link, Redirect} from "react-router-dom";
 import * as API from "../../API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
-
+import NavBar from "../../components/nav-bar";
+import Loading from "../../components/loading";
+import {AddStopInternal} from "../AddElement/AddStop";
 
 export class EditRoute extends React.Component{
+    async isAdmin(){
+        return await API.checkAdmin()
+    }
+
+    componentDidMount = () => {
+        this.isAdmin().then(result => {
+            this.setState({
+                adminChecked: true,
+                isAdmin: result["isAdmin"]
+            })
+        })
+    }
+
+    render() {
+        if (this.state === null || !this.state.adminChecked) {
+            return (
+                <Loading/>
+            );
+        } else if (!this.state.isAdmin) {
+            return (<Redirect to={'/'}/>)
+        } else {
+            return <EditRouteInternal/>
+        }
+    }
+}
+
+export class EditRouteInternal extends React.Component{
     constructor(props) {
         super(props);
         let id = this.getRouteId(window.location.href)
@@ -266,9 +295,7 @@ export class EditRoute extends React.Component{
         if(this.state.confirmDelete){
             return (
                 <div>
-                    <Link to={"/edit/routes"}>
-                        <button>Назад</button>
-                    </Link>
+                    <NavBar fatherlink={'/edit/routes'}/>
                     <form>
                         <label>{"Підтвердження видалення маршруту номер " + this.state.oldId}</label><br/>
                         <input type="button" onClick={this.resetForm} value="Скасувати видалення"/>
@@ -280,9 +307,7 @@ export class EditRoute extends React.Component{
         if(this.state.incorrectRoute){
             return (
                 <div>
-                    <Link to={"/edit/routes"}>
-                        <button>Назад</button>
-                    </Link>
+                    <NavBar fatherlink={'/edit/routes'}/>
                     {this.AddButton()}
                     <h1>Маршуруту з номером {this.state.number} не знайдено.</h1>
                 </div>
@@ -291,9 +316,7 @@ export class EditRoute extends React.Component{
 
         return (
             <div>
-                <Link to={"/edit/routes"}>
-                    <button>Назад</button>
-                </Link>
+                <NavBar fatherlink={'/edit/routes'}/>
                 <form>
                     <label>{"Редагування маршруту номер " + this.state.number}</label><br/>
                     <label>Номер маршруту: </label><input type="number" value={this.state.number} name="number" onChange={this.handleInputChange}/><br/>

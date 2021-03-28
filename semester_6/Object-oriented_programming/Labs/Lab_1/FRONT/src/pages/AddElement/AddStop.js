@@ -3,9 +3,37 @@ import {Link, Redirect} from "react-router-dom";
 import * as API from "../../API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
-
+import NavBar from "../../components/nav-bar";
+import Loading from "../../components/loading";
 
 export class AddStop extends React.Component{
+    async isAdmin(){
+        return await API.checkAdmin()
+    }
+
+    componentDidMount = () => {
+        this.isAdmin().then(result => {
+            this.setState({
+                adminChecked: true,
+                isAdmin: result["isAdmin"]
+            })
+        })
+    }
+
+    render() {
+        if (this.state === null || !this.state.adminChecked) {
+            return (
+                <Loading/>
+            );
+        } else if (!this.state.isAdmin) {
+            return (<Redirect to={'/'}/>)
+        } else {
+            return <AddStopInternal/>
+        }
+    }
+}
+
+export class AddStopInternal extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -20,8 +48,6 @@ export class AddStop extends React.Component{
             stops: [],
         }
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.addStop = this.addStop.bind(this);
-        this.removeStop = this.removeStop.bind(this);
         this.saveAndContinue = this.saveAndContinue.bind(this);
         this.saveAndExit = this.saveAndExit.bind(this);
     }
@@ -35,13 +61,27 @@ export class AddStop extends React.Component{
         });
     }
 
+    resetForm(){
+
+        this.GetStops().then((stops) => {
+            this.setState({
+                stops: stops,
+                name: ""
+            })
+
+        }).catch((error) => {
+            console.log(error);
+        });
+
+    }
+
 
 
     componentDidMount = () => {
 
         this.GetStops().then((stops) => {
             this.setState({
-                allStops: stops
+                stops: stops
             }, function () {
                 console.log("ST: " + this.state.startTime)
             })
@@ -56,8 +96,27 @@ export class AddStop extends React.Component{
         return await API.getStops()
     }
 
+    isNameAvailable(name){
+        let result = true
+        this.state.stops.forEach((stop) => {
+            if(stop.stop_name === name)
+                result = false
+        })
+        return result
+
+    }
+
+    mex(){
+        let result = 1
+        this.state.stops.forEach((stop) => {
+            if(result <= stop.stop_id)
+                result = stop.stop_id + 1
+        })
+        return result
+    }
+
     async saveChanges() {
-        let newNumber = this.mex()
+        let newNumber = await this.mex()
         this.setState({
             oldId : 0,
             id : newNumber
@@ -65,42 +124,14 @@ export class AddStop extends React.Component{
         let isAvailable = this.isNameAvailable(this.state.name)
         if (isAvailable) {
             let newStop = await API.updateStop(this.state)
-            this.state.name = newStop[newNumber].stop_name
+            this.resetForm()
         } else {
             alert("Зупинка з назвою " + this.state.name + " вже існує!")
         }
     }
 
-    reload(){
-
-    }
-
-    addStop(){
-        let newStop = this.state.allStops[0].stop_name
-        let oldStops = this.state.stops.concat(newStop)
-        let newTimetable = this.state.timeTable.concat([5.0])
-        this.setState({
-            stops:oldStops,
-            timeTable:newTimetable
-        })
-    }
-
-    removeStop(){
-        let oldStops = this.state.stops
-        if(oldStops.length > 0){
-            oldStops.pop()
-            let newTimetable = this.state.timeTable
-            newTimetable.pop()
-            this.setState({
-                stops:oldStops,
-                timeTable:newTimetable
-            })
-        }
-    }
-
     async saveAndContinue() {
         await this.saveChanges()
-        this.reload()
     }
 
     async saveAndExit(){
@@ -119,13 +150,10 @@ export class AddStop extends React.Component{
         }
         return (
             <div>
-                <Link to={"/edit/stops"}>
-                    <button>Назад</button>
-                </Link>
-
+                <NavBar fatherlink={'/edit/stops'}/>
                 <form>
                     <label>{"Реєстрація нової зупинки"}</label><br/>
-                    <label>Вигадайте унікальне ім'я для нової зупинки: </label><input type="text" value={this.state.name} name="number" onChange={this.handleInputChange}/><br/>
+                    <label>Вигадайте унікальне ім'я для нової зупинки: </label><input type="text" value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>
 
                     <input type="button" onClick={this.saveAndContinue} value="Зберегти та додати наступний"/>
                     <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>

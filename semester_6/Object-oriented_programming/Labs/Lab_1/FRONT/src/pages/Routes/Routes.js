@@ -4,6 +4,7 @@ import styles from "./Routes.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
+import NavBar from "../../components/nav-bar";
 
 
 const routeTypes = [
@@ -124,6 +125,7 @@ class Routes extends React.Component {
         if(this.state.counted){
             return (
                 <div>
+                    <NavBar fatherlink={'/'}/>
                     {this.createCheckboxes()}
                     <div className={styles.container}>
                         {list}
@@ -133,6 +135,7 @@ class Routes extends React.Component {
         } else {
             return (
                 <div>
+                    <NavBar fatherlink={'/'}/>
                     {this.createCheckboxes()}
                     <div className={styles.container}>
                         <ul>

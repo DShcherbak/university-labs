@@ -4,6 +4,9 @@ import styles from "./Editor.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
+import NavBar from "../../components/nav-bar";
+import Loading from "../../components/loading";
+import Redirect from "react-router-dom/es/Redirect";
 
 
 const routeTypes = [
@@ -21,7 +24,17 @@ class RoutesEditor extends React.Component {
         return list
     }
 
+    async isAdmin(){
+        return await API.checkAdmin()
+    }
+
     componentDidMount = () => {
+        this.isAdmin().then(result => {
+            this.setState({
+                adminChecked : true,
+                isAdmin: result["isAdmin"]
+            })
+        })
         this.GetRoutes().then((routes) => {
             this.setState({
                 routes : routes
@@ -39,7 +52,9 @@ class RoutesEditor extends React.Component {
         super(props);
         this.state ={
             displayRoutes: [],
-            routes: []
+            routes: [],
+            verifiedAdmin: false,
+
         }
     }
 
@@ -120,29 +135,39 @@ class RoutesEditor extends React.Component {
 
 
     render() {
-        let list = this.makeRoutesList(this.state.displayRoutes)
-        if(this.state.counted){
+        if(this.state === null || !this.state.adminChecked){
             return (
-                <div>
-                    <Link to={"/add/route"}>
-                        <button>Додати новий маршрут</button>
-                    </Link>
-                    {this.createCheckboxes()}
-                    <div className={styles.container}>
-                        {list}
-                    </div>
-                </div>
+                <Loading/>
             );
+        } else if(!this.state.isAdmin){
+            return (<Redirect to={'/'}/>)
         } else {
-            return (
-                <div>
-                    <Link to={"/add/route"}>
-                        <button>Додати новий маршрут</button>
-                    </Link>
-                    {this.createCheckboxes()}
-                    <div className={styles.container}/>
-                </div>
-            );
+            let list = this.makeRoutesList(this.state.displayRoutes)
+            if (this.state.counted) {
+                return (
+                    <div>
+                        <NavBar fatherlink={'/editor'}/>
+                        <Link to={"/add/route"}>
+                            <button>Додати новий маршрут</button>
+                        </Link>
+                        {this.createCheckboxes()}
+                        <div className={styles.container}>
+                            {list}
+                        </div>
+                    </div>
+                );
+            } else {
+                return (
+                    <div>
+                        <NavBar fatherlink={'/editor'}/>
+                        <Link to={"/add/route"}>
+                            <button>Додати новий маршрут</button>
+                        </Link>
+                        {this.createCheckboxes()}
+                        <div className={styles.container}/>
+                    </div>
+                );
+            }
         }
 
     }

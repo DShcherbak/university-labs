@@ -3,15 +3,45 @@ import {Link, Redirect} from "react-router-dom";
 import * as API from "../../API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
-
+import NavBar from "../../components/nav-bar";
+import Loading from "../../components/loading";
+import {EditRouteInternal} from "./EditRoute";
 
 export class EditStop extends React.Component{
+    async isAdmin(){
+        return await API.checkAdmin()
+    }
+
+    componentDidMount = () => {
+        this.isAdmin().then(result => {
+            this.setState({
+                adminChecked: true,
+                isAdmin: result["isAdmin"]
+            })
+        })
+    }
+
+    render() {
+        if (this.state === null || !this.state.adminChecked) {
+            return (
+                <Loading/>
+            );
+        } else if (!this.state.isAdmin) {
+            return (<Redirect to={'/'}/>)
+        } else {
+            return <EditStopInternal/>
+        }
+    }
+}
+
+export class EditStopInternal extends React.Component{
     constructor(props) {
         super(props);
         let id = this.getStopId(window.location.href)
         this.state = {
             id: id,
             name: "",
+            adminProved: true
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.resetForm = this.resetForm.bind(this);
@@ -138,8 +168,8 @@ export class EditStop extends React.Component{
         })
     };
 
-    confirmedDelete(){
-        API.deleteStop(this.state.oldId, this.state)
+    async confirmedDelete(){
+        await API.deleteStop(this.state.id, this.state)
         this.setState({
             returnToEditor : true
         })
@@ -162,7 +192,7 @@ export class EditStop extends React.Component{
         let isAvailable = this.isNameAvailable(this.state.name)
         if (isAvailable) {
             let newStop = await API.updateStop(this.state)
-            this.state.name = newStop[0].stop_name
+            this.resetForm()
         } else {
             alert("Зупинка з назвою " + this.state.name + " вже існує!")
         }
@@ -182,6 +212,10 @@ export class EditStop extends React.Component{
     }
 
     render(){
+        if(!this.state.adminProved){
+            alert("You have no admin rights!")
+            return (<Redirect to={'/'}/>)
+        }
         if(this.state.returnToEditor){
             return (
                 <Redirect to={'/edit/stops'}/>
@@ -190,9 +224,7 @@ export class EditStop extends React.Component{
         if(this.state.confirmDelete){
             return (
                 <div>
-                    <Link to={"/edit/stops"}>
-                        <button>Назад</button>
-                    </Link>
+                    <NavBar fatherlink={'/edit/stops'}/>
                     <form>
                         <label>{"Підтвердження видалення зупинки \"Станція " + this.state.name + "\""}</label><br/>
                         <input type="button" onClick={this.resetForm} value="Скасувати видалення"/>
@@ -204,9 +236,7 @@ export class EditStop extends React.Component{
         if(this.state.incorrectRoute){
             return (
                 <div>
-                    <Link to={"/edit/stops"}>
-                        <button>Назад</button>
-                    </Link>
+                    <NavBar fatherlink={'/edit/stops'}/>
                     <h1>Зупинки не знайдено.</h1>
                 </div>
             )
@@ -214,9 +244,7 @@ export class EditStop extends React.Component{
 
         return (
             <div>
-                <Link to={"/edit/stops"}>
-                    <button>Назад</button>
-                </Link>
+                <NavBar fatherlink={'/edit/stops'}/>
                 <form>
                     <label>{"Редагування зупинки"}</label><br/>
                     <label>Назва зупинки: </label><input type="text" value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>

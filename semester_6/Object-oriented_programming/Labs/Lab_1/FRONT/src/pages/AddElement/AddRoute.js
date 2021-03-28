@@ -3,9 +3,37 @@ import {Link, Redirect} from "react-router-dom";
 import * as API from "../../API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
-
+import NavBar from "../../components/nav-bar";
+import Loading from "../../components/loading";
 
 export class AddRoute extends React.Component{
+    async isAdmin(){
+        return await API.checkAdmin()
+    }
+
+    componentDidMount = () => {
+        this.isAdmin().then(result => {
+            this.setState({
+                adminChecked: true,
+                isAdmin: result["isAdmin"]
+            })
+        })
+    }
+
+    render() {
+        if (this.state === null || !this.state.adminChecked) {
+            return (
+                <Loading/>
+            );
+        } else if (!this.state.isAdmin) {
+            return (<Redirect to={'/'}/>)
+        } else {
+            return <AddRouteInternal/>
+        }
+    }
+}
+
+class AddRouteInternal extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -133,18 +161,17 @@ export class AddRoute extends React.Component{
 
     resetForm(){
         console.log("Reset...")
-        this.GetRoute().then((routes) => {
-            if(routes.length === 0){
-                this.setState({
-                    incorrectRoute: true
-                })
-            } else {
-                this.resetValues(routes)
-            }
 
-        }).catch((error) => {
-            console.log(error);
-        });
+        this.setState({
+            oldId : 0,
+            number: 0,
+            startTime: "06:00",
+            endTime: "23:30",
+            interval: 10,
+            type: 'Тролейбус',
+            timeTable : [],
+            stops: [],
+        })
 
     }
 
@@ -191,7 +218,7 @@ export class AddRoute extends React.Component{
 
     async saveAndContinue() {
         await this.saveChanges()
-        this.reload()
+        this.resetForm()
     }
 
     async saveAndExit(){
@@ -205,14 +232,12 @@ export class AddRoute extends React.Component{
     render(){
         if(this.state.returnToEditor){
             return (
-                <Redirect to={'/editor'}/>
+                <Redirect to={'/edit/routes'}/>
             )
         }
         return (
             <div>
-                <Link to={"/editor"}>
-                    <button>Назад</button>
-                </Link>
+                <NavBar fatherlink={'/edit/routes'}/>
 
                 <form>
                     <label>{"Реєстрація нового маршруту"}</label><br/>

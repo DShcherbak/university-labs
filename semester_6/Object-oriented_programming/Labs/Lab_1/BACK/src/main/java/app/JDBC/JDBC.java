@@ -78,5 +78,33 @@ public class JDBC {
     public void deleteElem(String table_name, String id_name, int id) throws SQLException {
         String query = "delete from "+ table_name + " where " + id_name + " = " + id;
         GeneralJDBC.updateQuery(query);
+
+
+    }
+
+    public boolean checkAdmin() {
+        boolean res = false;
+        try {
+            var result = GeneralJDBC.getQuery("select users.isAdmin from users inner join temp on temp.name = users.name");
+
+            if (result.next()) {
+                try {
+                    res = result.getBoolean(1);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
+        return res;
+    }
+
+    public void setCurrentUser(String email){
+        try{
+            GeneralJDBC.updateQuery("update temp set name = '" + email + "' where id = 1;");
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }

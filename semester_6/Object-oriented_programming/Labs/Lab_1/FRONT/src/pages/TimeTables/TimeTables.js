@@ -3,6 +3,7 @@ import React from "react";
 /* We simply can use an array and loop and print each user */
 import {TimeTableObject} from "../../models/TimeTableObject";
 import {Redirect} from 'react-router-dom'
+import NavBar from "../../components/nav-bar";
 
 export class GeneralTimeTables extends React.Component{
     constructor(props) {
@@ -22,6 +23,7 @@ export class GeneralTimeTables extends React.Component{
     render() {
         return (
             <div>
+                <NavBar fatherlink={'/'}/>
                 <TimeTableObject routeId = {this.state.routeId}/>
             </div>
 

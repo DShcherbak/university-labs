@@ -11,22 +11,7 @@ const MainNav = () => (
     >
       На головну
     </NavLink>
-    <NavLink
-      to="/profile"
-      exact
-      className="nav-link"
-      activeClassName="router-link-exact-active"
-    >
-      Маршрути
-    </NavLink>
-    <NavLink
-      to="/external-api"
-      exact
-      className="nav-link"
-      activeClassName="router-link-exact-active"
-    >
-      External API
-    </NavLink>
+
   </div>
 );
 

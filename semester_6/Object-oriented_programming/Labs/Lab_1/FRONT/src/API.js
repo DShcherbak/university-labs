@@ -4,6 +4,15 @@ export async function getRoutes() {
     return await sendGetRequest(backUrl + 'routes');
 }
 
+export async function checkAdmin(){
+    return await sendGetRequest(backUrl + 'admin')
+}
+
+export function setUser(email){
+    console.log("SET USER: " + email)
+    sendPostRequest(backUrl + 'admin', JSON.stringify("email:" + email))
+}
+
 export async function getRouteById(id){
     return await sendGetRequest(backUrl + 'route/' + id);
 }
@@ -36,15 +45,15 @@ export async function deleteStop(id, state){
 
 function sendGetRequest(requestUrl){
     // Simple POST request with a JSON body using fetch
-        const requestOptions = {
+    const requestOptions = {
         method: 'Get',
         headers: {},
-       // body: JSON.stringify({ title: 'React Get Request Example' })
-        };
-        return fetch(requestUrl, requestOptions).then(response => response.json())
-            .then((responseData) => {
-                    return responseData;
-            })
+        // body: JSON.stringify({ title: 'React Get Request Example' })
+    };
+    return fetch(requestUrl, requestOptions).then(response => response.json())
+        .then((responseData) => {
+            return responseData;
+        })
 }
 
 function convertStopsToInt(stops, allStops) {
@@ -81,7 +90,7 @@ function routeToJson(state) {
 }
 
 function stopToJson(state) {
-     let json = JSON.stringify({
+    let json = JSON.stringify({
         "stop_id": state.id,
         "stop_name": state.name
     })
@@ -139,5 +148,3 @@ postData('https://example.com/answer', { answer: 42 })
     .then((data) => {
         console.log(data); // JSON data parsed by `response.json()` call
     });
-
-
