@@ -1,10 +1,9 @@
 package app.servlets;
 
-import app.JDBC;
+import app.JDBC.JDBC;
 import app.models.RouteModel;
 import com.google.gson.Gson;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 
 
@@ -50,13 +48,11 @@ public class RouteServlet extends HttpServlet {
         int id = Integer.parseInt(num);
         JDBC jdbc = new JDBC();
         try {
-        if(id == 0){
-            jdbc.insertRoute(routeModel);
-        } else {
-            jdbc.updateRoute(id, routeModel);
-        }
-
-
+            if(id == 0){
+                jdbc.insertRoute(routeModel);
+            } else {
+                jdbc.updateRoute(id, routeModel);
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -65,7 +61,6 @@ public class RouteServlet extends HttpServlet {
         var out = GeneralRouteServlet.updateResp(resp);
         out.print(GeneralRouteServlet.updateRoutes(jdbc, routes));
         out.flush();
-        //AirportDAO.addAirport(airport);
     }
 
 

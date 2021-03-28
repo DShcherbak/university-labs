@@ -16,9 +16,13 @@ import Stations from "./pages/Stations/Stations.js";
 import { useAuth0 } from "@auth0/auth0-react";
 
 import { NavBar, Footer, Loading } from "./components";
-import Editor from "./pages/Editor/Editor";
-import {Edit} from "./pages/Edit/Edit"
-import {AddRoute} from "./pages/AddRoute/AddRoute";
+import RoutesEditor from "./pages/Editor/RoutesEditor";
+import StopsEditor from "./pages/Editor/StopsEditor";
+import {EditRoute} from "./pages/EditElement/EditRoute"
+import {EditStop} from "./pages/EditElement/EditStop"
+import {Editor} from "./pages/Editor/Editor"
+import {AddRoute} from "./pages/AddElement/AddRoute";
+import {AddStop} from "./pages/AddElement/AddStop";
 
 //import "./app.css";
 
@@ -37,8 +41,12 @@ const App = () => {
                     <Route exact path="/routes" component={Routes} />
                     <Route path="/timetables" component={GeneralTimeTables} />
                     <Route exact path="/editor" component={Editor} />
-                    <Route path="/edit" component={Edit}/>
-                    <Route path="/addRoute" component={AddRoute}/>
+                    <Route exact path="/edit/routes" component={RoutesEditor} />
+                    <Route exact path="/edit/stops" component={StopsEditor} />
+                    <Route path="/edit/route" component={EditRoute}/>
+                    <Route path="/edit/stop" component={EditStop}/>
+                    <Route path="/add/route" component={AddRoute}/>
+                    <Route path="/add/stop" component={AddStop}/>
                 </Switch>
             </div>
             <Footer />

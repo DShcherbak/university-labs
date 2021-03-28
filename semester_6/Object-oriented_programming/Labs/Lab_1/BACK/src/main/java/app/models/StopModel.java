@@ -1,8 +1,8 @@
 package app.models;
 
 public class StopModel {
-    int stop_id = 0;
-    String stop_name = "stop_name";
+    public int stop_id = 0;
+    public String stop_name = "stop_name";
 
 
     public StopModel(int id, String name){

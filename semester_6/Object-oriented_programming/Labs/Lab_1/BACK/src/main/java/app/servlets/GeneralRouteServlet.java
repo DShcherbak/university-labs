@@ -1,6 +1,6 @@
 package app.servlets;
 
-import app.JDBC;
+import app.JDBC.JDBC;
 import app.models.RouteModel;
 import com.google.gson.Gson;
 
@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class GeneralRouteServlet {
 
     public static String updateRoutes(JDBC jdbc, ArrayList<RouteModel> routes){
-        var stops = jdbc.getStops();
+        var stops = jdbc.getStopsMap();
         updateStops(routes, stops);
         return new Gson().toJson(routes);
     }

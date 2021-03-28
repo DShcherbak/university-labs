@@ -13,21 +13,24 @@ export async function getStops() {
 }
 
 export async function updateRoute(state){
-    console.log("update" + state.oldId)
-    return await sendPostRequest(backUrl + 'route/' + state.oldId, state)
+    return await sendPostRequest(backUrl + 'route/' + state.oldId, routeToJson(state))
 }
 
-export async function checkAvailable(id) {
+export async function checkAvailableRoute(id) {
     let c = await sendGetRequest(backUrl + 'route/' + id);
     return (!c) || (Object.keys(c).length === 0)
 }
 
 export async function deleteRoute(id, state){
-    return await sendPostRequest(backUrl + 'delete/route/' + id, state)
+    return await sendPostRequest(backUrl + 'delete/route/' + id,  routeToJson(state))
 }
 
-export async function insertRoute(route){
-    return await sendPostRequest(backUrl + 'route/' + route.number, route)
+export async function updateStop(state){
+    return await sendPostRequest(backUrl + 'stop/' + state.id, stopToJson(state))
+}
+
+export async function deleteStop(id, state){
+    return await sendPostRequest(backUrl + 'delete/stop/' + id, stopToJson(state))
 }
 
 
@@ -64,21 +67,35 @@ function convertTimeTable(timeTable){
     return result
 }
 
-function sendPostRequest(url, state){
-    // Simple POST request with a JSON body using fetch
-        let intStops = convertStopsToInt(state.stops, state.allStops)
+function routeToJson(state) {
+    let intStops = convertStopsToInt(state.stops, state.allStops)
     let intTimeTable = convertTimeTable(state.timeTable.slice(1))
+    return JSON.stringify({
+        "routeId": state.number,
+        "stops": intStops,
+        "startTime": state.startTime,
+        "endTime": state.endTime,
+        "interval": state.interval,
+        "type": typeToInt(state.type),
+        "timetable": intTimeTable})
+}
+
+function stopToJson(state) {
+     let json = JSON.stringify({
+        "stop_id": state.id,
+        "stop_name": state.name
+    })
+    console.log("SEND POST: " + json)
+    return json
+}
+
+function sendPostRequest(url, body){
+    // Simple POST request with a JSON body using fetch
+
     const requestOptions = {
         method: 'Post',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            "routeId": state.number,
-            "stops": intStops,
-            "startTime": state.startTime,
-            "endTime": state.endTime,
-            "interval": state.interval,
-            "type": typeToInt(state.type),
-            "timetable": intTimeTable})
+        body: body
     };
     return fetch(url, requestOptions).then(response => response.json())
         .then((responseData) => {

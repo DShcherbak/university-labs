@@ -1,18 +1,14 @@
 package app.servlets;
 
-import app.JDBC;
+import app.JDBC.JDBC;
 import app.models.RouteModel;
-import com.google.gson.Gson;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -38,10 +34,10 @@ public class DeleteServlet extends HttpServlet {
         try {
             switch (type){
                 case "route":
-                    jdbc.deleteElem("routes", id);
+                    jdbc.deleteElem("routes", "route_number", id);
                     break;
                 case "stop":
-                    jdbc.deleteElem("stops", id);
+                    jdbc.deleteElem("stops", "stop_id", id);
                     break;
                 default:
                     break;

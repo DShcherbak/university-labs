@@ -1,7 +1,6 @@
 package app.servlets;
 
-import app.JDBC;
-import app.models.RouteModel;
+import app.JDBC.JDBC;
 import com.google.gson.Gson;
 
 import javax.servlet.RequestDispatcher;
@@ -12,18 +11,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 
-@WebServlet(name = "StopsServlet", urlPatterns = "/stops")
-public class StopsServlet extends HttpServlet {
+@WebServlet(name = "AllStopsServlet", urlPatterns = "/stops")
+public class AllStopsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         JDBC jdbc = new JDBC();
-        var stops = jdbc.getStopsModel();
+        var stops = jdbc.getStops();
         var out = GeneralRouteServlet.updateResp(resp);
-        out.print(new Gson().toJson(stops));
+        String json = new Gson().toJson(stops);
+        out.print(json);
         out.flush();
     }
 
