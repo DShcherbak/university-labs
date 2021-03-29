@@ -14,7 +14,6 @@ import Routes from "./pages/Routes/Routes.js";
 import {GeneralTimeTables} from "./pages/TimeTables/TimeTables";
 import {GeneralEmployees} from "./pages/Employees/Employees";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import { NavBar, Footer, Loading } from "./components";
 import RoutesEditor from "./pages/Editor/RoutesEditor";
 import StopsEditor from "./pages/Editor/StopsEditor";
@@ -28,7 +27,7 @@ import {AddEmployee} from "./pages/AddElement/AddEmployee";
 import {EmployeeObject} from "./models/EmployeeObject";
 import {EditEmployee} from "./pages/EditElement/EditEmployee";
 
-//import "./app.css";
+import styles from "./styles/General.module.css";
 
 const App = () => {
     const { isLoading } = useAuth0();
@@ -38,8 +37,7 @@ const App = () => {
     }
 
     return (
-        <div id="app" className="d-flex flex-column h-100">
-            <div className="container flex-grow-1">
+        <div id="app" className={styles.MainApp}>
                 <Switch>
                     <Route exact path="/" component={MainPage} />
                     <Route exact path="/routes" component={Routes} />
@@ -57,8 +55,6 @@ const App = () => {
                     <Route path="/add/stop" component={AddStop}/>
                     <Route path="/add/employee" component={AddEmployee}/>
                 </Switch>
-            </div>
-            <Footer />
         </div>
     );
 };

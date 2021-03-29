@@ -113,6 +113,7 @@ export class EmployeeObject extends React.Component{
 
         return (
             <div>
+                <NavBar fatherlink={'/employees'}/>
                 <p>Ім'я:  {this.state.name}</p>
                 <p>Прізвище:  {this.state.surname}</p>
                 <p>Транспорт: {this.state.routeType} номер {this.state.routeNumber}</p>

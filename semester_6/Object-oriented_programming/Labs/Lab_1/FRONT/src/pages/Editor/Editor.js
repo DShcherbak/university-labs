@@ -1,7 +1,7 @@
 import React from "react";
 //import * as API from  "API.js"
 /* We simply can use an array and loop and print each user */
-import styles from "./Editor.module.css"
+import styles from "../../styles/General.module.css"
 import {Link} from 'react-router-dom';
 import NavBar from "../../components/nav-bar";
 import * as API from "../../API";
@@ -41,10 +41,10 @@ export class Editor extends React.Component{
             return(
                 <div>
                     <NavBar fatherlink = {'/'}/>
-                    <div className={styles.container}>
-                        <Link to={'/edit/routes'}><button className={styles.MainPageButton} >Редагувати маршрути</button></Link>
-                        <Link to={'/edit/stops'}><button className={styles.MainPageButton} >Редагувати зупинки</button></Link>
-                        <Link to={'/edit/employees'}><button className={styles.MainPageButton} >Редагувати працівників</button></Link>
+                    <div className={styles.BigButtonContainer}>
+                        <Link to={'/edit/routes'}><button className={styles.BigButton} >Редагувати <br/> маршрути</button></Link>
+                        <Link to={'/edit/stops'}><button className={styles.BigButton} >Редагувати <br/> зупинки</button></Link>
+                        <Link to={'/edit/employees'}><button className={styles.BigButton} >Редагувати <br/> працівників</button></Link>
                     </div>
                 </div>);
          }

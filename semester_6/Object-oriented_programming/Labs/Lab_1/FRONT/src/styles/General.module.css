@@ -1,0 +1,42 @@
+.BigButtonContainer {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: center;
+    height: 200px;
+    width:100%;
+}
+
+.BigButton{
+    background: #c7ffd8;
+    color:#161d6f;
+    font-size: 1.75vw;
+    min-width:14vw;
+    min-height: 14vw;
+}
+
+
+.BigButton:hover{
+    color: #b45508;
+}
+
+.MainBodyContainer{
+    min-height: 100vh;
+    height: max-content;
+    padding-bottom: 50px;
+    background: #f6f6f6;
+}
+
+.MainApp{
+    min-height:100vh;
+    height: max-content;
+}
+
+label{
+    color:black;
+}
+
+a{
+    text-decoration: none;
+}
+

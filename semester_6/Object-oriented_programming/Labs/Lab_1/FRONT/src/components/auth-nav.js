@@ -4,11 +4,14 @@
 
 import React from "react";
 import AuthenticationButton from "./authentication-button";
+import styles from "../styles/Navbar.module.css"
 
 const AuthNav = () => (
-  <div className="navbar-nav ml-auto">
-    <AuthenticationButton />
-  </div>
+    <div className={styles.authButtonWrapper}>
+      <div className={styles.authButton}>
+        <AuthenticationButton />
+      </div>
+    </div>
 );
 
 export default AuthNav;

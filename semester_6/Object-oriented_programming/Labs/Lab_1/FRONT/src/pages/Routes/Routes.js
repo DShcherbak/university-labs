@@ -1,6 +1,7 @@
 import React from "react";
 import * as API from "../../API.js"
-import styles from "./Routes.module.css"
+import generalStyles from "../../styles/General.module.css"
+import styles from "../../styles/Routes.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
@@ -90,6 +91,7 @@ class Routes extends React.Component {
     createCheckbox = label => (
         <Checkbox
             label={label}
+            className={generalStyles.checkbox}
             handleCheckboxChange={this.toggleCheckbox}
             key={label}
         />
@@ -104,12 +106,16 @@ class Routes extends React.Component {
     }
 
     makeRoutesList(routes){
-        return (<ul>{routes.map((route) => <Link to={"/timetables?routeId=" + route["routeId"]}><li key={route["routeId"]}>
-            <p> {this.getType(route["type"])} номер {route["routeId"]}<br/>
-            Початок руху: {route["startTime"]} <br/>
-            Останній маршрут: {route["endTime"]} <br/>
-            Маршрут зупинок:
-            {this.makeStopList(route["stops"])}</p></li></Link>)}</ul>);
+        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/timetables?routeId=" + route["routeId"]}><li key={route["routeId"]} className = {styles.listElement}>
+            <div  className={styles.routeCard}>
+                <div className={styles.listText}><p>{this.getType(route["type"])} номер {route["routeId"]}</p></div>
+                    <div className={styles.listText}>Початок руху: {route["startTime"]}</div>
+                    <div className={styles.listText}>Останній маршрут: {route["endTime"]}</div>
+
+                    <div className={styles.listText}>Маршрут зупинок:<br/>
+                        {this.makeStopList(route["stops"])}</div>
+
+            </div></li></Link>)}</ul>);
     }
 
 
@@ -117,20 +123,22 @@ class Routes extends React.Component {
         let list = this.makeRoutesList(this.state.displayRoutes)
         if(this.state.counted){
             return (
-                <div>
+                <div className={generalStyles.MainApp}>
                     <NavBar fatherlink={'/'}/>
+                    <div className={generalStyles.MainBodyContainer}>
                     {this.createCheckboxes()}
-                    <div className={styles.container}>
+                    <div className={generalStyles.container}>
                         {list}
+                    </div>
                     </div>
                 </div>
             );
         } else {
             return (
-                <div>
+                <div className={generalStyles.MainApp}>
                     <NavBar fatherlink={'/'}/>
+                    <div className={generalStyles.MainBodyContainer}>
                     {this.createCheckboxes()}
-                    <div className={styles.container}>
                         <ul>
                             <li>No list here</li>
                         </ul>

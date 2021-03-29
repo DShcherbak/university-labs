@@ -1,15 +1,16 @@
 import {NavLink} from "react-router-dom";
 import React from "react";
+import styles from "../styles/Navbar.module.css"
 
 const MainNav = () => (
-  <div className="navbar-nav mr-auto">
+  <div className={styles.logo}>
     <NavLink
       to="/"
       exact
-      className="nav-link"
+      className={styles.logoLink}
       activeClassName="router-link-exact-active"
     >
-      На головну
+      Лабораторна №1
     </NavLink>
 
   </div>
