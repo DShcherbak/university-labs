@@ -1,8 +1,7 @@
 let backUrl = 'http://localhost:8080/'
 
-export async function getRoutes() {
-    return await sendGetRequest(backUrl + 'routes');
-}
+
+//USER
 
 export async function checkAdmin(){
     return await sendGetRequest(backUrl + 'admin')
@@ -13,12 +12,15 @@ export function setUser(email){
     sendPostRequest(backUrl + 'admin', JSON.stringify("email:" + email))
 }
 
-export async function getRouteById(id){
-    return await sendGetRequest(backUrl + 'route/' + id);
+
+//ROUTES
+
+export async function getRoutes() {
+    return await sendGetRequest(backUrl + 'routes');
 }
 
-export async function getStops() {
-    return await sendGetRequest(backUrl + 'stops')
+export async function getRouteById(id){
+    return await sendGetRequest(backUrl + 'route/' + id);
 }
 
 export async function updateRoute(state){
@@ -34,6 +36,26 @@ export async function deleteRoute(id, state){
     return await sendPostRequest(backUrl + 'delete/route/' + id,  routeToJson(state))
 }
 
+function convertStopsToInt(stops, allStops) {
+    let result = []
+    for(let i = 0; i < stops.length; i++){
+        for(let j = 0; j < allStops.length; j++){
+            if(stops[i] === allStops[j]["stop_name"]){
+                result.push(allStops[j]["stop_id"])
+            }
+        }
+    }
+    return result
+}
+
+
+//STOPS
+
+export async function getStops() {
+    return await sendGetRequest(backUrl + 'stops')
+}
+
+
 export async function updateStop(state){
     return await sendPostRequest(backUrl + 'stop/' + state.id, stopToJson(state))
 }
@@ -41,6 +63,49 @@ export async function updateStop(state){
 export async function deleteStop(id, state){
     return await sendPostRequest(backUrl + 'delete/stop/' + id, stopToJson(state))
 }
+
+function stopToJson(state) {
+    let json = JSON.stringify({
+        "stop_id": state.id,
+        "stop_name": state.name
+    })
+    console.log("SEND POST: " + json)
+    return json
+}
+
+
+//EMPLOYEES
+
+export async function getEmployees() {
+    return await sendGetRequest(backUrl + 'employee/all')
+}
+
+export async function getEmployee(id) {
+    console.log("req is coming")
+    return await sendGetRequest(backUrl + 'employee/' + id)
+}
+
+export async function updateEmployee(state){
+    return await sendPostRequest(backUrl + 'employee/' + state.oldId, employeeToJson(state))
+}
+
+export async function deleteEmployee(id, state){
+    return await sendPostRequest(backUrl + 'delete/employee/' + id, employeeToJson(state))
+}
+
+function employeeToJson(state) {
+    let json = JSON.stringify({
+        "id": state.id,
+        "name": state.name,
+        "surname": state.surname,
+        "route_number": state.route_number
+    })
+    console.log("SEND POST: " + json)
+    return json
+}
+
+
+//REQUESTS
 
 
 function sendGetRequest(requestUrl){
@@ -56,17 +121,7 @@ function sendGetRequest(requestUrl){
         })
 }
 
-function convertStopsToInt(stops, allStops) {
-    let result = []
-    for(let i = 0; i < stops.length; i++){
-        for(let j = 0; j < allStops.length; j++){
-            if(stops[i] === allStops[j]["stop_name"]){
-                result.push(allStops[j]["stop_id"])
-            }
-        }
-    }
-    return result
-}
+
 
 function convertTimeTable(timeTable){
     let result = []
@@ -89,14 +144,7 @@ function routeToJson(state) {
         "timetable": intTimeTable})
 }
 
-function stopToJson(state) {
-    let json = JSON.stringify({
-        "stop_id": state.id,
-        "stop_name": state.name
-    })
-    console.log("SEND POST: " + json)
-    return json
-}
+
 
 function sendPostRequest(url, body){
     // Simple POST request with a JSON body using fetch

@@ -33,7 +33,6 @@ public class RoutesJDBC {
 
     public static void updateRoute(int id, RouteModel route) throws SQLException {
         String query = "update routes set # where route_number = " + id;
-
         String updates = "route_number = " + route.routeId + ", stops = Array [";
         for (var stop: route.stops) {
             int t = (int)Math.round((Double) stop);
@@ -54,6 +53,11 @@ public class RoutesJDBC {
         query = query.replaceFirst("#", updates);
         System.out.println(query);
         updateQuery(query);
+
+        if(id != route.routeId){
+            query = "update employees set route_id = " + route.routeId + " where route_id = " + id;
+            updateQuery(query);
+        }
     }
 
     public static void insertRoute(RouteModel route) throws SQLException {

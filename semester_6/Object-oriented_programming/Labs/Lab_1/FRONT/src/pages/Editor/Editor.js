@@ -44,6 +44,7 @@ export class Editor extends React.Component{
                     <div className={styles.container}>
                         <Link to={'/edit/routes'}><button className={styles.MainPageButton} >Редагувати маршрути</button></Link>
                         <Link to={'/edit/stops'}><button className={styles.MainPageButton} >Редагувати зупинки</button></Link>
+                        <Link to={'/edit/employees'}><button className={styles.MainPageButton} >Редагувати працівників</button></Link>
                     </div>
                 </div>);
          }

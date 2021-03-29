@@ -39,6 +39,9 @@ public class DeleteServlet extends HttpServlet {
                 case "stop":
                     jdbc.deleteElem("stops", "stop_id", id);
                     break;
+                case "employee":
+                    jdbc.deleteElem("employees", "id", id);
+                    break;
                 default:
                     break;
             }

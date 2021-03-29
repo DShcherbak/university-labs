@@ -39,6 +39,5 @@ public class AllRoutesServlet extends HttpServlet {
         Gson gson = new Gson();
         RouteModel routeModel = gson.fromJson(jb.toString(), RouteModel.class);
         System.out.println(routeModel);
-        //AirportDAO.addAirport(airport);
     }
 }

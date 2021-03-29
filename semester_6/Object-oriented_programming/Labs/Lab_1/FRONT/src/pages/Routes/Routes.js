@@ -85,13 +85,6 @@ class Routes extends React.Component {
         }, function () {
             console.log(this.state);
         })
-
-   //     console.log(this.state.optionalRoutes)
-   //     console.log(this.selectedCheckboxes)
-  //      console.log("I choose this one: ")
-  //      console.log(this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes)))
-  //      let newDisplay = this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes))
-   //     console.log(newDisplay)
     }
 
     createCheckbox = label => (
@@ -113,8 +106,8 @@ class Routes extends React.Component {
     makeRoutesList(routes){
         return (<ul>{routes.map((route) => <Link to={"/timetables?routeId=" + route["routeId"]}><li key={route["routeId"]}>
             <p> {this.getType(route["type"])} номер {route["routeId"]}<br/>
-            Початок руху: {} <br/>
-            Останній маршрут: {} <br/>
+            Початок руху: {route["startTime"]} <br/>
+            Останній маршрут: {route["endTime"]} <br/>
             Маршрут зупинок:
             {this.makeStopList(route["stops"])}</p></li></Link>)}</ul>);
     }

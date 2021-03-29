@@ -1,5 +1,6 @@
 package app.JDBC;
 
+import app.models.EmployeeModel;
 import app.models.RouteModel;
 import app.models.StopModel;
 
@@ -69,6 +70,29 @@ public class JDBC {
         StopsJDBC.insertStop(stop);
     }
 
+
+    /*
+    *
+    Employees
+    *
+     */
+
+    public ArrayList<EmployeeModel> getEmployee(int id) {
+        return EmployeesJDBC.getEmployeesInternal("select * from employees where id = " + id);
+    }
+
+    public ArrayList<EmployeeModel> getEmployees() {
+        return EmployeesJDBC.getEmployeesInternal("select * from employees order by id");
+    }
+
+    public void updateEmployee(int id, EmployeeModel employee) throws SQLException {
+        EmployeesJDBC.updateEmployee(id, employee);
+    }
+
+    public void insertEmployee(EmployeeModel employee) throws SQLException {
+        EmployeesJDBC.insertEmployee(employee);
+    }
+
     /*
     *
     General
@@ -78,7 +102,10 @@ public class JDBC {
     public void deleteElem(String table_name, String id_name, int id) throws SQLException {
         String query = "delete from "+ table_name + " where " + id_name + " = " + id;
         GeneralJDBC.updateQuery(query);
-
+        if(table_name == "routes"){
+            query = "delete from employees where route_id = " + id;
+            GeneralJDBC.updateQuery(query);
+        }
 
     }
 

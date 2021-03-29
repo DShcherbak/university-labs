@@ -148,12 +148,12 @@ export class TimeTableObject extends React.Component{
             <div>
                 <Redirect to={"/timetables"}/>
                 {this.AddButton()}
-                <p>Current time is {this.toNormalTime(currentTime)}</p>
-                <p>Route number: {this.state.number}</p>
-                <p>First departure at: {this.state.startTime}</p>
-                <p>Last departure at: {this.state.endTime}</p>
-                <p>Time between departures: {this.toTimePeriod(this.state.interval)}</p>
-                <div>Next bus should appear in: <br/>{listStopTimes}</div>
+                <p>Поточний час: {this.toNormalTime(currentTime)}</p>
+                <p>Номер маршруту: {this.state.number}</p>
+                <p>Перший рейс: {this.state.startTime}</p>
+                <p>Останній рейс: {this.state.endTime}</p>
+                <p>Інтервал: {this.toTimePeriod(this.state.interval)}</p>
+                <div>Очікуйте наступний транспорт в такий час: <br/>{listStopTimes}</div>
             </div>
         )
 
