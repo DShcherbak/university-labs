@@ -73,16 +73,16 @@ func readMatrixes(filename string) (A, B [][]int, err error) {
 	return A, B, nil
 }
 
-func matrixMultPlain(A, B [][]int) (C [][]int, timer time.Duration) {
-	C = make([][]int, n)
-	for i := 0; i < n; i++ {
-		C[i] = make([]int, n)
+func matrixMultPlain(A, B [][]int, N int) (C [][]int, timer time.Duration) {
+	C = make([][]int, N)
+	for i := 0; i < N; i++ {
+		C[i] = make([]int, N)
 	}
 	start := time.Now()
-	for i := 0; i < n; i++ {
-		for j := 0; j < n; j++ {
+	for i := 0; i < N; i++ {
+		for j := 0; j < N; j++ {
 			C[i][j] = 0
-			for k := 0; k < n; k++ {
+			for k := 0; k < N; k++ {
 				C[i][j] += A[i][k] * B[k][j]
 			}
 		}
@@ -175,51 +175,98 @@ func matrixMultStripes(A, B [][]int, numberStripesY, numberStripesX int) (C [][]
 	return C, timer
 }
 
-func blockMatrixes(A, B [][]int) (blocks [][][]int, stripeSizeY, stripeSizeX int) {
+func blockMatrixes(A, B [][]int) (blocks [][][]int, stripeSize int) {
 	blocks = make([][][]int, 32)
-	if n%numberStripesY == 0 {
-		stripeSizeY = n / numberStripesY
+	if n%4 == 0 {
+		stripeSize = n / 4
 	} else {
-		stripeSizeY = n/numberStripesY + 1
+		stripeSize = n/4 + 1
 	}
 
-	if n%numberStripesX == 0 {
-		stripeSizeX = n / numberStripesX
-	} else {
-		stripeSizeX = n/numberStripesX + 1
+	xi := 0
+	for i := 0; i < 4; i++ {
+		xj := 0
+		yj := stripeSize
+		for j := 0; j < 4; j++ {
+			blocks[i*4+j] = make([][]int, stripeSize)
+			N := xi + stripeSize
+			if N > n {
+				N = n
+			}
+			for k := 0; k+xi < N; k++ {
+				blocks[i*4+j][k] = A[k+xi][xj:yj]
+			}
+			xj += stripeSize
+			if yj+stripeSize > n {
+				yj = n
+			} else {
+				yj += stripeSize
+			}
+		}
+		xi = xi + stripeSize
 	}
-	x := 0
-	y := stripeSizeY
-	for i := 0; i < numberStripesY; i++ {
-		blocks[i] = A[x:y]
-		x += stripeSizeY
-		if y+stripeSizeY > n {
-			y = n
-		} else {
-			y += stripeSizeY
+	xi = 0
+	for i := 0; i < 4; i++ {
+		xj := 0
+		yj := stripeSize
+		for j := 0; j < 4; j++ {
+			blocks[16+i*4+j] = make([][]int, stripeSize)
+			N := xi + stripeSize
+			if N > n {
+				N = n
+			}
+			for k := 0; k+xi < N; k++ {
+				blocks[16+i*4+j][k] = B[k+xi][xj:yj]
+			}
+			xj += stripeSize
+			if yj+stripeSize > n {
+				yj = n
+			} else {
+				yj += stripeSize
+			}
 		}
-	}
-	x = 0
-	y = stripeSizeX
-	for i := 0; i < numberStripesX; i++ {
-		blocks[numberOfStripesY+i] = make([][]int, n)
-		for j := 0; j < n; j++ {
-			blocks[numberOfStripesY+i][j] = B[j][x:y]
-		}
-		x += stripeSizeX
-		if y+stripeSizeX > n {
-			y = n
-		} else {
-			y += stripeSizeX
-		}
+		xi = xi + stripeSize
 
 	}
 	return
 }
 
+func processBlock(blocks [][][]int, blockId, blockSize int, C [][]int) {
+	leftBlock := blocks[blockId]
+	for b := 0; b < 4; b++ {
+		rightBlock := blocks[16+(blockId%4)*4+b]
+		result, _ := matrixMultPlain(leftBlock, rightBlock, blockSize)
+		leftMargin := blockSize * b
+		topMargin := blockSize * (blockId / 4)
+		for i := 0; i < len(result); i++ {
+			for j := 0; j < len(result[0]); j++ {
+				C[topMargin+i][leftMargin+j] += result[i][j]
+			}
+		}
+	}
+}
+
+func multiplyBlocksFoks(blocks [][][]int, count, processes, blockSize int, C [][]int, wg *sync.WaitGroup) {
+	for blockId := 0; blockId < 16; blockId++ {
+		if (blockId*processes/16)%processes == count {
+			processBlock(blocks, blockId, blockSize, C)
+		}
+	}
+	defer wg.Done()
+}
+
+func multiplyBlocksCannon(blocks [][][]int, count, processes, blockSize int, C [][]int, wg *sync.WaitGroup) {
+	for blockId := 0; blockId < 16; blockId++ {
+		if (blockId*processes/16)%processes == count {
+			processBlock(blocks, blockId, blockSize, C)
+		}
+	}
+	defer wg.Done()
+}
+
 func matrixMultFoks(A, B [][]int, numberOperators int) (C [][]int, timer time.Duration) {
 	if len(A) < 4 {
-		return matrixMultPlain(A, B)
+		return matrixMultPlain(A, B, n)
 	}
 	C = make([][]int, n)
 	for i := 0; i < n; i++ {
@@ -229,13 +276,37 @@ func matrixMultFoks(A, B [][]int, numberOperators int) (C [][]int, timer time.Du
 
 	var wg *sync.WaitGroup
 	wg = &sync.WaitGroup{}
-	wg.Add(64)
+	wg.Add(numberOfProcesses)
 
-	stripes, stripeSizeY, stripeSizeX := blockMatrixes(A, B)
-	for i := 0; i < numberStripesY; i++ {
-		for j := 0; j < numberStripesX; j++ {
-			go multiplyStripes(stripes, i, j, stripeSizeY, stripeSizeX, C, wg)
-		}
+	blocks, blockSize := blockMatrixes(A, B)
+	for i := 0; i < numberOfProcesses; i++ {
+		go multiplyBlocksFoks(blocks, i, numberOfProcesses, blockSize, C, wg)
+	}
+
+	wg.Wait()
+
+	finish := time.Now()
+	timer = finish.Sub(start)
+	return C, timer
+}
+
+func matrixMultCannon(A, B [][]int, numberOperators int) (C [][]int, timer time.Duration) {
+	if len(A) < 4 {
+		return matrixMultPlain(A, B, n)
+	}
+	C = make([][]int, n)
+	for i := 0; i < n; i++ {
+		C[i] = make([]int, n)
+	}
+	start := time.Now()
+
+	var wg *sync.WaitGroup
+	wg = &sync.WaitGroup{}
+	wg.Add(numberOfProcesses)
+
+	blocks, blockSize := blockMatrixes(A, B)
+	for i := 0; i < numberOfProcesses; i++ {
+		go multiplyBlocksCannon(blocks, i, numberOfProcesses, blockSize, C, wg)
 	}
 
 	wg.Wait()
@@ -294,24 +365,35 @@ func establishConstants(testCase int) {
 }
 
 func main() {
-	establishConstants(1)
+	establishConstants(2)
 	A, B, err := readMatrixes("") //matrix_test_1.txt
 	if err != nil {
 		fmt.Printf(err.Error())
 		return
 	}
 	fmt.Println("Matrix multipication")
-	C1, time1 := matrixMultPlain(A, B)
+	C1, time1 := matrixMultPlain(A, B, n)
 	fmt.Println(time1)
 	C2, time2 := matrixMultStripes(A, B, numberOfStripesY, numberOfStripesX)
 	fmt.Println(time2)
 	C3, time3 := matrixMultFoks(A, B, numberOfProcesses)
 	fmt.Println(time3)
+	C4, time4 := matrixMultCannon(A, B, numberOfProcesses)
+	fmt.Println(time4)
+	printFirstBlock(C1)
 	if sliceComparison(C1, C2) && sliceComparison(C1, C3) {
 		fmt.Printf("Testes passed")
 	} else {
+		for i := 0; i < n; i++ {
+			for j := 0; j < n; j++ {
+				if C4[i][j] != C1[i][j] {
+					fmt.Printf("%d %d\n", i, j)
+				}
+			}
+		}
 		printFirstBlock(C1)
 		printFirstBlock(C2)
 		printFirstBlock(C3)
+		printFirstBlock(C4)
 	}
 }
