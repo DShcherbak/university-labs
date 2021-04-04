@@ -5,7 +5,9 @@ import {TimeTableObject} from "../../models/TimeTableObject";
 import {Link, Redirect} from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
 import * as API from "../../API";
-import styles from "./Employees.module.css"
+import general from "../../styles/General.module.css"
+import styles from "../../styles/Routes.module.css"
+import smallList from "../../styles/SmallList.module.css"
 
 export class GeneralEmployees extends React.Component{
 
@@ -39,8 +41,10 @@ export class GeneralEmployees extends React.Component{
     }
 
     makeEmployeesList(){
-        return (<ul>{this.state.employees.map((employee) => <Link to={"/employee?id=" + employee["id"]}><li key={employee["id"]}>
-            <p> {employee["name"]} {employee["surname"]}</p></li></Link>)}</ul>);
+        return (<ul className={general.listOfCards}>
+            {
+                this.state.employees.map((employee) => <Link to={"/employee?id=" + employee["id"]}><li key={employee["id"]} className={general.listElement}>
+            <div className={general.listCard}><div className={smallList.smallP}>{employee["name"]} {employee["surname"]}</div></div></li></Link>)}</ul>);
     }
 
     render() {
@@ -49,7 +53,7 @@ export class GeneralEmployees extends React.Component{
             return (
                 <div>
                     <NavBar fatherlink={'/'}/>
-                    <div className={styles.container}>
+                    <div className={general.MainBodyContainer}>
                         {list}
                     </div>
                 </div>
@@ -58,10 +62,8 @@ export class GeneralEmployees extends React.Component{
             return (
                 <div>
                     <NavBar fatherlink={'/'}/>
-                    <div className={styles.container}>
-                        <ul>
-                            <li>No employees here</li>
-                        </ul>
+                    <div className={general.MainBodyContainer}>
+                        <div>No employees here</div>
                     </div>
                 </div>
             );

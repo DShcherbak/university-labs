@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import TimeTableForm from "../components/additional-components/TimeTableForm";
 import NavBar from "../components/nav-bar";
 import Loading from "../components/loading";
+import styles from "../styles/General.module.css"
 
 
 
@@ -114,9 +115,12 @@ export class EmployeeObject extends React.Component{
         return (
             <div>
                 <NavBar fatherlink={'/employees'}/>
-                <p>Ім'я:  {this.state.name}</p>
-                <p>Прізвище:  {this.state.surname}</p>
-                <p>Транспорт: {this.state.routeType} номер {this.state.routeNumber}</p>
+                <div className={styles.MainBodyContainer}>
+                    <p>Ім'я:  {this.state.name}</p>
+                    <p>Прізвище:  {this.state.surname}</p>
+                    <p>Транспорт: {this.state.routeType} номер {this.state.routeNumber}</p>
+                </div>
+
             </div>
         )
 

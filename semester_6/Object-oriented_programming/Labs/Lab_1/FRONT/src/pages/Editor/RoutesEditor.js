@@ -1,12 +1,13 @@
 import React from "react";
 import * as API from "../../API.js"
-import styles from "./Editor.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
+import styles from "../../styles/Routes.module.css"
+import general from "../../styles/General.module.css"
 
 
 const routeTypes = [
@@ -125,12 +126,16 @@ class RoutesEditor extends React.Component {
     }
 
     makeRoutesList(routes){
-        return (<ul>{routes.map((route) => <Link to={"/edit/route?routeId=" + route["routeId"]}><li key={route["routeId"]}>
-            <p> {this.getType(route["type"])} номер {route["routeId"]}<br/>
-                Початок руху: {} <br/>
-                Останній маршрут: {} <br/>
-                Маршрут зупинок:
-                {this.makeStopList(route["stops"])}</p></li></Link>)}</ul>);
+        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/edit/route?routeId=" + route["routeId"]}><li key={route["routeId"]} className = {styles.listElement}>
+            <div  className={styles.routeCard}>
+                <div className={styles.listText}><p>{this.getType(route["type"])} номер {route["routeId"]}</p></div>
+                <div className={styles.listText}>Початок руху: {route["startTime"]}</div>
+                <div className={styles.listText}>Останній маршрут: {route["endTime"]}</div>
+
+                <div className={styles.listText}>Маршрут зупинок:<br/>
+                    {this.makeStopList(route["stops"])}</div>
+
+            </div></li></Link>)}</ul>);
     }
 
 
@@ -147,12 +152,14 @@ class RoutesEditor extends React.Component {
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>
-                        <Link to={"/add/route"}>
-                            <button>Додати новий маршрут</button>
-                        </Link>
-                        {this.createCheckboxes()}
-                        <div className={styles.container}>
-                            {list}
+                        <div className={general.MainBodyContainer}>
+                            <Link to={"/add/route"}>
+                                <button>Додати новий маршрут</button>
+                            </Link>
+                            {this.createCheckboxes()}
+                            <div className={styles.container}>
+                                {list}
+                            </div>
                         </div>
                     </div>
                 );
@@ -160,11 +167,13 @@ class RoutesEditor extends React.Component {
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>
-                        <Link to={"/add/route"}>
-                            <button>Додати новий маршрут</button>
-                        </Link>
-                        {this.createCheckboxes()}
-                        <div className={styles.container}/>
+                        <div className={general.MainBodyContainer}>
+                            <Link to={"/add/route"}>
+                                <button>Додати новий маршрут</button>
+                            </Link>
+                            {this.createCheckboxes()}
+                            <div className={styles.container}/>
+                        </div>
                     </div>
                 );
             }

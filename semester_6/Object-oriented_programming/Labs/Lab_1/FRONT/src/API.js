@@ -8,7 +8,6 @@ export async function checkAdmin(){
 }
 
 export function setUser(email){
-    console.log("SET USER: " + email)
     sendPostRequest(backUrl + 'admin', JSON.stringify("email:" + email))
 }
 
@@ -57,7 +56,7 @@ export async function getStops() {
 
 
 export async function updateStop(state){
-    return await sendPostRequest(backUrl + 'stop/' + state.id, stopToJson(state))
+    return await sendPostRequest(backUrl + 'stop/' + state.oldId, stopToJson(state))
 }
 
 export async function deleteStop(id, state){

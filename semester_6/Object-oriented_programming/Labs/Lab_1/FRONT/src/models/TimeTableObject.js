@@ -4,6 +4,7 @@ import * as API from "../API";
 import { withRouter } from 'react-router-dom';
 import TimeTableForm from "../components/additional-components/TimeTableForm";
 import NavBar from "../components/nav-bar";
+import styles from "../styles/General.module.css";
 
 
 
@@ -77,9 +78,9 @@ export class TimeTableObject extends React.Component{
 
     listTime(timeToStops){
         let list = []
-        timeToStops.forEach((value, key) => list.push(<li>{key} | {value}</li>));
+        timeToStops.forEach((value, key) => list.push(<tr><td>{key}</td><td>{value}</td></tr>));
         return (
-            <ul>{list}</ul>
+            <table>{list}</table>
         );
     }
 
@@ -131,7 +132,7 @@ export class TimeTableObject extends React.Component{
 
         if(this.state.incorrectRoute){
             return (
-                <div>
+                <div className={styles.MainBodyContainer}>
                     {this.AddButton()}
                     <h1>Маршуруту з номером {this.state.number} не знайдено.</h1>
                 </div>
@@ -143,19 +144,28 @@ export class TimeTableObject extends React.Component{
         let currentTime = this.getCurrentTime();
         let timeToStops = this.countTimeToStops();
         let listStopTimes = this.listTime(timeToStops)
-        return (
+        if(this.state === undefined || this.state.number === undefined || isNaN(this.state.number)){
+            return  <div className={styles.MainBodyContainer}>
+                    <Redirect to={"/timetables"}/>
+                    {this.AddButton()}
+                    <p>Поточний час: {this.toNormalTime(currentTime)}</p>
+                </div>
+        } else {
+            return (
+                <div className={styles.MainBodyContainer}>
+                    <Redirect to={"/timetables"}/>
+                    {this.AddButton()}
+                    <p>Поточний час: {this.toNormalTime(currentTime)}</p>
+                    <p>Номер маршруту: {this.state.number}</p>
+                    <p>Перший рейс: {this.state.startTime}</p>
+                    <p>Останній рейс: {this.state.endTime}</p>
+                    <p>Інтервал: {this.toTimePeriod(this.state.interval)}</p>
+                    <div>Очікуйте наступний транспорт в такий час: <br/>{listStopTimes}</div>
+                </div>
+            )
+        }
 
-            <div>
-                <Redirect to={"/timetables"}/>
-                {this.AddButton()}
-                <p>Поточний час: {this.toNormalTime(currentTime)}</p>
-                <p>Номер маршруту: {this.state.number}</p>
-                <p>Перший рейс: {this.state.startTime}</p>
-                <p>Останній рейс: {this.state.endTime}</p>
-                <p>Інтервал: {this.toTimePeriod(this.state.interval)}</p>
-                <div>Очікуйте наступний транспорт в такий час: <br/>{listStopTimes}</div>
-            </div>
-        )
+
 
 
     }

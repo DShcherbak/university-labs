@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
+import general from "../../styles/General.module.css";
+import smallList from "../../styles/SmallList.module.css";
 
 
 const routeTypes = [
@@ -32,7 +34,7 @@ class EmployeesEditor extends React.Component {
             let newEmployees = []
             employees.forEach((employee) => {
                 newEmployees.push(<Link to={"/edit/employee?id=" + employee.id}>
-                    <li key={employee.id}>Працівник(ця) {employee.name}</li>
+                    <li key={employee.id} className={general.listElement}><div className={general.listCard}><div className={smallList.smallP}>Працівник(ця)  {employee.name}</div></div></li>
                 </Link>)
             })
 
@@ -79,9 +81,14 @@ class EmployeesEditor extends React.Component {
 
 
     makeEmployeesList(newEmployees){
-        return (<ul>{newEmployees.map((employees) => employees)}</ul>)
+        return (<ul className={general.listOfCards}>{newEmployees.map((employees) => employees)}</ul>)
     }
 
+/*    return (<ul className={general.listOfCards}>
+{
+    this.state.employees.map((employee) => <Link to={"/employee?id=" + employee["id"]}><li key={employee["id"]} >
+        <div className={general.listCard}><div className={smallList.smallP}>{employee["name"]} {employee["surname"]}</div></div></li></Link>)}</ul>);
+*/
 
     render() {
         if(this.state === null || !this.state.adminChecked || this.state.employees === undefined){
@@ -96,11 +103,13 @@ class EmployeesEditor extends React.Component {
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>
-                        <Link to={"/add/employee"}>
-                            <button>Додати нового працівника</button>
-                        </Link>
-                        <div className={styles.container}>
-                            {list}
+                        <div className={general.MainBodyContainer}>
+                            <Link to={"/add/employee"}>
+                                <button>Додати нового працівника</button>
+                            </Link>
+                            <div className={styles.container}>
+                                {list}
+                            </div>
                         </div>
                     </div>
                 );
@@ -108,10 +117,12 @@ class EmployeesEditor extends React.Component {
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>
-                        <Link to={"/add/employee"}>
-                            <button>Додати нового працівника</button>
-                        </Link>
-                        <div className={styles.container}/>
+                        <div className={general.MainBodyContainer}>
+                            <Link to={"/add/employee"}>
+                                <button>Додати нового працівника</button>
+                            </Link>
+                            <div className={styles.container}/>
+                        </div>
                     </div>
                 );
             }

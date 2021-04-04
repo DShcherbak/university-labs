@@ -11,10 +11,12 @@ export class MainPage extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state ={
+        this.setState({
             adminChecked: false,
             isAdmin: false,
-        }
+        }, function () {
+            console.log("LOG0" + this.state.adminChecked + this.state.isAdmin)
+        })
     }
 
     async isAdmin(){
@@ -22,20 +24,29 @@ export class MainPage extends React.Component{
     }
 
     componentDidMount = () => {
+        console.log("LOG4")
         this.isAdmin().then(result => {
+            console.log(result, result["isAdmin"])
             this.setState({
                 adminChecked: true,
                 isAdmin: result["isAdmin"]
+            }, function () {
+                console.log("LOG5" + this.state.adminChecked + this.state.isAdmin)
             })
+            console.log("LOG6" + this.state.adminChecked + this.state.isAdmin)
         })
+        //console.log("LOG7" + this.state.adminChecked + this.state.isAdmin)
+
     }
 
     render() {
         if (this.state === null || !this.state.adminChecked) {
+            console.log("LOG")
             return (
                 <Loading/>
             );
         } else if (!this.state.isAdmin) {
+            console.log("LOG2")
             return (<div>
                         <NavBar fatherlink={''}/>
                         <div className={generalStyles.BigButtonContainer}>
@@ -45,6 +56,7 @@ export class MainPage extends React.Component{
                         </div>
                     </div>)
         } else {
+            console.log("LOG3")
             return (
                 <div>
                     <NavBar fatherlink={''}/>

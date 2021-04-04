@@ -1,9 +1,4 @@
 #include "quickhall.h"
-// iPair is integer pairs
-#define iPair std::pair<int, int>
-
-
-
 
 int distanceToLine(GNode left, GNode right, GNode p)
 {
@@ -45,7 +40,6 @@ std::vector<std::vector<std::shared_ptr<Edge>>> QuickHull(std::vector<GNode> GNo
         result.push_back(newEdge);
         return result;
     }
-
 
     std::vector<std::shared_ptr<Edge>> tempEdges;
     //add temporary edges to canvas

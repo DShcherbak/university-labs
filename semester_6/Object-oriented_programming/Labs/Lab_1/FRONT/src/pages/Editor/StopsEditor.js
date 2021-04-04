@@ -1,13 +1,12 @@
 import React from "react";
 import * as API from "../../API.js"
-import styles from "./Editor.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
-
+import styles from "../../styles/General.module.css"
 
 const routeTypes = [
     'Тролейбус',

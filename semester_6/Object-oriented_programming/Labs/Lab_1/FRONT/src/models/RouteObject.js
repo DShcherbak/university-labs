@@ -6,7 +6,6 @@ import Checkbox from '../components/additional-components/Checkbox';
 export class RouteObject extends React.Component{
 
     constructor(props) {
-        console.log("CREATING ELEMENT: " + props.routeProps["routeId"])
         super(props);
         this.state = {
             routeNumber : props.routeProps["routeId"],

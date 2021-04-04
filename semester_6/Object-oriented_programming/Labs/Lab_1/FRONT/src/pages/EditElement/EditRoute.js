@@ -6,6 +6,7 @@ import TimeTableForm from "../../components/additional-components/TimeTableForm"
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import {AddStopInternal} from "../AddElement/AddStop";
+import styles from "../../styles/General.module.css";
 
 export class EditRoute extends React.Component{
     async isAdmin(){
@@ -317,12 +318,13 @@ export class EditRouteInternal extends React.Component{
         return (
             <div>
                 <NavBar fatherlink={'/edit/routes'}/>
-                <form>
-                    <label>{"Редагування маршруту номер " + this.state.number}</label><br/>
-                    <label>Номер маршруту: </label><input type="number" value={this.state.number} name="number" onChange={this.handleInputChange}/><br/>
-                    <label>Початок руху: </label><input type="text" value={this.state.startTime} name="startTime" onChange={this.handleInputChange}/><br/>
-                    <label>Кінець руху: </label><input type="text" value={this.state.endTime} name="endTime" onChange={this.handleInputChange}/><br/>
-                    <label>Інтервал: </label><input type="number" value={this.state.interval} min="0" name="interval" onChange={this.handleInputChange}/><br/>
+                <div className={styles.MainFormContainer}>
+                <form className={styles.editForm}>
+                    <label><b>{"Редагування маршруту номер " + this.state.number}</b></label><br/>
+                    <label>Номер маршруту: </label><input type="number" className={styles.wideFromInput} value={this.state.number} name="number" onChange={this.handleInputChange}/><br/>
+                    <label>Початок руху: </label><input type="text" className={styles.wideFromInput} value={this.state.startTime} name="startTime" onChange={this.handleInputChange}/><br/>
+                    <label>Кінець руху: </label><input type="text" className={styles.wideFromInput} value={this.state.endTime} name="endTime" onChange={this.handleInputChange}/><br/>
+                    <label>Інтервал: </label><input type="number" className={styles.wideFromInput} value={this.state.interval} min="0" name="interval" onChange={this.handleInputChange}/><br/>
                     <label>Тип маршруту: </label>
                     <select name="type" value={this.state.type} onChange={this.handleInputChange}>
                         <option value="Тролейбус">Тролейбус</option>
@@ -336,11 +338,14 @@ export class EditRouteInternal extends React.Component{
                     <input type="button" onClick={this.addStop} value="+"/>
                     <input type="button" onClick={this.removeStop} value="-"/>
                     <br/><br/>
+                    <div className={styles.AllMyButtons}>
                     <input type="button" onClick={this.resetForm} value="Скасувати зміни"/>
                     <input type="button" onClick={this.deleteElement} value="Видалити елемент"/>
                     <input type="button" onClick={this.saveAndContinue} value="Зберегти та продовжити"/>
                     <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
+                    </div>
                 </form>
+                </div>
             </div>
 
         )

@@ -3,6 +3,7 @@ import {Redirect} from "react-router-dom";
 import * as API from "../../API";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
+import styles from "../../styles/General.module.css";
 
 export class AddEmployee extends React.Component{
     async isAdmin(){
@@ -131,15 +132,17 @@ export class AddEmployeeInternal extends React.Component{
         return (
             <div>
                 <NavBar fatherlink={'/edit/employees'}/>
-                <form>
-                    <label>{"Реєстрація нового працівника"}</label><br/>
-                    <label>Ім'я: </label><input type="text" value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>
-                    <label>Прізвище: </label><input type="text" value={this.state.surname} name="surname" onChange={this.handleInputChange}/><br/>
-                    <label>Номер маршруту: </label><input type="number" value={this.state.route_number} name="route_number" onChange={this.handleInputChange}/><br/>
+                <div className={styles.MainFormContainer}>
+                    <form className={styles.editForm}>
+                        <label><b>{"Реєстрація нового працівника"}</b></label><br/>
+                        <label>Ім'я: </label><input type="text" className={styles.wideFromInput} value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>
+                        <label>Прізвище: </label><input type="text" className={styles.wideFromInput} value={this.state.surname} name="surname" onChange={this.handleInputChange}/><br/>
+                        <label>Номер маршруту: </label><input type="number" className={styles.wideFromInput} value={this.state.route_number} name="route_number" onChange={this.handleInputChange}/><br/>
 
-                    <input type="button" onClick={this.saveAndContinue} value="Зберегти та продовжити"/>
-                    <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
-                </form>
+                        <input type="button" onClick={this.saveAndContinue} value="Зберегти та продовжити"/>
+                        <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
+                    </form>
+                </div>
             </div>
 
         )

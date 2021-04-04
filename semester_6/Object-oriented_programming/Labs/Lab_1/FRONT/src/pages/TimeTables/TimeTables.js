@@ -4,6 +4,7 @@ import React from "react";
 import {TimeTableObject} from "../../models/TimeTableObject";
 import {Redirect} from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
+import styles from "../../styles/General.module.css"
 
 export class GeneralTimeTables extends React.Component{
     constructor(props) {
@@ -21,8 +22,10 @@ export class GeneralTimeTables extends React.Component{
     }
 
     render() {
+        console.log(this.state)
+        console.log(this.state.routeId)
         return (
-            <div>
+            <div >
                 <NavBar fatherlink={'/'}/>
                 <TimeTableObject routeId = {this.state.routeId}/>
             </div>

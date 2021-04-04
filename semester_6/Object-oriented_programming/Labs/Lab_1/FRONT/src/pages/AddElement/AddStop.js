@@ -5,6 +5,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
+import styles from "../../styles/General.module.css";
 
 export class AddStop extends React.Component{
     async isAdmin(){
@@ -151,13 +152,15 @@ export class AddStopInternal extends React.Component{
         return (
             <div>
                 <NavBar fatherlink={'/edit/stops'}/>
-                <form>
-                    <label>{"Реєстрація нової зупинки"}</label><br/>
-                    <label>Вигадайте унікальне ім'я для нової зупинки: </label><input type="text" value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>
+                <div className={styles.MainFormContainer}>
+                    <form className={styles.editForm}>
+                        <label><b>{"Реєстрація нової зупинки"}</b></label><br/>
+                    <label>Вигадайте унікальне ім'я для нової зупинки: </label><input type="text" className={styles.wideFromInput} value={this.state.name} name="name" onChange={this.handleInputChange}/><br/>
 
                     <input type="button" onClick={this.saveAndContinue} value="Зберегти та додати наступний"/>
                     <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
                 </form>
+                </div>
             </div>
 
         )
