@@ -341,7 +341,7 @@ func sliceComparison(A, B [][]int) bool {
 func establishConstants(testCase int) {
 	s1 = rand.NewSource(time.Now().UnixNano())
 	random = rand.New(s1)
-	randomMatrixSize = 1000
+	randomMatrixSize = 5000
 	n = randomMatrixSize
 	randomMatrixMaxNum = 100
 	switch testCase {
@@ -365,33 +365,26 @@ func establishConstants(testCase int) {
 }
 
 func main() {
-	establishConstants(2)
+	establishConstants(3)
 	A, B, err := readMatrixes("") //matrix_test_1.txt
 	if err != nil {
 		fmt.Printf(err.Error())
 		return
 	}
 	fmt.Println("Matrix multipication")
-	C1, time1 := matrixMultPlain(A, B, n)
-	fmt.Println(time1)
+	//C1, time1 := matrixMultPlain(A, B, n)
+	//fmt.Println(time1)
 	C2, time2 := matrixMultStripes(A, B, numberOfStripesY, numberOfStripesX)
 	fmt.Println(time2)
 	C3, time3 := matrixMultFoks(A, B, numberOfProcesses)
 	fmt.Println(time3)
 	C4, time4 := matrixMultCannon(A, B, numberOfProcesses)
 	fmt.Println(time4)
-	printFirstBlock(C1)
-	if sliceComparison(C1, C2) && sliceComparison(C1, C3) {
+	if sliceComparison(C4, C2) && sliceComparison(C2, C3) {//&& sliceComparison(C1,C4) {
 		fmt.Printf("Testes passed")
 	} else {
-		for i := 0; i < n; i++ {
-			for j := 0; j < n; j++ {
-				if C4[i][j] != C1[i][j] {
-					fmt.Printf("%d %d\n", i, j)
-				}
-			}
-		}
-		printFirstBlock(C1)
+		fmt.Printf("Testes failed")
+		//printFirstBlock(C1)
 		printFirstBlock(C2)
 		printFirstBlock(C3)
 		printFirstBlock(C4)
