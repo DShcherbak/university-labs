@@ -37,20 +37,26 @@ var (
 	gameStarted = false
 	ducksClocks []chan bool
 	hostClock   chan bool
+	bulletClocks []chan bool
 
 	ducks []*Duck
+	bullets []*Bullet
+	hunter *Hunter
 
 	backgroundImage *ebiten.Image
+	bulletImage *ebiten.Image
 
-	score       int
-	ammo        int
+	score     int
+	ammo      int
+	bulletSpeed int
+
 	mouseIsDown bool
 )
 
 func hostGame(screen *ebiten.Image, nextFrameTick chan bool) {
 	var ticks int
 	for {
-		<-nextFrameTick
+		<- nextFrameTick
 
 		for i := range ducksClocks {
 			if ducks[i].isGarbage {
@@ -63,15 +69,17 @@ func hostGame(screen *ebiten.Image, nextFrameTick chan bool) {
 			if ducks[i].isGarbage {
 				continue
 			}
-			<-ducksClocks[i]
+			<- ducksClocks[i]
 		}
 
-		deleted := true
-		for deleted {
-			deleted = false
+
+
+		deletedDuck := true
+		for deletedDuck {
+			deletedDuck = false
 			for i := range ducksClocks {
 				if ducks[i].isGarbage {
-					deleted = true
+					deletedDuck = true
 
 					ducks[i] = ducks[len(ducks)-1]
 					ducksClocks[i] = ducksClocks[len(ducksClocks)-1]
@@ -83,7 +91,38 @@ func hostGame(screen *ebiten.Image, nextFrameTick chan bool) {
 			}
 		}
 
-		if ticks%40 == 0 {
+		for i := range bulletClocks {
+			if bullets[i].isOut {
+				continue
+			}
+			bulletClocks[i] <- true
+		}
+
+		for i := range bulletClocks {
+			if bullets[i].isOut {
+				continue
+			}
+			<- bulletClocks[i]
+		}
+
+		deletedBullet := true
+		for deletedBullet {
+			deletedBullet = false
+			for i, bullet := range bullets {
+				if bullet.isOut {
+					deletedBullet = true
+
+					bullets[i] = bullets[len(bullets)-1]
+					bulletClocks[i] = bulletClocks[len(bulletClocks)-1]
+
+					bullets = bullets[:len(bullets)-1]
+					bulletClocks = bulletClocks[:len(bulletClocks)-1]
+					break
+				}
+			}
+		}
+
+		if ticks % 40 == 0 {
 			var duck *Duck
 			newDuckColor := rand.Intn(6)
 			switch {
@@ -139,33 +178,33 @@ func (game *Game) Draw(screen *ebiten.Image) {
 		game.StartGame(screen)
 	}
 
-	shot_x, shot_y := ebiten.CursorPosition()
+	hunterPosition, _ := ebiten.CursorPosition()
 	if !mouseIsDown && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 		mouseIsDown = true
-
 		if ammo > 0 {
 			ammo--
-			for i := range ducks {
-				if ducks[i].isGarbage || ducks[i].isDead {
-					continue
-				}
-				if ducks[i].isHit(shot_x, shot_y) {
-					ducks[i].kill()
-					score += 1 << (ducks[i].duckType - 1)
-					break
-				}
+			newBullet := &Bullet{
+				x: hunterPosition,
+				y: screenHeight - 40,
+				isOut: false,
 			}
+			bullets = append(bullets, newBullet)
+			bulletClocks = append(bulletClocks, make(chan bool))
+			go operateBullet(screen, newBullet, bulletClocks[len(bulletClocks) - 1])
 		}
 	}
 
 	op := &ebiten.DrawImageOptions{}
 	screen.DrawImage(backgroundImage.SubImage(image.Rect(220, 0, 720, 500)).(*ebiten.Image), op)
 
+	dogImage, op := hunter.drawHunter(hunterPosition)
+	screen.DrawImage(dogImage, op)
+
 	hostClock <- true
 	time.Sleep(100 * time.Millisecond)
 	<-hostClock
-
 	mouseIsDown = false
+
 	text.Draw(screen, fmt.Sprintf("Score: %d\nAmmo: %d", score, ammo), myFont, 5, 25, color.White)
 }
 
@@ -193,6 +232,8 @@ func initialiseVariables() {
 	//background
 	backgroundImage = getAndDecode("../bg.png")
 
+	bulletImage = getAndDecode("../bullet.png")
+
 	//create some font
 	tt, err := opentype.Parse(fonts.MPlus1pRegular_ttf)
 	if err != nil {
@@ -204,9 +245,12 @@ func initialiseVariables() {
 		Hinting: font.HintingFull,
 	})
 
-	windowHeight := 31 * screenHeight / 8
-	windowWidth := 5 * screenHeight / 2
-	ebiten.SetWindowSize(windowHeight, windowWidth)
+	hunter = &Hunter{x: 0}
+	bulletSpeed = 20
+
+	windowWidth := 31 * screenHeight / 8
+	windowHeight := 13 * screenHeight / 6
+	ebiten.SetWindowSize(windowWidth, windowHeight)
 }
 
 func main() {

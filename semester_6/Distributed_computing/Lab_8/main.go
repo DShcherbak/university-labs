@@ -365,7 +365,7 @@ func establishConstants(testCase int) {
 }
 
 func main() {
-	establishConstants(3)
+	establishConstants(2)
 	A, B, err := readMatrixes("") //matrix_test_1.txt
 	if err != nil {
 		fmt.Printf(err.Error())
