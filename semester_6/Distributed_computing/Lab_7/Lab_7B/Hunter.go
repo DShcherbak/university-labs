@@ -57,9 +57,6 @@ func operateBullet(screen *ebiten.Image, bullet *Bullet, bulletsClock chan bool)
 
 			bullet.y -= bulletSpeed
 
-			//bulletImage1 := ebiten.NewImage(5, 5)
-			//bulletImage.Fill(color.RGBA{255, 0, 0, 255})
-
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Scale(0.1, 0.05)
 			op.GeoM.Translate(float64(bullet.x), float64(bullet.y))
