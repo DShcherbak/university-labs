@@ -341,7 +341,7 @@ func sliceComparison(A, B [][]int) bool {
 func establishConstants(testCase int) {
 	s1 = rand.NewSource(time.Now().UnixNano())
 	random = rand.New(s1)
-	randomMatrixSize = 5000
+	randomMatrixSize = 1000
 	n = randomMatrixSize
 	randomMatrixMaxNum = 100
 	switch testCase {
@@ -372,15 +372,15 @@ func main() {
 		return
 	}
 	fmt.Println("Matrix multipication")
-	//C1, time1 := matrixMultPlain(A, B, n)
-	//fmt.Println(time1)
+	C1, time1 := matrixMultPlain(A, B, n)
+	fmt.Println(time1)
 	C2, time2 := matrixMultStripes(A, B, numberOfStripesY, numberOfStripesX)
 	fmt.Println(time2)
 	C3, time3 := matrixMultFoks(A, B, numberOfProcesses)
 	fmt.Println(time3)
 	C4, time4 := matrixMultCannon(A, B, numberOfProcesses)
 	fmt.Println(time4)
-	if sliceComparison(C4, C2) && sliceComparison(C2, C3) {//&& sliceComparison(C1,C4) {
+	if sliceComparison(C4, C2) && sliceComparison(C2, C3) && sliceComparison(C1,C4) {
 		fmt.Printf("Testes passed")
 	} else {
 		fmt.Printf("Testes failed")
