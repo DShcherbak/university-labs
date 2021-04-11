@@ -67,6 +67,14 @@ public class RouteService {
             route.setStops(newRoute.getStops());
         }
 
+        try{
+            route.setStartTime(newRoute.getStartTime());
+        }catch(Exception ex){
+            throw new IllegalStateException(
+                    "Incorrect time format : " + newRoute.getStartTime()
+            );
+        }
+
         repository.save(route);
 
     }

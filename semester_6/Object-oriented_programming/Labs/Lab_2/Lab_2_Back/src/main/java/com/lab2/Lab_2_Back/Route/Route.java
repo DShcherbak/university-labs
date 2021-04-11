@@ -3,7 +3,10 @@ package com.lab2.Lab_2_Back.Route;
 import com.lab2.Lab_2_Back.ListConverter;
 
 import javax.persistence.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity
@@ -23,15 +26,26 @@ public class Route {
     private Long routeNumber;
     @Convert(converter = ListConverter.class)
     private List<Long> stops = new ArrayList<>();
-    private String startTime;
-    private String endTime;
+    private java.sql.Timestamp startTime;
+    private java.sql.Timestamp endTime;
     private Long interval;
     private Long routeType;
+
+    @Transient
+    private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
+
+    private java.sql.Timestamp parseTimestamp(String timestamp) {
+        try {
+            return new java.sql.Timestamp(TIME_FORMAT.parse(timestamp).getTime());
+        } catch (ParseException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     public Route() {
     }
 
-    public Route(Long id, Long routeNumber, List<Long> stopList, String startTime, String endTime, Long interval, Long routeType) {
+    public Route(Long id, Long routeNumber, List<Long> stopList, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
         this.id = id;
         this.routeNumber = routeNumber;
         this.stops = stopList;
@@ -41,7 +55,7 @@ public class Route {
         this.routeType = routeType;
     }
 
-    public Route(Long routeNumber,  List<Long> stopList, String startTime, String endTime, Long interval, Long routeType) {
+    public Route(Long routeNumber,  List<Long> stopList, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
         this.routeNumber = routeNumber;
         this.stops = stopList;
         this.startTime = startTime;
@@ -66,20 +80,34 @@ public class Route {
         this.routeNumber = routeNumber;
     }
 
-    public String getStartTime() {
+    public java.sql.Timestamp getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStartTime(java.sql.Timestamp startTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(startTime);
+        cal.add(Calendar.HOUR, 3);
+        this.startTime = new java.sql.Timestamp(cal.getTime().getTime());
     }
 
-    public String getEndTime() {
+    public void setStartTime(String startTime) {
+        this.startTime = parseTimestamp(startTime);
+    }
+
+    public java.sql.Timestamp getEndTime() {
         return endTime;
     }
 
+    public void setEndTime(java.sql.Timestamp endTime) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(endTime);
+        cal.add(Calendar.HOUR, 3);
+        this.startTime = new java.sql.Timestamp(cal.getTime().getTime());
+    }
+
     public void setEndTime(String endTime) {
-        this.endTime = endTime;
+        this.endTime = parseTimestamp(endTime);
     }
 
     public Long getInterval() {

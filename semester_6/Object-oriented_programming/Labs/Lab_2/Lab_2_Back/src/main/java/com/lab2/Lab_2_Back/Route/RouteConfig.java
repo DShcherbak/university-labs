@@ -18,10 +18,38 @@ public class RouteConfig {
     CommandLineRunner routeCommandLineRunner(RouteRepository repository){
         return args -> {
             Route[] routes = {
-                    new Route(1L,1L,new ArrayList<Long>(Arrays.asList(1L,2L,3L,4L,5L)), "06:40", "23:30", 10L, 1L ),
-                    new Route(2L,2L,new ArrayList<Long>(Arrays.asList(5L,4L,3L,2L,1L)), "06:40", "23:30", 10L, 1L ),
-                    new Route(3L,20L,new ArrayList<Long>(Arrays.asList(1L,3L,5L, 7L)), "06:55", "23:40", 15L, 2L ),
-                    new Route(4L,21L,new ArrayList<Long>(Arrays.asList(7L, 5L, 3L, 1L)), "06:55", "23:40", 15L, 2L ),
+                    new Route(
+                            1L,
+                            1L,
+                            new ArrayList<>(Arrays.asList(1L,2L,3L,4L,5L)),
+                            new java.sql.Timestamp((6*60+40) * 60000),
+                            new java.sql.Timestamp((23*60+30) * 60000),
+                            10L,
+                            1L ),
+
+                    new Route(2L,
+                            2L,
+                            new ArrayList<>(Arrays.asList(5L,4L,3L,2L,1L)),
+                            new java.sql.Timestamp((6*60+40) * 60000),
+                            new java.sql.Timestamp((23*60+30) * 60000),
+                            10L,
+                            1L ),
+
+                    new Route(3L,
+                            20L,
+                            new ArrayList<>(Arrays.asList(1L,3L,5L, 7L)),
+                            new java.sql.Timestamp((6*60+40) * 60000),
+                            new java.sql.Timestamp((23*60+40) * 60000),
+                            15L,
+                            2L ),
+
+                    new Route(4L,
+                            21L,
+                            new ArrayList<>(Arrays.asList(7L, 5L, 3L, 1L)),
+                            new java.sql.Timestamp((6*60+40) * 60000),
+                            new java.sql.Timestamp((23*60+40) * 60000),
+                            15L,
+                            2L ),
             };
 
 
