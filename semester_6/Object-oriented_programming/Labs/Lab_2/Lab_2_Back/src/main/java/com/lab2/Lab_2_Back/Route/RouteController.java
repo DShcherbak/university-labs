@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(path = "api/routes")
 public class RouteController {
 
@@ -19,6 +20,11 @@ public class RouteController {
     @GetMapping
     public List<Route> GetRoutes(){
         return routeService.GetRoutes();
+    }
+
+    @GetMapping(path="{routeId}")
+    public Route GetRouteById(@PathVariable("routeId") Long routeId){
+        return routeService.GetRouteById(routeId);
     }
 
     @PostMapping

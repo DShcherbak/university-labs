@@ -1,38 +1,42 @@
-let backUrl = 'http://localhost:8080/'
-
+import * as PureAPI from "./PureAPI";
+let backUrl = 'http://localhost:8080/api/'
 
 //USER
 
 export async function checkAdmin(){
-    return await sendGetRequest(backUrl + 'admin')
+    return true //await sendGetRequest(backUrl + 'admin')
 }
 
 export function setUser(email){
-    sendPostRequest(backUrl + 'admin', JSON.stringify("email:" + email))
+    return PureAPI.sendPostRequest(backUrl + 'admin', JSON.stringify("email:" + email))
 }
 
 
 //ROUTES
 
 export async function getRoutes() {
-    return await sendGetRequest(backUrl + 'routes');
+    return await PureAPI.sendCoolGetRequest(backUrl + 'routes')
 }
 
 export async function getRouteById(id){
-    return await sendGetRequest(backUrl + 'route/' + id);
+    return await PureAPI.sendCoolGetRequest(backUrl + 'routes/' + id);
+}
+
+export async function createRoute(state) {
+    return await PureAPI.sendPostRequest(backUrl + 'routes/' + state.oldId, routeToJson(state))
 }
 
 export async function updateRoute(state){
-    return await sendPostRequest(backUrl + 'route/' + state.oldId, routeToJson(state))
+    return await sendUpdateRequest(backUrl + 'routes/' + state.oldId, routeToJson(state))
 }
 
 export async function checkAvailableRoute(id) {
-    let c = await sendGetRequest(backUrl + 'route/' + id);
+    let c = await PureAPI.sendGetRequest(backUrl + 'route/' + id);
     return (!c) || (Object.keys(c).length === 0)
 }
 
 export async function deleteRoute(id, state){
-    return await sendPostRequest(backUrl + 'delete/route/' + id,  routeToJson(state))
+    return await PureAPI.sendPostRequest(backUrl + 'delete/route/' + id,  routeToJson(state))
 }
 
 function convertStopsToInt(stops, allStops) {
@@ -51,16 +55,16 @@ function convertStopsToInt(stops, allStops) {
 //STOPS
 
 export async function getStops() {
-    return await sendGetRequest(backUrl + 'stops')
+    return await PureAPI.sendGetRequest(backUrl + 'stops')
 }
 
 
 export async function updateStop(state){
-    return await sendPostRequest(backUrl + 'stop/' + state.oldId, stopToJson(state))
+    return await PureAPI.sendPostRequest(backUrl + 'stop/' + state.oldId, stopToJson(state))
 }
 
 export async function deleteStop(id, state){
-    return await sendPostRequest(backUrl + 'delete/stop/' + id, stopToJson(state))
+    return await PureAPI.sendPostRequest(backUrl + 'delete/stop/' + id, stopToJson(state))
 }
 
 function stopToJson(state) {
@@ -76,20 +80,20 @@ function stopToJson(state) {
 //EMPLOYEES
 
 export async function getEmployees() {
-    return await sendGetRequest(backUrl + 'employee/all')
+    return await PureAPI.sendGetRequest(backUrl + 'employee/all')
 }
 
 export async function getEmployee(id) {
     console.log("req is coming")
-    return await sendGetRequest(backUrl + 'employee/' + id)
+    return await PureAPI.sendGetRequest(backUrl + 'employee/' + id)
 }
 
 export async function updateEmployee(state){
-    return await sendPostRequest(backUrl + 'employee/' + state.oldId, employeeToJson(state))
+    return await PureAPI.sendPostRequest(backUrl + 'employee/' + state.oldId, employeeToJson(state))
 }
 
 export async function deleteEmployee(id, state){
-    return await sendPostRequest(backUrl + 'delete/employee/' + id, employeeToJson(state))
+    return await PureAPI.sendPostRequest(backUrl + 'delete/employee/' + id, employeeToJson(state))
 }
 
 function employeeToJson(state) {
@@ -107,18 +111,7 @@ function employeeToJson(state) {
 //REQUESTS
 
 
-function sendGetRequest(requestUrl){
-    // Simple POST request with a JSON body using fetch
-    const requestOptions = {
-        method: 'Get',
-        headers: {},
-        // body: JSON.stringify({ title: 'React Get Request Example' })
-    };
-    return fetch(requestUrl, requestOptions).then(response => response.json())
-        .then((responseData) => {
-            return responseData;
-        })
-}
+
 
 
 
@@ -145,11 +138,26 @@ function routeToJson(state) {
 
 
 
-function sendPostRequest(url, body){
+
+
+function sendUpdateRequest(url, body){
     // Simple POST request with a JSON body using fetch
 
     const requestOptions = {
-        method: 'Post',
+        method: 'Put',
+        headers: { 'Content-Type': 'application/json' },
+        body: body
+    };
+    return fetch(url, requestOptions).then(response => response.json())
+        .then((responseData) => {
+            return responseData;
+        })
+}
+
+function sendDeleteRequest(url, body){
+
+    const requestOptions = {
+        method: 'Delete',
         headers: { 'Content-Type': 'application/json' },
         body: body
     };
@@ -172,26 +180,3 @@ function typeToInt(type){
 
     }
 }
-
-async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *client
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return await response.json(); // parses JSON response into native JavaScript objects
-}
-
-postData('https://example.com/answer', { answer: 42 })
-    .then((data) => {
-        console.log(data); // JSON data parsed by `response.json()` call
-    });

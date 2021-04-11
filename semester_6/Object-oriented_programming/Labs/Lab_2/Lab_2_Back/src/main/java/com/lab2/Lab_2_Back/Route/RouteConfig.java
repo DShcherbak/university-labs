@@ -21,7 +21,7 @@ public class RouteConfig {
                     new Route(
                             1L,
                             1L,
-                            new ArrayList<>(Arrays.asList(1L,2L,3L,4L,5L)),
+                            new ArrayList<>(Arrays.asList(0L,1L,2L,3L,4L)),
                             new java.sql.Timestamp((6*60+40) * 60000),
                             new java.sql.Timestamp((23*60+30) * 60000),
                             10L,
@@ -29,7 +29,7 @@ public class RouteConfig {
 
                     new Route(2L,
                             2L,
-                            new ArrayList<>(Arrays.asList(5L,4L,3L,2L,1L)),
+                            new ArrayList<>(Arrays.asList(4L,3L,2L,1L,0L)),
                             new java.sql.Timestamp((6*60+40) * 60000),
                             new java.sql.Timestamp((23*60+30) * 60000),
                             10L,

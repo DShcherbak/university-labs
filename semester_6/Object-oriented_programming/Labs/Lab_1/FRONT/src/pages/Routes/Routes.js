@@ -16,13 +16,6 @@ const routeTypes = [
 
 class Routes extends React.Component {
 
-    makeSubset(subset, routes){
-        let selectedRoutes = routes.filter(route => subset.has(this.getType(route["type"])))
-       // console.log("SUBSET: " + selectedRoutes)
-        let list = selectedRoutes.map(route => <li><RouteObject routeProps = {route}/></li>);
-        return list
-    }
-
     componentDidMount = () => {
         this.GetRoutes().then((routes) => {
             this.setState({
@@ -31,10 +24,23 @@ class Routes extends React.Component {
         }).catch((error) => {
             console.log(error);
         });
+        this.GetStops().then((stops) => {
+            this.setState({
+                stops : stops,
+                counted: true
+            })
+            console.log(this.state.stops)
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     async GetRoutes() {
         return await API.getRoutes()
+    }
+
+    async GetStops() {
+        return await API.getStops()
     }
 
     constructor(props) {
@@ -62,27 +68,15 @@ class Routes extends React.Component {
         }
     }
 
-    getSubsetNumber(subset){
-        let number = 0
-        if(subset.has("Тролейбус"))
-            number += 1
-        if(subset.has("Автобус"))
-            number += 2
-        if(subset.has("Трамвай"))
-            number += 4
-        return number;
-    }
-
     toggleCheckbox = label => {
         if (this.selectedCheckboxes.has(label)) {
             this.selectedCheckboxes.delete(label);
         } else {
             this.selectedCheckboxes.add(label);
         }
-        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route["type"])))
+        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route["routeType"])))
         this.setState({
             displayRoutes: newDisplayRoutes,
-            counted: true
         }, function () {
             console.log(this.state);
         })
@@ -101,17 +95,33 @@ class Routes extends React.Component {
         routeTypes.map(this.createCheckbox)
     )
 
+    displayTime(timeStr){
+        return timeStr.toString().substring(11,16)
+    }
+
+    getStopName(id){
+        let result = "<Помилка імені>"
+        if(this.state.stops === undefined || this.state.stops === null){
+            return result
+        }
+        this.state.stops.forEach((stop) => {
+            if(stop.id === id){
+                result = stop.name
+            }
+        })
+        return result
+    }
+
     makeStopList(stops){
-        return (<ul>{stops.map((stop) => <li>{stop}</li>)}</ul>)
+        return (<ul>{stops.map((stopId) => <li>{this.getStopName(stopId)}</li>)}</ul>)
     }
 
     makeRoutesList(routes){
-        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/timetables?routeId=" + route["routeId"]}><li key={route["routeId"]} className = {styles.listElement}>
+        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/timetables?routeId=" + route["id"]}><li key={route["id"]} className = {styles.listElement}>
             <div  className={styles.routeCard}>
-                <div className={styles.listText}><p>{this.getType(route["type"])} номер {route["routeId"]}</p></div>
-                    <div className={styles.listText}>Початок руху: {route["startTime"]}</div>
-                    <div className={styles.listText}>Останній маршрут: {route["endTime"]}</div>
-
+                <div className={styles.listText}><p>{this.getType(route["routeType"])} номер {route["routeNumber"]}</p></div>
+                    <div className={styles.listText}>Початок руху: {this.displayTime(route["startTime"])}</div>
+                    <div className={styles.listText}>Останній маршрут: {this.displayTime(route["endTime"])}</div>
                     <div className={styles.listText}>Маршрут зупинок:<br/>
                         {this.makeStopList(route["stops"])}</div>
 
@@ -120,8 +130,8 @@ class Routes extends React.Component {
 
 
     render() {
-        let list = this.makeRoutesList(this.state.displayRoutes)
         if(this.state.counted){
+            let list = this.makeRoutesList(this.state.displayRoutes)
             return (
                 <div className={generalStyles.MainApp}>
                     <NavBar fatherlink={'/'}/>
@@ -140,7 +150,7 @@ class Routes extends React.Component {
                     <div className={generalStyles.MainBodyContainer}>
                     {this.createCheckboxes()}
                         <ul>
-                            <li>No list here</li>
+                            <li>Оберіть типи маршруту, які вас цікавлять</li>
                         </ul>
                     </div>
                 </div>

@@ -23,6 +23,14 @@ public class RouteService {
         return repository.findAll();
     }
 
+    public Route GetRouteById(Long routeId){
+        Optional<Route> route= repository.findById(routeId);
+        if(route.isEmpty()){
+            throw new IllegalStateException("No route with id = " + routeId);
+        }
+        return route.get();
+    }
+
     public void addNewRoute(Route route){
         var routeById = repository.findRouteById(route.getId());
         if(routeById.isPresent()){

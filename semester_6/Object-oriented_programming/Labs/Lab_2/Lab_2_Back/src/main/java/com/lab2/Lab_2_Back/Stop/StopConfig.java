@@ -13,16 +13,17 @@ public class StopConfig {
     CommandLineRunner stopCommandLineRunner(StopRepository repository){
         return args -> {
             Stop[] stops = {
-                    new Stop("Либідська"),
-                    new Stop("Палац Україна"),
-                    new Stop("Олімпійська"),
-                    new Stop("Площа Льва Толстого"),
-                    new Stop("Майдан Незалежності"),
-                    new Stop("Поштова площа"),
-                    new Stop("Контрактова площа"),
+                    new Stop(0L, "Либідська"),
+                    new Stop(1L,"Палац Україна"),
+                    new Stop(2L,"Олімпійська"),
+                    new Stop(3L,"Площа Льва Толстого"),
+                    new Stop(4L,"Майдан Незалежності"),
+                    new Stop(5L,"Поштова площа"),
+                    new Stop(6L,"Контрактова площа"),
+                    new Stop(7L,"Тараса Шевченка"),
+                    new Stop(8L,"Почайна"),
+                    new Stop(9L,"Оболонь"),
             };
-
-
             repository.saveAll(List.of(stops));
         };
     }
