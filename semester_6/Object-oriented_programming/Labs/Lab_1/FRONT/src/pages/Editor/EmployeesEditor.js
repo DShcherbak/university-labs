@@ -20,9 +20,6 @@ const routeTypes = [
 
 class EmployeesEditor extends React.Component {
 
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
 
     componentDidMount = () => {
         this.GetEmployees().then((employees) => {

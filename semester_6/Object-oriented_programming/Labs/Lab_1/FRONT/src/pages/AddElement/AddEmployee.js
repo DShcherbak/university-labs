@@ -7,25 +7,11 @@ import styles from "../../styles/General.module.css";
 import UserService from "../../services/UserService";
 
 export class AddEmployee extends React.Component{
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
 
-    componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked: true,
-                isAdmin: result
-            })
-        })
-    }
+    componentDidMount = () => {}
 
     render() {
-        if (this.state === null || !this.state.adminChecked) {
-            return (
-                <Loading/>
-            );
-        } else if (!this.state.isAdmin) {
+        if(!UserService.isAdmin()){
             return (<Redirect to={'/'}/>)
         } else {
             return <AddEmployeeInternal/>
@@ -105,9 +91,13 @@ export class AddEmployeeInternal extends React.Component{
             oldId : 0,
             id : newNumber
         })
-        API.createEmployee(this.state)
+        let result = await API.createEmployee(this.state)
+        if(result === undefined){
+            alert("Введений номер маршруту є недійсним!")
+            return false
+        }
         this.resetValues()
-    //  }
+        return true
     }
 
     saveAndContinue(){
@@ -115,11 +105,11 @@ export class AddEmployeeInternal extends React.Component{
     }
 
     async saveAndExit(){
-
-        this.setState(
-            {returnToEditor : true}
-        )
-        await this.saveChanges()
+        if(await this.saveChanges()){
+            this.setState(
+                {returnToEditor : true}
+            )
+        }
     }
 
     render(){

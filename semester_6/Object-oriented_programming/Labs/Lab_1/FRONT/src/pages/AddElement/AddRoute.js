@@ -9,25 +9,11 @@ import styles from "../../styles/General.module.css";
 import UserService from "../../services/UserService";
 
 export class AddRoute extends React.Component{
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
 
-    componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked: true,
-                isAdmin: result
-            })
-        })
-    }
+    componentDidMount = () => {}
 
     render() {
-        if (this.state === null || !this.state.adminChecked) {
-            return (
-                <Loading/>
-            );
-        } else if (!this.state.isAdmin) {
+        if (!UserService.isAdmin()) {
             return (<Redirect to={'/'}/>)
         } else {
             return <AddRouteInternal/>

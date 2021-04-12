@@ -7,25 +7,11 @@ import styles from "../../styles/General.module.css";
 import UserService from "../../services/UserService";
 
 export class EditEmployee extends React.Component{
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
 
-    componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked: true,
-                isAdmin: result
-            })
-        })
-    }
+    componentDidMount = () => {}
 
     render() {
-        if (this.state === null || !this.state.adminChecked) {
-            return (
-                <Loading/>
-            );
-        } else if (!this.state.isAdmin) {
+        if(!UserService.isAdmin()){
             return (<Redirect to={'/'}/>)
         } else {
             return <EditEmployeeInternal/>
@@ -65,11 +51,12 @@ export class EditEmployeeInternal extends React.Component{
     }
 
     resetValues(employee){
+        console.log(employee)
         this.setState({
-            id : employee["id"],
-            name: employee["name"],
-            surname: employee["surname"],
-            route_number: employee["routeNumber"],
+            id : employee.id,
+            name: employee.name,
+            surname: employee.surname,
+            route_number: employee.routeId,
             incorrectRoute : false,
             returnToEditor: false,
             confirmDelete : false,
@@ -79,22 +66,15 @@ export class EditEmployeeInternal extends React.Component{
     }
 
     componentDidMount = () => {
-        this.GetEmployee().then((employee) => {
-            if(employee === undefined){
-                this.setState({
-                    incorrectRoute: true
-                })
-            } else {
-                this.resetValues(employee)
-            }
-
-        }).catch((error) => {
-            console.log(error);
-        });
+        this.resetForm()
     }
 
     async GetEmployee() {
         return (await API.getEmployee(this.state.id))
+    }
+
+    async GetRoute(id) {
+        return (await API.getRouteById(id))
     }
 
     resetForm(){
@@ -104,9 +84,17 @@ export class EditEmployeeInternal extends React.Component{
                     incorrectRoute: true
                 })
             } else {
-                this.resetValues(employee)
+                this.GetRoute(employee.routeId).then((route => {
+                    if(route === undefined){
+                        this.setState({
+                            incorrectRoute: true
+                        })
+                    } else {
+                        employee.routeId = route.routeNumber
+                        this.resetValues(employee)
+                    }
+                }))
             }
-
         }).catch((error) => {
             console.log(error);
         });
@@ -127,11 +115,12 @@ export class EditEmployeeInternal extends React.Component{
     };
 
     async saveChanges() {
-        //if(await API.checkAvailableRoute(this.state.route_number)){
-        //    alert('Недійсний маршрут!')
-       // } else {
-        await API.updateEmployee(this.state)
-      //  }
+        let result = await API.updateEmployee(this.state)
+        if(result === undefined){
+            alert("Введений номер маршруту є недійсним!")
+            return false
+        }
+        return true
     }
 
     async saveAndContinue(){
@@ -139,10 +128,11 @@ export class EditEmployeeInternal extends React.Component{
     }
 
     async saveAndExit(){
-        await this.setState(
-            {returnToEditor : true}
-        )
-        await this.saveChanges()
+        if(await this.saveChanges()){
+            this.setState(
+                {returnToEditor : true}
+            )
+        }
     }
 
     render(){
@@ -160,7 +150,7 @@ export class EditEmployeeInternal extends React.Component{
                 <div>
                     <NavBar fatherlink={'/edit/employees'}/>
                     <form>
-                        <label>{"Підтвердження видалення працівника \"Станція " + this.state.name + " " + this.state.surname +  "\""}</label><br/>
+                        <label>{"Підтвердження видалення працівника \"" + this.state.name + " " + this.state.surname +  "\""}</label><br/>
                         <input type="button" onClick={this.resetForm} value="Скасувати видалення"/>
                         <input type="button" onClick={this.confirmedDelete} value="Видалити елемент"/>
                     </form>

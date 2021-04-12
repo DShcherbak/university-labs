@@ -17,9 +17,6 @@ const routeTypes = [
 
 class StopsEditor extends React.Component {
 
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
 
     componentDidMount = () => {
 

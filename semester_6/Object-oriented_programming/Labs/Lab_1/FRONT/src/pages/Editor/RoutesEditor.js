@@ -26,17 +26,8 @@ class RoutesEditor extends React.Component {
         return list
     }
 
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
-
     componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked : true,
-                isAdmin: result
-            })
-        })
+
         this.GetRoutes().then((routes) => {
             this.setState({
                 routes : routes

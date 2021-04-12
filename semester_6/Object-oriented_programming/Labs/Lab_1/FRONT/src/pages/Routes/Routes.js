@@ -74,7 +74,7 @@ class Routes extends React.Component {
         } else {
             this.selectedCheckboxes.add(label);
         }
-        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route["routeType"])))
+        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route.routeType)))
         this.setState({
             displayRoutes: newDisplayRoutes,
         }, function () {
@@ -117,13 +117,13 @@ class Routes extends React.Component {
     }
 
     makeRoutesList(routes){
-        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/timetables?routeId=" + route["id"]}><li key={route["id"]} className = {styles.listElement}>
+        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/timetables?routeId=" + route.routeNumber}><li key={route.routeNumber} className = {styles.listElement}>
             <div  className={styles.routeCard}>
-                <div className={styles.listText}><p>{this.getType(route["routeType"])} номер {route["routeNumber"]}</p></div>
-                    <div className={styles.listText}>Початок руху: {this.displayTime(route["startTime"])}</div>
-                    <div className={styles.listText}>Останній маршрут: {this.displayTime(route["endTime"])}</div>
+                <div className={styles.listText}><p>{this.getType(route.routeType)} номер {route.routeNumber}</p></div>
+                    <div className={styles.listText}>Початок руху: {this.displayTime(route.startTime)}</div>
+                    <div className={styles.listText}>Останній маршрут: {this.displayTime(route.endTime)}</div>
                     <div className={styles.listText}>Маршрут зупинок:<br/>
-                        {this.makeStopList(route["stops"])}</div>
+                        {this.makeStopList(route.stops)}</div>
 
             </div></li></Link>)}</ul>);
     }

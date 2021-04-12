@@ -104,7 +104,7 @@ export class TimeTableObject extends React.Component{
             })
         })
         this.GetTimeTable().then((route) => {
-        if(route === undefined){
+        if(route === undefined || route === null){
             this.setState({
                 incorrectRoute : true
             })
@@ -134,7 +134,17 @@ export class TimeTableObject extends React.Component{
     }
 
     async GetTimeTable() {
-        return await API.getRouteById(this.state.number)
+        if(isNaN(this.state.number)){
+            this.state.number = 1;
+        }
+        let routes = await API.getRoutes()
+        let result = null
+        routes.forEach((route) => {
+            if(route.routeNumber === this.state.number){
+                result = route
+            }
+        })
+        return result
     }
 
     async GetStops() {

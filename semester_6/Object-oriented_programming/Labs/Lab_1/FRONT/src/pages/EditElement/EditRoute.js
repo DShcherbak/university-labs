@@ -8,25 +8,14 @@ import styles from "../../styles/General.module.css";
 import UserService from "../../services/UserService";
 
 export class EditRoute extends React.Component{
-    async isAdmin(){
-        return await API.checkAdmin()
-    }
+
 
     componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked: true,
-                isAdmin: result
-            })
-        })
+
     }
 
     render() {
-        if (this.state === null || !this.state.adminChecked) {
-            return (
-                <Loading/>
-            );
-        } else if (!this.state.isAdmin) {
+        if (!UserService.isAdmin()) {
             return (<Redirect to={'/'}/>)
         } else {
             return <EditRouteInternal/>
@@ -239,7 +228,7 @@ export class EditRouteInternal extends React.Component{
     };
 
     confirmedDelete(){
-        API.deleteRoute(this.state.oldId, this.state)
+        API.deleteRoute(this.state.id, this.state)
         this.setState({
             returnToEditor : true
         })
@@ -273,7 +262,7 @@ export class EditRouteInternal extends React.Component{
     }
 
     addStop(){
-        let newStop = this.state.allStops[0].stop_name
+        let newStop = this.state.allStops[0].name
         let oldStops = this.state.stops.concat(newStop)
         let newTimetable = this.state.timeTable.concat([[5.0]])
         this.setState({
@@ -310,7 +299,7 @@ export class EditRouteInternal extends React.Component{
                 <div>
                     <NavBar fatherlink={'/edit/routes'}/>
                     <form>
-                        <label>{"Підтвердження видалення маршруту номер " + this.state.oldId}</label><br/>
+                        <label>{"Підтвердження видалення маршруту номер " + this.state.number}</label><br/>
                         <input type="button" onClick={this.resetForm} value="Скасувати видалення"/>
                         <input type="button" onClick={this.confirmedDelete} value="Видалити елемент"/>
                     </form>
