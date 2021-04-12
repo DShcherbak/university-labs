@@ -4,7 +4,7 @@ import React from "react";
 import {TimeTableObject} from "../../models/TimeTableObject";
 import {Link, Redirect} from 'react-router-dom'
 import NavBar from "../../components/nav-bar";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import general from "../../styles/General.module.css"
 import styles from "../../styles/Routes.module.css"
 import smallList from "../../styles/SmallList.module.css"

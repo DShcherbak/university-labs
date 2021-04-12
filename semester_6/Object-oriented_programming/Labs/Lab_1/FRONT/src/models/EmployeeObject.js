@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import * as API from "../API";
+import * as API from "../services/API";
 import { withRouter } from 'react-router-dom';
 import TimeTableForm from "../components/additional-components/TimeTableForm";
 import NavBar from "../components/nav-bar";

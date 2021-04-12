@@ -8,7 +8,7 @@ import MainNav from "./main-nav";
 import AuthNav from "./auth-nav";
 import styles from "../styles/Navbar.module.css"
 import {Link} from "react-router-dom";
-import * as API from "../API"
+import * as API from "../services/API"
 import {Email} from "./email";
 
 const NavBar = (props) => {

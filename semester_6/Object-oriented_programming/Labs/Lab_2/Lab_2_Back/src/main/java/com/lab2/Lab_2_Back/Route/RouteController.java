@@ -28,7 +28,7 @@ public class RouteController {
     }
 
     @PostMapping
-    public void registerNewRoute(@RequestBody Route route){
+    public void registerNewRoute(@RequestBody Route route, @RequestHeader("Authorization") String authString){
         routeService.addNewRoute(route);
     }
 

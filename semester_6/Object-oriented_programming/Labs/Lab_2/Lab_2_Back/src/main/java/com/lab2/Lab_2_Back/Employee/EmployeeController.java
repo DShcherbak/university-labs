@@ -28,7 +28,8 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public void registerNewEmployee(@RequestBody Employee employee){
+    public void registerNewEmployee(@RequestBody Employee employee, @RequestHeader("Authorization") String authString){
+        System.out.println("GOT AUTH: " + authString);
         service.addNewEmployee(employee);
     }
 
