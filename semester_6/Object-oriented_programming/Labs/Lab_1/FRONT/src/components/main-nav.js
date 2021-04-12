@@ -10,7 +10,7 @@ const MainNav = () => (
       className={styles.logoLink}
       activeClassName="router-link-exact-active"
     >
-      Лабораторна №1
+      Лабораторна №2
     </NavLink>
 
   </div>

@@ -2,6 +2,7 @@ package com.lab2.Lab_2_Back.Stop;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -29,6 +30,27 @@ public class Stop {
     public Stop(Long id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Stop{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Stop stop = (Stop) o;
+        return Objects.equals(id, stop.id) && Objects.equals(name, stop.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
     }
 
     public Long getId() {

@@ -46,7 +46,7 @@ public class EmployeeService {
         if(repository.existsById(employeeId)){
             repository.deleteById(employeeId);
         } else {
-            throw new IllegalStateException("Stop with id = " + employeeId + " doesn't exist.");
+            throw new IllegalStateException("Employee with id = " + employeeId + " doesn't exist.");
         }
     }
 

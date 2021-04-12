@@ -44,8 +44,12 @@ public class RouteService {
         if(routeByRouteNumber.isPresent()){
             throw new IllegalStateException("Route with Number = " + route.getRouteNumber() + " already exists");
         }
-        route.setLocalStartTime(route.getStartTime()); //Sets to local time (GPT + 3)
-        route.setLocalEndTime(route.getEndTime()); //Sets to local time (GPT + 3)
+        if(route.getStartTime() != null){
+            route.setLocalStartTime(route.getStartTime()); //Sets to local time (GPT + 3)
+        }
+        if(route.getEndTime() != null) {
+            route.setLocalEndTime(route.getEndTime()); //Sets to local time (GPT + 3)
+        }
         repository.save(route);
     }
 
@@ -53,7 +57,7 @@ public class RouteService {
         if(repository.existsById(routeId)){
             repository.deleteById(routeId);
         } else {
-            throw new IllegalStateException("Stop with id = " + routeId + " doesn't exist.");
+            throw new IllegalStateException("Route with id = " + routeId + " doesn't exist.");
         }
     }
 
@@ -65,7 +69,7 @@ public class RouteService {
             Optional<Route> routeByRouteNumber = repository.findRouteByRouteNumber(newRoute.getRouteNumber());
             if(routeByRouteNumber.isPresent()) {
                 throw new IllegalStateException(
-                        "Route with number = " + routeId + " already exists"
+                        "Route with number = " + newRoute.getRouteNumber() + " already exists"
                 );
             }
         }
@@ -87,37 +91,42 @@ public class RouteService {
         if(newRoute.getTimetable() != null){
             route.setTimetable(newRoute.getTimetable());
         }
-
-        try{
-            route.setLocalStartTime(newRoute.getStartTime());
-        }catch(Exception ex){
-            throw new IllegalStateException(
-                    "Incorrect time format : " + newRoute.getStartTime()
-            );
+        if(newRoute.getStartTime() != null){
+            try{
+                route.setLocalStartTime(newRoute.getStartTime());
+            }catch(Exception ex){
+                throw new IllegalStateException(
+                        "Incorrect time format : " + newRoute.getStartTime()
+                );
+            }
         }
 
-        try{
-            route.setLocalEndTime(newRoute.getEndTime());
-        }catch(Exception ex){
-            throw new IllegalStateException(
-                    "Incorrect time format : " + newRoute.getEndTime()
-            );
+        if(newRoute.getEndTime() != null) {
+            try {
+                route.setLocalEndTime(newRoute.getEndTime());
+            } catch (Exception ex) {
+                throw new IllegalStateException(
+                        "Incorrect time format : " + newRoute.getEndTime()
+                );
+            }
         }
-
-        if(newRoute.getInterval() < 0){
-            throw new IllegalStateException(
-                    "Interval sholud be positive " + newRoute.getInterval()
-            );
-        } else {
-            route.setInterval(newRoute.getInterval());
+        if(newRoute.getInterval() != null) {
+            if (newRoute.getInterval() < 0) {
+                throw new IllegalStateException(
+                        "Interval sholud be positive " + newRoute.getInterval()
+                );
+            } else {
+                route.setInterval(newRoute.getInterval());
+            }
         }
-
-        if(newRoute.getRouteType() < 0){
-            throw new IllegalStateException(
-                    "Route type sholud be positive " + newRoute.getRouteType()
-            );
-        } else {
-            route.setRouteType(newRoute.getRouteType());
+        if(newRoute.getRouteType() != null) {
+            if (newRoute.getRouteType() < 0) {
+                throw new IllegalStateException(
+                        "Route type sholud be positive " + newRoute.getRouteType()
+                );
+            } else {
+                route.setRouteType(newRoute.getRouteType());
+            }
         }
 
         repository.save(route);

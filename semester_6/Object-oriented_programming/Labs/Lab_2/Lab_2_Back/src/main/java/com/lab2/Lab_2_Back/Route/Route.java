@@ -154,11 +154,6 @@ public class Route {
         this.stops = stopIdList;
     }
 
-    private String listToString(List<Long> list){
-        String result = "[";
-        for(Long l : list) result = result.concat(String.valueOf(l)).concat(",");
-        return result.substring(0, result.length()-1).concat("]");
-    }
 
     @Override
     public boolean equals(Object o) {

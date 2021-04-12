@@ -57,7 +57,7 @@ public class RouteConfig {
             };
 
 
-            repository.saveAll(List.of(routes));
+            //repository.saveAll(List.of(routes));
         };
     }
 }

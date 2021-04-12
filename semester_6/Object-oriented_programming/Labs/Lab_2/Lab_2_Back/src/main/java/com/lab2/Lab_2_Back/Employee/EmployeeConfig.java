@@ -16,7 +16,7 @@ public class EmployeeConfig {
                     new Employee("Денис", "Щербак", 1L),
                     new Employee("Іван", "Рамик", 2L),
                     new Employee("Василина", "Борисюк", 3L)};
-            repository.saveAll(List.of(employee));
+            //repository.saveAll(List.of(employee));
         };
     }
 }

@@ -24,7 +24,7 @@ public class StopConfig {
                     new Stop(8L,"Почайна"),
                     new Stop(9L,"Оболонь"),
             };
-            repository.saveAll(List.of(stops));
+            //repository.saveAll(List.of(stops));
         };
     }
 }
