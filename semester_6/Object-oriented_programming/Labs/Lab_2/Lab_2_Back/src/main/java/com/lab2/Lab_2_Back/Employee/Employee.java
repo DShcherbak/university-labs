@@ -18,22 +18,22 @@ public class Employee {
     private Long id;
     private String name;
     private String surname;
-    private Long routeNumber;
+    private Long routeId;
 
     public Employee() {
     }
 
-    public Employee(String name, String surname, Long routeNumber) {
+    public Employee(String name, String surname, Long routeId) {
         this.name = name;
         this.surname = surname;
-        this.routeNumber = routeNumber;
+        this.routeId = routeId;
     }
 
-    public Employee(Long id, String name, String surname, Long routeNumber) {
+    public Employee(Long id, String name, String surname, Long routeId) {
         this.id = id;
         this.name = name;
         this.surname = surname;
-        this.routeNumber = routeNumber;
+        this.routeId = routeId;
     }
 
     public Long getId() {
@@ -60,12 +60,12 @@ public class Employee {
         this.surname = surname;
     }
 
-    public Long getRouteNumber() {
-        return routeNumber;
+    public Long getRouteId() {
+        return routeId;
     }
 
-    public void setRouteNumber(Long routeNumber) {
-        this.routeNumber = routeNumber;
+    public void setRouteId(Long routeNumber) {
+        this.routeId = routeNumber;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Employee {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", routeNumber=" + routeNumber +
+                ", routeId=" + routeId +
                 '}';
     }
 }

@@ -37,6 +37,13 @@ public class Route {
     @Transient
     private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
+    public int getGPT() {
+        return GPT;
+    }
+
+    @Transient
+    private final int GPT = 3;
+
     private java.sql.Timestamp parseTimestamp(String timestamp) {
         try {
             return new java.sql.Timestamp(TIME_FORMAT.parse(timestamp).getTime());
@@ -89,11 +96,15 @@ public class Route {
         return startTime;
     }
 
-    public void setStartTime(java.sql.Timestamp startTime) {
+    public void setLocalStartTime(java.sql.Timestamp startTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(startTime);
-        cal.add(Calendar.HOUR, 3);
-        this.startTime = new java.sql.Timestamp(cal.getTime().getTime());
+        cal.add(Calendar.HOUR, GPT);
+        setStartTime(new java.sql.Timestamp(cal.getTime().getTime()));
+    }
+
+    public void setStartTime(java.sql.Timestamp startTime){
+        this.startTime = startTime;
     }
 
     public void setStartTime(String startTime) {
@@ -104,11 +115,15 @@ public class Route {
         return endTime;
     }
 
-    public void setEndTime(java.sql.Timestamp endTime) {
+    public void setLocalEndTime(java.sql.Timestamp endTime) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(endTime);
-        cal.add(Calendar.HOUR, 3);
-        this.endTime = new java.sql.Timestamp(cal.getTime().getTime());
+        cal.add(Calendar.HOUR, GPT);
+        setEndTime(new java.sql.Timestamp(cal.getTime().getTime()));
+    }
+
+    public void setEndTime(java.sql.Timestamp endTime){
+        this.endTime = endTime;
     }
 
     public void setEndTime(String endTime) {

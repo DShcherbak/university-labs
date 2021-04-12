@@ -37,13 +37,15 @@ public class RouteService {
 
     public void addNewRoute(Route route){
         var routeById = repository.findRouteById(route.getId());
-        if(routeById.isPresent()){
+        if(routeById.isPresent()) {
             throw new IllegalStateException("Route with id = " + route.getId() + " already exists");
         }
         var routeByRouteNumber = repository.findRouteByRouteNumber(route.getRouteNumber());
         if(routeByRouteNumber.isPresent()){
             throw new IllegalStateException("Route with Number = " + route.getRouteNumber() + " already exists");
         }
+        route.setLocalStartTime(route.getStartTime()); //Sets to local time (GPT + 3)
+        route.setLocalEndTime(route.getEndTime()); //Sets to local time (GPT + 3)
         repository.save(route);
     }
 
@@ -87,7 +89,7 @@ public class RouteService {
         }
 
         try{
-            route.setStartTime(newRoute.getStartTime());
+            route.setLocalStartTime(newRoute.getStartTime());
         }catch(Exception ex){
             throw new IllegalStateException(
                     "Incorrect time format : " + newRoute.getStartTime()
@@ -95,7 +97,7 @@ public class RouteService {
         }
 
         try{
-            route.setEndTime(newRoute.getEndTime());
+            route.setLocalEndTime(newRoute.getEndTime());
         }catch(Exception ex){
             throw new IllegalStateException(
                     "Incorrect time format : " + newRoute.getEndTime()

@@ -27,15 +27,15 @@ export class EmployeeObject extends React.Component{
     componentDidMount = () => {
         let number = this.getRouteId(window.location.href)
         console.log("Employee number " + number)
-        this.GetEmployee(number).then((employees) => {
-            if(employees.length === 0){
+        this.GetEmployee(number).then((employee) => {
+            if(employee === undefined){
                 this.setState({
                     incorrectRoute: true,
                     counted: true
                 })
             } else {
-                let routeId = employees[0]["route_number"]
-                console.log("Route number " + routeId)
+                let routeId = employee.routeId
+                console.log("Route id " + routeId)
                 this.GetRoute(routeId).then((route) => {
                     console.log(route)
                     if(route === undefined){
@@ -45,12 +45,12 @@ export class EmployeeObject extends React.Component{
                         })
                     } else {
                         this.setState({
-                            id: employees[0]["id"],
-                            name: employees[0]["name"],
-                            surname: employees[0]["surname"],
-                            routeId: employees[0]["route_id"],
-                            routeType : this.GetType(route["type"]),
-                            routeNumber : route["routeId"],
+                            id: employee.id,
+                            name: employee.name,
+                            surname: employee.surname,
+                            routeNumber: route.routeNumber,
+                            routeType : this.GetType(route.routeType),
+                            routeId : route.id,
                             counted : true
                         }, function () {
                             console.log("ST: " + this.state.startTime)
@@ -84,17 +84,7 @@ export class EmployeeObject extends React.Component{
     }
 
     async GetRoute(id){
-
-        let routes = await API.getRoutes()
-        console.log("All the routes: " + routes)
-        let n = routes.length
-        for(let i = 0; i < n; i++){
-            console.log("X: " + routes[i]["routeId"])
-            if(routes[i]["routeId"] === id){
-                return routes[i]
-            }
-        }
-        return undefined
+        return await API.getRouteById(id)
     }
 
     render(){
