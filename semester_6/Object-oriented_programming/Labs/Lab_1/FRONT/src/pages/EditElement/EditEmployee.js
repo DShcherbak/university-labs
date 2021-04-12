@@ -1,9 +1,10 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import styles from "../../styles/General.module.css";
+import UserService from "../../services/UserService";
 
 export class EditEmployee extends React.Component{
     async isAdmin(){
@@ -14,7 +15,7 @@ export class EditEmployee extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -38,8 +39,7 @@ export class EditEmployeeInternal extends React.Component{
         let id = this.getEmployeeId(window.location.href)
         this.state = {
             id: id,
-            name: "",
-            adminProved: true
+            name: ""
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.resetForm = this.resetForm.bind(this);
@@ -69,12 +69,12 @@ export class EditEmployeeInternal extends React.Component{
             id : employee["id"],
             name: employee["name"],
             surname: employee["surname"],
-            route_number: employee["route_number"],
+            route_number: employee["routeNumber"],
             incorrectRoute : false,
             returnToEditor: false,
             confirmDelete : false,
         }, function () {
-            console.log("ST: " + this.state.startTime)
+            console.log("ST: " + this.state.id)
         })
     }
 
@@ -94,11 +94,10 @@ export class EditEmployeeInternal extends React.Component{
     }
 
     async GetEmployee() {
-        return (await API.getEmployee(this.state.id))[0]
+        return (await API.getEmployee(this.state.id))
     }
 
     resetForm(){
-        console.log("Reset...")
         this.GetEmployee().then((employee) => {
             if(employee === undefined){
                 this.setState({
@@ -121,21 +120,18 @@ export class EditEmployeeInternal extends React.Component{
     };
 
     async confirmedDelete(){
-        await API.deleteEmployee(this.state.id, this.state)
         this.setState({
             returnToEditor : true
         })
+        API.deleteEmployee(this.state.id)
     };
 
     async saveChanges() {
-        if(await API.checkAvailableRoute(this.state.route_number)){
-            alert('Недійсний маршрут!')
-        } else {
-            this.setState({
-                oldId : this.state.id
-            })
-            await API.updateEmployee(this.state)
-        }
+        //if(await API.checkAvailableRoute(this.state.route_number)){
+        //    alert('Недійсний маршрут!')
+       // } else {
+        await API.updateEmployee(this.state)
+      //  }
     }
 
     async saveAndContinue(){
@@ -143,15 +139,14 @@ export class EditEmployeeInternal extends React.Component{
     }
 
     async saveAndExit(){
-        await this.saveChanges()
-        this.setState(
+        await this.setState(
             {returnToEditor : true}
         )
-
+        await this.saveChanges()
     }
 
     render(){
-        if(!this.state.adminProved){
+        if(!UserService.isAdmin()){
             alert("You have no admin rights!")
             return (<Redirect to={'/'}/>)
         }

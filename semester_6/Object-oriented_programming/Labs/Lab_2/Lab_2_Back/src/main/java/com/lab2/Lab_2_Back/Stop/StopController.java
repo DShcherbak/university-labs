@@ -1,5 +1,6 @@
 package com.lab2.Lab_2_Back.Stop;
 
+import com.lab2.Lab_2_Back.Route.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,11 @@ public class StopController {
         return stopService.GetStops();
     }
 
+    @GetMapping(path="{stopId}")
+    public Stop GetStop(@PathVariable("stopId") Long stopId){
+        return stopService.GetStopById(stopId);
+    }
+
     @PostMapping
     public void registerNewStop(@RequestBody Stop stop){
         stopService.addNewStop(stop);
@@ -35,7 +41,7 @@ public class StopController {
     @PutMapping(path={"{stopId}"})
     public void updateStop(
             @PathVariable("stopId") Long stopId,
-            @RequestParam(required = true) String name ){
-        stopService.updateStop(stopId, name);
+            @RequestBody Stop stop){
+        stopService.updateStop(stopId, stop);
     }
 }

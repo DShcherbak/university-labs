@@ -1,12 +1,9 @@
 package com.lab2.Lab_2_Back.Route;
 
-import com.lab2.Lab_2_Back.Stop.Stop;
-import com.lab2.Lab_2_Back.Stop.StopRepository;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +17,14 @@ public class RouteService {
     }
 
     public List<Route> GetRoutes(){
-        return repository.findAll();
+        var list = repository.findAll();
+        list.sort(new Comparator<Route>() {
+            @Override
+            public int compare(Route o1, Route o2) {
+                return o1.getRouteNumber() > o2.getRouteNumber() ? 1 : -1;
+            }
+        });
+        return list;
     }
 
     public Route GetRouteById(Long routeId){
@@ -51,16 +55,19 @@ public class RouteService {
         }
     }
 
-    public void updateRoute(Long routeId, Route newRoute){
+    public void updateRoute(Long routeId, Long oldNumber, Route newRoute){
         Route route = repository.findById(routeId).orElseThrow(() -> new IllegalStateException(
                 "Route with id = " + routeId + " doesn't exist"
         ));
-        Optional<Route> routeByRouteNumber = repository.findRouteByRouteNumber(newRoute.getRouteNumber());
-        if(routeByRouteNumber.isPresent()) {
-            throw new IllegalStateException(
-                    "Route with number = " + routeId + " already exists"
-            );
+        if(!oldNumber.equals(newRoute.getRouteNumber())){
+            Optional<Route> routeByRouteNumber = repository.findRouteByRouteNumber(newRoute.getRouteNumber());
+            if(routeByRouteNumber.isPresent()) {
+                throw new IllegalStateException(
+                        "Route with number = " + routeId + " already exists"
+                );
+            }
         }
+
         if(newRoute.getRouteNumber() != null){
             if(newRoute.getRouteNumber() < 0) {
                 throw new IllegalStateException(
@@ -75,6 +82,10 @@ public class RouteService {
             route.setStops(newRoute.getStops());
         }
 
+        if(newRoute.getTimetable() != null){
+            route.setTimetable(newRoute.getTimetable());
+        }
+
         try{
             route.setStartTime(newRoute.getStartTime());
         }catch(Exception ex){
@@ -83,7 +94,30 @@ public class RouteService {
             );
         }
 
-        repository.save(route);
+        try{
+            route.setEndTime(newRoute.getEndTime());
+        }catch(Exception ex){
+            throw new IllegalStateException(
+                    "Incorrect time format : " + newRoute.getEndTime()
+            );
+        }
 
+        if(newRoute.getInterval() < 0){
+            throw new IllegalStateException(
+                    "Interval sholud be positive " + newRoute.getInterval()
+            );
+        } else {
+            route.setInterval(newRoute.getInterval());
+        }
+
+        if(newRoute.getRouteType() < 0){
+            throw new IllegalStateException(
+                    "Route type sholud be positive " + newRoute.getRouteType()
+            );
+        } else {
+            route.setRouteType(newRoute.getRouteType());
+        }
+
+        repository.save(route);
     }
 }

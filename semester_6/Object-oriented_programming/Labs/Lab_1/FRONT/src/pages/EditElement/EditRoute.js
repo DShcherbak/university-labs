@@ -1,12 +1,11 @@
 import React from "react";
 import {Link, Redirect} from "react-router-dom";
-import * as API from "../../API";
-import { confirmAlert } from 'react-confirm-alert'; // Import
+import * as API from "../../services/API";
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
-import {AddStopInternal} from "../AddElement/AddStop";
 import styles from "../../styles/General.module.css";
+import UserService from "../../services/UserService";
 
 export class EditRoute extends React.Component{
     async isAdmin(){
@@ -17,7 +16,7 @@ export class EditRoute extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -40,8 +39,9 @@ export class EditRouteInternal extends React.Component{
         super(props);
         let id = this.getRouteId(window.location.href)
         this.state = {
-            oldId: id,
-            number: id,
+            id: id,
+            oldNumber : -1,
+            number: -1,
             startTime: "06:40",
             endTime: "00:10",
             interval: 6,
@@ -109,15 +109,24 @@ export class EditRouteInternal extends React.Component{
         }
     }
 
-    resetValues(routes){
-        let stopsNames = routes[0]["stops"]
-        let tt = [0].concat(routes[0]["timetable"])
+    displayTime(timeStr){
+        if(timeStr === undefined || timeStr === null){
+            return '--:--'
+        }
+        return timeStr.toString().substring(11,16)
+    }
+
+    resetValues(route){
+        let stopsNames = route.stops
+        let tt = [0].concat(route.timetable)
         this.setState({
-            number : routes[0]["routeId"],
-            startTime : routes[0]["startTime"],
-            endTime : routes[0]["endTime"],
-            interval : routes[0]["interval"],
-            type: this.getType(routes[0]["type"]),
+            id : route.id,
+            number : route.routeNumber,
+            oldNumber : route.routeNumber,
+            startTime : this.displayTime(route.startTime),
+            endTime : this.displayTime(route.endTime),
+            interval : route.interval,
+            type: this.getType(route.routeType),
             stops : stopsNames,
             timeTable: tt,
             incorrectRoute : false,
@@ -130,21 +139,16 @@ export class EditRouteInternal extends React.Component{
 
     componentDidMount = () => {
         this.GetRoute().then((routes) => {
-            if(routes.length === 0){
-                this.setState({
-                    incorrectRoute: true
-                })
-            } else {
-                this.resetValues(routes)
-            }
-
+            console.log(routes)
+            this.resetValues(routes)
         }).catch((error) => {
             console.log(error);
         });
 
         this.GetStops().then((stops) => {
             this.setState({
-               allStops: stops
+               allStops: stops,
+                counted: true
             }, function () {
                 console.log("ST: " + this.state.startTime)
             })
@@ -155,7 +159,7 @@ export class EditRouteInternal extends React.Component{
     }
 
     async GetRoute() {
-        return await API.getRouteById(this.state.oldId)
+        return await API.getRouteById(this.state.id)
     }
 
     async GetStops() {
@@ -172,11 +176,14 @@ export class EditRouteInternal extends React.Component{
 
     makeStopChoosing(id){
         let optionsList = []
+        console.log("Stops: " + this.state.stops)
         this.state.allStops.forEach((stop) => {
-            if(stop['stop_name'] === this.state.stops[id]){
-                optionsList.push(<option selected value = {stop['stop_name']}>{stop['stop_name']}</option>)
+
+            if(stop.id === this.state.stops[id]){
+                console.log(stop)
+                optionsList.push(<option selected value = {stop.id}>{stop.name}</option>)
             } else {
-                optionsList.push(<option value = {stop['stop_name']}>{stop['stop_name']}</option>)
+                optionsList.push(<option value = {stop.id}>{stop.name}</option>)
             }
 
         })
@@ -239,17 +246,18 @@ export class EditRouteInternal extends React.Component{
     };
 
     async saveChanges() {
-        if (this.state.oldId == this.state.number) {
-            let newRoute = await API.updateRoute(this.state);
-            this.state.oldId = newRoute[0]["routeId"]
-        } else {
-            let isAvailable = await API.checkAvailableRoute(this.state.number)
-            if (isAvailable) {
+        let isAvailable = this.state.number > 0
+        if(isAvailable) {
+            if (this.state.stops.length > 1) {
                 let newRoute = await API.updateRoute(this.state);
-                this.state.oldId = newRoute[0]["routeId"]
+                if (newRoute === undefined || newRoute.state === "rejected") {
+                    alert("Маршрут номер " + this.state.number + " вже існує!")
+                }
             } else {
-                alert("Маршрут номер " + this.state.number + " вже існує!")
+                alert("Не можна створити маршрут, в якому менше двох зупинок!")
             }
+        } else {
+            alert("Номер маршруту має бути більшим від нуля!")
         }
     }
     async saveAndContinue(){
@@ -288,6 +296,10 @@ export class EditRouteInternal extends React.Component{
     }
 
     render(){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
+            return (<Redirect to={'/'}/>)
+        }
         if(this.state.returnToEditor){
             return (
                 <Redirect to={'/edit/routes'}/>
@@ -314,42 +326,55 @@ export class EditRouteInternal extends React.Component{
                 </div>
             )
         }
+        if(this.state.counted) {
 
-        return (
-            <div>
-                <NavBar fatherlink={'/edit/routes'}/>
-                <div className={styles.MainFormContainer}>
-                <form className={styles.editForm}>
-                    <label><b>{"Редагування маршруту номер " + this.state.number}</b></label><br/>
-                    <label>Номер маршруту: </label><input type="number" className={styles.wideFromInput} value={this.state.number} name="number" onChange={this.handleInputChange}/><br/>
-                    <label>Початок руху: </label><input type="text" className={styles.wideFromInput} value={this.state.startTime} name="startTime" onChange={this.handleInputChange}/><br/>
-                    <label>Кінець руху: </label><input type="text" className={styles.wideFromInput} value={this.state.endTime} name="endTime" onChange={this.handleInputChange}/><br/>
-                    <label>Інтервал: </label><input type="number" className={styles.wideFromInput} value={this.state.interval} min="0" name="interval" onChange={this.handleInputChange}/><br/>
-                    <label>Тип маршруту: </label>
-                    <select name="type" value={this.state.type} onChange={this.handleInputChange}>
-                        <option value="Тролейбус">Тролейбус</option>
-                        <option value="Автобус">Автобус</option>
-                        <option value="Трамвай">Трамвай</option>
-                    </select>
-                    <br/>
-                    <label>Станції та розклад руху: </label>
 
-                    <ul>{this.displayStationsAndTT(this.state.stops, this.state.timeTable)}</ul>
-                    <input type="button" onClick={this.addStop} value="+"/>
-                    <input type="button" onClick={this.removeStop} value="-"/>
-                    <br/><br/>
-                    <div className={styles.AllMyButtons}>
-                    <input type="button" onClick={this.resetForm} value="Скасувати зміни"/>
-                    <input type="button" onClick={this.deleteElement} value="Видалити елемент"/>
-                    <input type="button" onClick={this.saveAndContinue} value="Зберегти та продовжити"/>
-                    <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
+            return (
+
+                <div>
+                    <NavBar fatherlink={'/edit/routes'}/>
+                    <div className={styles.MainFormContainer}>
+                        <form className={styles.editForm}>
+                            <label><b>{"Редагування маршруту номер " + this.state.number}</b></label><br/>
+                            <label>Номер маршруту: </label><input type="number" className={styles.wideFromInput}
+                                                                  value={this.state.number} name="number"
+                                                                  onChange={this.handleInputChange}/><br/>
+                            <label>Початок руху: </label><input type="text" className={styles.wideFromInput}
+                                                                value={this.state.startTime} name="startTime"
+                                                                onChange={this.handleInputChange}/><br/>
+                            <label>Кінець руху: </label><input type="text" className={styles.wideFromInput}
+                                                               value={this.state.endTime} name="endTime"
+                                                               onChange={this.handleInputChange}/><br/>
+                            <label>Інтервал: </label><input type="number" className={styles.wideFromInput}
+                                                            value={this.state.interval} min="0" name="interval"
+                                                            onChange={this.handleInputChange}/><br/>
+                            <label>Тип маршруту: </label>
+                            <select name="type" value={this.state.type} onChange={this.handleInputChange}>
+                                <option value="Тролейбус">Тролейбус</option>
+                                <option value="Автобус">Автобус</option>
+                                <option value="Трамвай">Трамвай</option>
+                            </select>
+                            <br/>
+                            <label>Станції та розклад руху: </label>
+
+                            <ul>{this.displayStationsAndTT(this.state.stops, this.state.timeTable)}</ul>
+                            <input type="button" onClick={this.addStop} value="+"/>
+                            <input type="button" onClick={this.removeStop} value="-"/>
+                            <br/><br/>
+                            <div className={styles.AllMyButtons}>
+                                <input type="button" onClick={this.resetForm} value="Скасувати зміни"/>
+                                <input type="button" onClick={this.deleteElement} value="Видалити елемент"/>
+                                <input type="button" onClick={this.saveAndContinue} value="Зберегти та продовжити"/>
+                                <input type="button" onClick={this.saveAndExit} value="Зберегти та вийти"/>
+                            </div>
+                        </form>
                     </div>
-                </form>
                 </div>
-            </div>
 
-        )
-
+            )
+        } else {
+            return <Loading/>
+        }
 
     }
 

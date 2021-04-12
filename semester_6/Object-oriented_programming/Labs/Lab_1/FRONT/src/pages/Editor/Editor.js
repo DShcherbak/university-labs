@@ -4,9 +4,11 @@ import React from "react";
 import styles from "../../styles/General.module.css"
 import {Link} from 'react-router-dom';
 import NavBar from "../../components/nav-bar";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
+import Keycloak from 'keycloak-js';
+import UserService from "../../services/UserService";
 
 
 export class Editor extends React.Component{
@@ -15,29 +17,19 @@ export class Editor extends React.Component{
         super();
         this.setState({
             adminChecked : false,
-            isAdmin: false
+            isAdmin: false,
+            keycloak: null, authenticated: false
         })
-    }
-    async isAdmin(){
-         return await API.checkAdmin()
     }
     componentDidMount() {
-        this.isAdmin().then(result => {
             this.setState({
                 adminChecked : true,
-                isAdmin: result["isAdmin"]
+                isAdmin: false
             })
-        })
     }
 
     render(){
-         if(this.state === null || !this.state.adminChecked){
-             return (
-                 <Loading/>
-             );
-         } else if(!this.state.isAdmin){
-             return (<Redirect to={'/'}/>)
-         } else {
+        if(UserService.isAdmin()){
             return(
                 <div>
                     <NavBar fatherlink = {'/'}/>
@@ -46,11 +38,11 @@ export class Editor extends React.Component{
                         <Link to={'/edit/stops'}><button className={styles.BigButton} >Редагувати <br/> зупинки</button></Link>
                         <Link to={'/edit/employees'}><button className={styles.BigButton} >Редагувати <br/> працівників</button></Link>
                     </div>
-                </div>);
-         }
-
-
-
+                </div>
+            );
+        } else {
+            return (<Redirect to={'/'}/>)
+        }
     }
 }
 /*

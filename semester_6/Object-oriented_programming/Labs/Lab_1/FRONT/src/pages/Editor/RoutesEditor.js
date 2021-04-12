@@ -1,5 +1,5 @@
 import React from "react";
-import * as API from "../../API.js"
+import * as API from "../../services/API.js"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
@@ -8,6 +8,7 @@ import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
 import styles from "../../styles/Routes.module.css"
 import general from "../../styles/General.module.css"
+import UserService from "../../services/UserService";
 
 
 const routeTypes = [
@@ -19,7 +20,7 @@ const routeTypes = [
 class RoutesEditor extends React.Component {
 
     makeSubset(subset, routes){
-        let selectedRoutes = routes.filter(route => subset.has(this.getType(route["type"])))
+        let selectedRoutes = routes.filter(route => subset.has(this.getType(route["routeType"])))
         // console.log("SUBSET: " + selectedRoutes)
         let list = selectedRoutes.map(route => <li><RouteObject routeProps = {route}/></li>);
         return list
@@ -33,7 +34,7 @@ class RoutesEditor extends React.Component {
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked : true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
         this.GetRoutes().then((routes) => {
@@ -43,10 +44,23 @@ class RoutesEditor extends React.Component {
         }).catch((error) => {
             console.log(error);
         });
+
+        this.GetStops().then((stops) => {
+            this.setState({
+                stops : stops,
+                counted : true
+            })
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     async GetRoutes() {
         return await API.getRoutes()
+    }
+
+    async GetStops() {
+        return await API.getStops()
     }
 
     constructor(props) {
@@ -93,20 +107,12 @@ class RoutesEditor extends React.Component {
         } else {
             this.selectedCheckboxes.add(label);
         }
-        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route["type"])))
+        let newDisplayRoutes = this.state.routes.filter(route => this.selectedCheckboxes.has(this.getType(route["routeType"])))
         this.setState({
-            displayRoutes: newDisplayRoutes,
-            counted: true
+            displayRoutes: newDisplayRoutes
         }, function () {
             console.log(this.state);
         })
-
-        //     console.log(this.state.optionalRoutes)
-        //     console.log(this.selectedCheckboxes)
-        //      console.log("I choose this one: ")
-        //      console.log(this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes)))
-        //      let newDisplay = this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes))
-        //     console.log(newDisplay)
     }
 
     createCheckbox = label => (
@@ -121,16 +127,39 @@ class RoutesEditor extends React.Component {
         routeTypes.map(this.createCheckbox)
     )
 
+    displayTime(timeStr){
+        if(timeStr === undefined || timeStr === null){
+            return '--:--'
+        }
+        return timeStr.toString().substring(11,16)
+    }
+
+    getStopName(id){
+        let result = "<Помилка імені>"
+        if(this.state.stops === undefined || this.state.stops === null){
+            return result
+        }
+        this.state.stops.forEach((stop) => {
+            if(stop.id === id){
+                result = stop.name
+            }
+        })
+        return result
+    }
+
     makeStopList(stops){
-        return (<ul>{stops.map((stop) => <li>{stop}</li>)}</ul>)
+        if(stops === undefined){
+            return (<ul/>)
+        }
+        return (<ul>{stops.map((stop) => <li>{this.getStopName(stop)}</li>)}</ul>)
     }
 
     makeRoutesList(routes){
-        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/edit/route?routeId=" + route["routeId"]}><li key={route["routeId"]} className = {styles.listElement}>
+        return (<ul className={styles.listOfRoutes}>{routes.map((route) => <Link to={"/edit/route?routeId=" + route["id"]}><li key={route["id"]} className = {styles.listElement}>
             <div  className={styles.routeCard}>
-                <div className={styles.listText}><p>{this.getType(route["type"])} номер {route["routeId"]}</p></div>
-                <div className={styles.listText}>Початок руху: {route["startTime"]}</div>
-                <div className={styles.listText}>Останній маршрут: {route["endTime"]}</div>
+                <div className={styles.listText}><p>{this.getType(route["routeType"])} номер {route["routeNumber"]}</p></div>
+                <div className={styles.listText}>Початок руху: {this.displayTime(route["startTime"])}</div>
+                <div className={styles.listText}>Останній маршрут: {this.displayTime(route["endTime"])}</div>
 
                 <div className={styles.listText}>Маршрут зупинок:<br/>
                     {this.makeStopList(route["stops"])}</div>
@@ -140,15 +169,12 @@ class RoutesEditor extends React.Component {
 
 
     render() {
-        if(this.state === null || !this.state.adminChecked){
-            return (
-                <Loading/>
-            );
-        } else if(!this.state.isAdmin){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
             return (<Redirect to={'/'}/>)
         } else {
-            let list = this.makeRoutesList(this.state.displayRoutes)
             if (this.state.counted) {
+                let list = this.makeRoutesList(this.state.displayRoutes)
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>

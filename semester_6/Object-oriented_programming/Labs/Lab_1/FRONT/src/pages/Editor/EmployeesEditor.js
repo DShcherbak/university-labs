@@ -1,5 +1,5 @@
 import React from "react";
-import * as API from "../../API.js"
+import * as API from "../../services/API.js"
 import styles from "./Editor.module.css"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
@@ -9,6 +9,7 @@ import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
 import general from "../../styles/General.module.css";
 import smallList from "../../styles/SmallList.module.css";
+import UserService from "../../services/UserService";
 
 
 const routeTypes = [
@@ -24,12 +25,6 @@ class EmployeesEditor extends React.Component {
     }
 
     componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked : true,
-                isAdmin: result["isAdmin"]
-            })
-        })
         this.GetEmployees().then((employees) => {
             let newEmployees = []
             employees.forEach((employee) => {
@@ -72,12 +67,7 @@ class EmployeesEditor extends React.Component {
                 return "Тролейбус";
         }
     }
-        //     console.log(this.state.optionalRoutes)
-        //     console.log(this.selectedCheckboxes)
-        //      console.log("I choose this one: ")
-        //      console.log(this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes)))
-        //      let newDisplay = this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes))
-        //     console.log(newDisplay)
+
 
 
     makeEmployeesList(newEmployees){
@@ -91,15 +81,12 @@ class EmployeesEditor extends React.Component {
 */
 
     render() {
-        if(this.state === null || !this.state.adminChecked || this.state.employees === undefined){
-            return (
-                <Loading/>
-            );
-        } else if(!this.state.isAdmin){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
             return (<Redirect to={'/'}/>)
         } else {
-            let list = this.makeEmployeesList(this.state.employees)
             if (this.state.counted) {
+                let list = this.makeEmployeesList(this.state.employees)
                 return (
                     <div>
                         <NavBar fatherlink={'/editor'}/>

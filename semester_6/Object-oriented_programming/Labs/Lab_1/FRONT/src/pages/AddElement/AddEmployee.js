@@ -1,9 +1,10 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import styles from "../../styles/General.module.css";
+import UserService from "../../services/UserService";
 
 export class AddEmployee extends React.Component{
     async isAdmin(){
@@ -14,7 +15,7 @@ export class AddEmployee extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -73,7 +74,7 @@ export class AddEmployeeInternal extends React.Component{
             this.setState({
                 employees: employees
             }, function () {
-                console.log("ST: " + this.state.startTime)
+                console.log("ST: " + this.state.name)
             })
 
         }).catch((error) => {
@@ -96,34 +97,36 @@ export class AddEmployeeInternal extends React.Component{
     }
 
     async saveChanges() {
-        if(await API.checkAvailableRoute(this.state.route_number)){
+        /*if(await API.checkAvailableRoute(this.state.route_number)){
             alert('Недійсний маршрут!')
-        } else {
-            let newNumber = await this.mex()
-            this.setState({
-                oldId : 0,
-                id : newNumber
-            })
-            await API.updateEmployee(this.state)
-            this.resetValues()
-        }
+        } else {*/
+        let newNumber = await this.mex()
+        this.setState({
+            oldId : 0,
+            id : newNumber
+        })
+        API.createEmployee(this.state)
+        this.resetValues()
+    //  }
     }
 
-    async saveAndContinue(){
-        await this.saveChanges()
+    saveAndContinue(){
+        this.saveChanges()
     }
 
     async saveAndExit(){
-        await this.saveChanges()
+
         this.setState(
             {returnToEditor : true}
-        , function () {
-            console.log("ST: " + this.state.returnToEditor)
-        })
-
+        )
+        await this.saveChanges()
     }
 
     render(){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
+            return (<Redirect to={'/'}/>)
+        }
         if(this.state.returnToEditor){
             return (
                 <Redirect to={'/edit/employees'}/>

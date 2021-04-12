@@ -37,10 +37,11 @@ public class RouteController {
         routeService.deleteRoute(routeId);
     }
 
-    @PutMapping(path="{routeId}")
+    @PutMapping(path="{routeId}/{oldNumber}")
     public void updateRoute(
             @PathVariable("routeId") Long routeId,
+            @PathVariable("oldNumber") Long oldNumber,
             @RequestBody Route route){
-        routeService.updateRoute(routeId, route);
+        routeService.updateRoute(routeId, oldNumber, route);
     }
 }

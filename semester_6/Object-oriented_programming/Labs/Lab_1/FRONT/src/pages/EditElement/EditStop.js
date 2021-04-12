@@ -1,11 +1,9 @@
 import React from "react";
 import {Link, Redirect} from "react-router-dom";
-import * as API from "../../API";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import TimeTableForm from "../../components/additional-components/TimeTableForm";
+import * as API from "../../services/API";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
-import {EditRouteInternal} from "./EditRoute";
+import UserService from "../../services/UserService";
 
 export class EditStop extends React.Component{
     async isAdmin(){
@@ -16,7 +14,7 @@ export class EditStop extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -91,19 +89,19 @@ export class EditStopInternal extends React.Component{
 
     resetValues(stop){
         this.setState({
-            id : stop.stop_id,
-            name: stop.stop_name,
+            id : stop.id,
+            name: stop.name,
             incorrectRoute : false,
             returnToEditor: false,
             confirmDelete : false,
         }, function () {
-            console.log("ST: " + this.state.startTime)
+            console.log("ST: " + this.state.id)
         })
     }
 
     componentDidMount = () => {
         this.GetStop().then((stop) => {
-            if(stop.length === 0){
+            if(stop === undefined || stop === null || stop === {}){
                 this.setState({
                     incorrectRoute: true
                 })
@@ -126,10 +124,7 @@ export class EditStopInternal extends React.Component{
     }
 
     async GetStop() {
-        let stops = await API.getStops()
-        let myStop = null
-        stops.forEach((stop) => {if(stop.stop_id === this.state.id) myStop = stop})
-        return myStop
+        return await API.getStop(this.state.id)
     }
 
     async GetStops() {
@@ -137,7 +132,6 @@ export class EditStopInternal extends React.Component{
     }
 
     resetForm(){
-        console.log("Reset...")
         this.GetStop().then((stop) => {
             if(stop.length === 0){
                 this.setState({
@@ -168,17 +162,18 @@ export class EditStopInternal extends React.Component{
         })
     };
 
-    async confirmedDelete(){
-        await API.deleteStop(this.state.id, this.state)
+    confirmedDelete(){
         this.setState({
             returnToEditor : true
         })
+        API.deleteStop(this.state.id)
+
     };
 
     isNameAvailable(name){
         let result = true
         this.state.stops.forEach((stop) => {
-            if(stop.stop_name === name)
+            if(stop.name === name)
                 result = false
         })
         return result
@@ -186,12 +181,9 @@ export class EditStopInternal extends React.Component{
     }
 
     async saveChanges() {
-        this.setState({
-            oldId : this.state.id
-        })
         let isAvailable = this.isNameAvailable(this.state.name)
         if (isAvailable) {
-            let newStop = await API.updateStop(this.state)
+            let newStop = await API.updateStop(this.state.id, this.state)
             this.resetForm()
         } else {
             alert("Зупинка з назвою " + this.state.name + " вже існує!")
@@ -212,7 +204,7 @@ export class EditStopInternal extends React.Component{
     }
 
     render(){
-        if(!this.state.adminProved){
+        if(!UserService.isAdmin()){
             alert("You have no admin rights!")
             return (<Redirect to={'/'}/>)
         }

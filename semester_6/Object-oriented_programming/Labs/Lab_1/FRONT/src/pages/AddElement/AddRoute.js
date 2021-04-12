@@ -1,11 +1,12 @@
 import React from "react";
 import {Link, Redirect} from "react-router-dom";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import styles from "../../styles/General.module.css";
+import UserService from "../../services/UserService";
 
 export class AddRoute extends React.Component{
     async isAdmin(){
@@ -16,7 +17,7 @@ export class AddRoute extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -38,7 +39,7 @@ class AddRouteInternal extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            oldId : 0,
+            id : 0,
             number: 0,
             startTime: "06:00",
             endTime: "23:30",
@@ -87,29 +88,13 @@ class AddRouteInternal extends React.Component{
 
     }
 
-    resetValues(routes){
-        let stopsNames = routes[0]["stops"]
-        let tt = [0].concat(routes[0]["timetable"])
-        this.setState({
-            startTime: "06:00",
-            endTime: "23:30",
-            interval: 10,
-            type: 'Тролейбус',
-            stops: new Map(),
-            timeTable: tt,
-            returnToEditor: false,
-        }, function () {
-            console.log("ST: " + this.state.startTime)
-        })
-    }
-
     componentDidMount = () => {
 
         this.GetStops().then((stops) => {
             this.setState({
                 allStops: stops
             }, function () {
-                console.log("ST: " + this.state.startTime)
+                console.log("ST: " + this.state.allStops)
             })
 
         }).catch((error) => {
@@ -125,10 +110,10 @@ class AddRouteInternal extends React.Component{
     makeStopChoosing(id){
         let optionsList = []
         this.state.allStops.forEach((stop) => {
-            if(stop['stop_name'] === this.state.stops[id]){
-                optionsList.push(<option selected value = {stop['stop_name']}>{stop['stop_name']}</option>)
+            if(stop.name === this.state.stops[id]){
+                optionsList.push(<option selected value = {stop.id}>{stop.name}</option>)
             } else {
-                optionsList.push(<option value = {stop['stop_name']}>{stop['stop_name']}</option>)
+                optionsList.push(<option value = {stop.id}>{stop.name}</option>)
             }
 
         })
@@ -164,7 +149,7 @@ class AddRouteInternal extends React.Component{
         console.log("Reset...")
 
         this.setState({
-            oldId : 0,
+            id : 0,
             number: 0,
             startTime: "06:00",
             endTime: "23:30",
@@ -179,11 +164,11 @@ class AddRouteInternal extends React.Component{
     async saveChanges() {
         let isAvailable = this.state.number > 0
         if(isAvailable) {
-            isAvailable = await API.checkAvailableRoute(this.state.number)
-            if (isAvailable) {
-                await API.updateRoute(this.state);
+            if (this.state.stops.length > 1) {
+                let newRoute = await API.createRoute(this.state);
+                console.log("CREATED: " + this.state.id)
             } else {
-                alert("Маршрут номер " + this.state.number + " вже існує!")
+                alert("Не можна створити маршрут, в якому менше двох зупинок!")
             }
         } else {
             alert("Номер маршруту має бути більшим від нуля!")
@@ -195,7 +180,7 @@ class AddRouteInternal extends React.Component{
     }
 
     addStop(){
-        let newStop = this.state.allStops[0].stop_name
+        let newStop = this.state.allStops[0].id
         let oldStops = this.state.stops.concat(newStop)
         let newTimetable = this.state.timeTable.concat([5.0])
         this.setState({
@@ -219,18 +204,22 @@ class AddRouteInternal extends React.Component{
 
     async saveAndContinue() {
         await this.saveChanges()
-        this.resetForm()
     }
 
     async saveAndExit(){
-        await this.saveChanges()
         this.setState(
             {returnToEditor : true}
         )
+        await this.saveChanges()
+
 
     }
 
     render(){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
+            return (<Redirect to={'/'}/>)
+        }
         if(this.state.returnToEditor){
             return (
                 <Redirect to={'/edit/routes'}/>

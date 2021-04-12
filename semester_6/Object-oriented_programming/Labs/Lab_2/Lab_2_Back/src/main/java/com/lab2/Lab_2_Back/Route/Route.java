@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -30,6 +31,8 @@ public class Route {
     private java.sql.Timestamp endTime;
     private Long interval;
     private Long routeType;
+    @Convert(converter = ListConverter.class)
+    private List<Long> timetable = new ArrayList<>();
 
     @Transient
     private final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
@@ -45,19 +48,21 @@ public class Route {
     public Route() {
     }
 
-    public Route(Long id, Long routeNumber, List<Long> stopList, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
+    public Route(Long id, Long routeNumber, List<Long> stopList, List<Long> timetable, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
         this.id = id;
         this.routeNumber = routeNumber;
         this.stops = stopList;
+        this.timetable = timetable;
         this.startTime = startTime;
         this.endTime = endTime;
         this.interval = interval;
         this.routeType = routeType;
     }
 
-    public Route(Long routeNumber,  List<Long> stopList, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
+    public Route(Long routeNumber,  List<Long> stopList, List<Long> timetable, java.sql.Timestamp startTime, java.sql.Timestamp endTime, Long interval, Long routeType) {
         this.routeNumber = routeNumber;
         this.stops = stopList;
+        this.timetable = timetable;
         this.startTime = startTime;
         this.endTime = endTime;
         this.interval = interval;
@@ -103,7 +108,7 @@ public class Route {
         Calendar cal = Calendar.getInstance();
         cal.setTime(endTime);
         cal.add(Calendar.HOUR, 3);
-        this.startTime = new java.sql.Timestamp(cal.getTime().getTime());
+        this.endTime = new java.sql.Timestamp(cal.getTime().getTime());
     }
 
     public void setEndTime(String endTime) {
@@ -141,15 +146,42 @@ public class Route {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return id.equals(route.id) && routeNumber.equals(route.routeNumber) && stops.equals(route.stops) && startTime.equals(route.startTime) && endTime.equals(route.endTime) && interval.equals(route.interval) && routeType.equals(route.routeType) && timetable.equals(route.timetable) && TIME_FORMAT.equals(route.TIME_FORMAT);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, routeNumber, stops, startTime, endTime, interval, routeType, timetable, TIME_FORMAT);
+    }
+
+    public List<Long> getTimetable() {
+        return timetable;
+    }
+
+    public void setTimetable(List<Long> timetable) {
+        this.timetable = timetable;
+    }
+
+    public SimpleDateFormat getTIME_FORMAT() {
+        return TIME_FORMAT;
+    }
+
+    @Override
     public String toString() {
         return "Route{" +
                 "id=" + id +
                 ", routeNumber=" + routeNumber +
-                ", stopIdList=" + listToString(stops) +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
+                ", stops=" + stops +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
                 ", interval=" + interval +
                 ", routeType=" + routeType +
+                ", timetable=" + timetable +
+                ", TIME_FORMAT=" + TIME_FORMAT +
                 '}';
     }
 }

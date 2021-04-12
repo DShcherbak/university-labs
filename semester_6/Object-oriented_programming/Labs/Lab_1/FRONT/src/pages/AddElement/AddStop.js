@@ -1,11 +1,12 @@
 import React from "react";
 import {Link, Redirect} from "react-router-dom";
-import * as API from "../../API";
+import * as API from "../../services/API";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import TimeTableForm from "../../components/additional-components/TimeTableForm";
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import styles from "../../styles/General.module.css";
+import UserService from "../../services/UserService";
 
 export class AddStop extends React.Component{
     async isAdmin(){
@@ -16,7 +17,7 @@ export class AddStop extends React.Component{
         this.isAdmin().then(result => {
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             })
         })
     }
@@ -116,15 +117,15 @@ export class AddStopInternal extends React.Component{
         return result
     }
 
-    async saveChanges() {
-        let newNumber = await this.mex()
+    saveChanges() {
+        let newNumber = this.mex()
         this.setState({
             oldId : 0,
             id : newNumber
         })
         let isAvailable = this.isNameAvailable(this.state.name)
         if (isAvailable) {
-            let newStop = await API.updateStop(this.state)
+            let newStop = API.createStop(this.state)
             this.resetForm()
         } else {
             alert("Зупинка з назвою " + this.state.name + " вже існує!")
@@ -136,14 +137,19 @@ export class AddStopInternal extends React.Component{
     }
 
     async saveAndExit(){
-        await this.saveChanges()
         this.setState(
             {returnToEditor : true}
         )
+        this.saveChanges()
+
 
     }
 
     render(){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
+            return (<Redirect to={'/'}/>)
+        }
         if(this.state.returnToEditor){
             return (
                 <Redirect to={'/edit/stops'}/>

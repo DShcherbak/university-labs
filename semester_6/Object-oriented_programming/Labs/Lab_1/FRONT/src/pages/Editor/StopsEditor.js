@@ -1,5 +1,5 @@
 import React from "react";
-import * as API from "../../API.js"
+import * as API from "../../services/API.js"
 import {RouteObject} from "../../models/RouteObject"
 import Checkbox from "../../components/additional-components/Checkbox";
 import { Link } from 'react-router-dom'
@@ -7,6 +7,7 @@ import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
 import Redirect from "react-router-dom/es/Redirect";
 import styles from "../../styles/General.module.css"
+import UserService from "../../services/UserService";
 
 const routeTypes = [
     'Тролейбус',
@@ -21,17 +22,12 @@ class StopsEditor extends React.Component {
     }
 
     componentDidMount = () => {
-        this.isAdmin().then(result => {
-            this.setState({
-                adminChecked : true,
-                isAdmin: result["isAdmin"]
-            })
-        })
+
         this.GetStops().then((stops) => {
             let newStops = []
             stops.forEach((stop) => {
-                newStops.push(<Link to={"/edit/stop?stopId=" + stop.stop_id}>
-                    <li key={stop.stop_id}>Станція {stop.stop_name}</li>
+                newStops.push(<Link to={"/edit/stop?stopId=" + stop.id}>
+                    <li key={stop.id}>Станція {stop.name}</li>
                 </Link>)
             })
 
@@ -57,37 +53,14 @@ class StopsEditor extends React.Component {
         }
     }
 
-    getType(number){
-        switch (number) {
-            case 1:
-                return "Тролейбус";
-            case 2:
-                return "Автобус";
-            case 3:
-                return "Трамвай";
-            default:
-                return "Тролейбус";
-        }
-    }
-        //     console.log(this.state.optionalRoutes)
-        //     console.log(this.selectedCheckboxes)
-        //      console.log("I choose this one: ")
-        //      console.log(this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes)))
-        //      let newDisplay = this.state.optionalRoutes.get(this.getSubsetNumber(this.selectedCheckboxes))
-        //     console.log(newDisplay)
-
-
     makeStopList(stops){
         return (<ul>{stops.map((stop) => stop)}</ul>)
     }
 
 
     render() {
-        if(this.state === null || !this.state.adminChecked){
-            return (
-                <Loading/>
-            );
-        } else if(!this.state.isAdmin){
+        if(!UserService.isAdmin()){
+            alert("You have no admin rights!")
             return (<Redirect to={'/'}/>)
         } else {
             let list = this.makeStopList(this.state.stops)

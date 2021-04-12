@@ -1,5 +1,5 @@
 import React from "react";
-import * as API from "../../API.js"
+import * as API from "../../services/API.js"
 import generalStyles from "../../styles/General.module.css"
 import styles from "../../styles/Routes.module.css"
 import {RouteObject} from "../../models/RouteObject"

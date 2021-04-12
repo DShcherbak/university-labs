@@ -5,7 +5,8 @@ import generalStyles from "../../styles/General.module.css"
 import {Link} from 'react-router-dom';
 import NavBar from "../../components/nav-bar";
 import Loading from "../../components/loading";
-import * as API from "../../API";
+import * as API from "../../services/API";
+import RenderOnAuthenticated from "../../components/render-on-authentificated";
 
 export class MainPage extends React.Component{
 
@@ -26,27 +27,26 @@ export class MainPage extends React.Component{
     componentDidMount = () => {
         console.log("LOG4")
         this.isAdmin().then(result => {
-            console.log(result, result["isAdmin"])
             this.setState({
                 adminChecked: true,
-                isAdmin: result["isAdmin"]
+                isAdmin: result
             }, function () {
-                console.log("LOG5" + this.state.adminChecked + this.state.isAdmin)
+                if(!this.state.isAdmin)
+                    console.log("Admin access denied")
             })
-            console.log("LOG6" + this.state.adminChecked + this.state.isAdmin)
         })
+
         //console.log("LOG7" + this.state.adminChecked + this.state.isAdmin)
 
     }
 
     render() {
-        if (this.state === null || !this.state.adminChecked) {
+      /*  if (this.state === null || !this.state.adminChecked) {
             console.log("LOG")
             return (
                 <Loading/>
             );
         } else if (!this.state.isAdmin) {
-            console.log("LOG2")
             return (<div>
                         <NavBar fatherlink={''}/>
                         <div className={generalStyles.BigButtonContainer}>
@@ -56,18 +56,19 @@ export class MainPage extends React.Component{
                         </div>
                     </div>)
         } else {
-            console.log("LOG3")
-            return (
+           */
+        let adminButton = RenderOnAuthenticated(<Link to={'/editor'}><button className={generalStyles.BigButton} > Сторінка<br/> адміністратора</button></Link>)
+        return (
                 <div>
                     <NavBar fatherlink={''}/>
                     <div className={generalStyles.BigButtonContainer}>
                         <Link to={'/routes'}><button className={generalStyles.BigButton}> Маршрути</button></Link>
                         <Link to={'/timetables'}><button className={generalStyles.BigButton} > Розклади</button></Link>
                         <Link to={'/employees'}><button className={generalStyles.BigButton} > Працівники</button></Link>
-                        <Link to={'/editor'}><button className={generalStyles.BigButton} > Сторінка<br/> адміністратора</button></Link>
+                        {adminButton}
                     </div>
                 </div>
             );
-        }
+     //   }
     }
 }

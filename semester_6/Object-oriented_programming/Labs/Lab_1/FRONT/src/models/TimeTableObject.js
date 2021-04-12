@@ -1,6 +1,6 @@
 import React from "react";
 import {Redirect} from "react-router-dom";
-import * as API from "../API";
+import * as API from "../services/API";
 import { withRouter } from 'react-router-dom';
 import TimeTableForm from "../components/additional-components/TimeTableForm";
 import NavBar from "../components/nav-bar";
@@ -42,11 +42,11 @@ export class TimeTableObject extends React.Component{
 
     toTimePeriod(value){
         if(value < 60){
-            return value.toString() + " minutes.";
+            return value.toString() + " хвилин.";
         } else {
             let hours = Math.floor(value/60).toString();
             value %= 60;
-            return hours + "hours and " + value.toString() + " minutes.";
+            return hours + " годин " + value.toString() + " хвилин.";
         }
     }
 
@@ -84,33 +84,50 @@ export class TimeTableObject extends React.Component{
         );
     }
 
+    getStopName(id){
+        let result = "<Помилка імені>"
+        if(this.state.stops === undefined){
+            return result
+        } else {
+            this.state.stops.forEach((stop) => {
+                if(stop.id === id)
+                    result = stop.name
+            })
+            return result
+        }
+    }
+
     componentDidMount = () => {
-        this.GetTimeTable().then((routes) => {
-            if(routes.length === 0){
-                this.setState({
-                    incorrectRoute: true
-                })
-            } else {
-                let newStops = new Map()
-                let stopsNames = routes[0]["stops"]
-                let tt = routes[0]["timetable"]
-                newStops.set(stopsNames[0], 0)
-                for(let i = 0; i < tt.length; i++){
-                    newStops.set(stopsNames[i+1], tt[i])
-                }
-                this.setState({
-                    number : routes[0]["routeId"],
-                    startTime : routes[0]["startTime"],
-                    endTime : routes[0]["endTime"],
-                    interval : routes[0]["interval"],
-                    stops : newStops,
-                    incorrectRoute : false
-                }, function () {
-                    console.log("ST: " + this.state.startTime)
-                })
-
+        this.GetStops().then((stops) => {
+            this.setState({
+                stops: stops
+            })
+        })
+        this.GetTimeTable().then((route) => {
+        if(route === undefined){
+            this.setState({
+                incorrectRoute : true
+            })
+        } else {
+            let newStops = new Map()
+            let stopIds = route.stops
+            let tt = route.timetable
+            newStops.set(this.getStopName(stopIds[0]), 0)
+            for(let i = 0; i < tt.length; i++){
+                newStops.set(this.getStopName(stopIds[i+1]), tt[i])
             }
-
+            this.setState({
+                id: route.id,
+                number : route.routeNumber,
+                startTime : route.startTime,
+                endTime : route.endTime,
+                interval : route.interval,
+                stops : newStops,
+                incorrectRoute : false
+            }, function () {
+                console.log("ST: " + this.state.startTime)
+            })
+        }
         }).catch((error) => {
             console.log(error);
         });
@@ -118,6 +135,17 @@ export class TimeTableObject extends React.Component{
 
     async GetTimeTable() {
         return await API.getRouteById(this.state.number)
+    }
+
+    async GetStops() {
+        return await API.getStops()
+    }
+
+    displayTime(timeStr){
+        if(timeStr === undefined || timeStr === null){
+            return '--:--'
+        }
+        return timeStr.toString().substring(11,16)
     }
 
     AddButton(){
@@ -139,7 +167,6 @@ export class TimeTableObject extends React.Component{
             )
         }
         this.totalTime = 0;
-
         this.state.stops.forEach((value, key) => this.totalTime += value);
         let currentTime = this.getCurrentTime();
         let timeToStops = this.countTimeToStops();
@@ -157,8 +184,8 @@ export class TimeTableObject extends React.Component{
                     {this.AddButton()}
                     <p>Поточний час: {this.toNormalTime(currentTime)}</p>
                     <p>Номер маршруту: {this.state.number}</p>
-                    <p>Перший рейс: {this.state.startTime}</p>
-                    <p>Останній рейс: {this.state.endTime}</p>
+                    <p>Перший рейс: {this.displayTime(this.state.startTime)}</p>
+                    <p>Останній рейс: {this.displayTime(this.state.endTime)}</p>
                     <p>Інтервал: {this.toTimePeriod(this.state.interval)}</p>
                     <div>Очікуйте наступний транспорт в такий час: <br/>{listStopTimes}</div>
                 </div>
