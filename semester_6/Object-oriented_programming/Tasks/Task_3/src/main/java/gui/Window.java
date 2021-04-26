@@ -12,6 +12,7 @@ public class Window {
     public final static int height = 600;
     public final static int a = 40;
     public JFrame frame;
+    public boolean yourMove;
     String title;
     ActionListener listener;
     Map<String, JButton> buttonMap = new HashMap<>();
@@ -25,6 +26,10 @@ public class Window {
         this.title = title;
         this.gui = gui;
         this.listener = new ButtonClickListener();
+    }
+
+    public void receiveFirstMove(){
+
     }
 
     public void addButton(JButton button, String name, int x, int y, int w, int h){
@@ -78,17 +83,21 @@ public class Window {
             String command = e.getActionCommand();
             System.out.println(command);
             if( command.equals( "START" ))  {
-                gui.setCurrentState(GUI.GuiState.Loading);
-                gui.showEventDemo();
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
+                labelMap.get("HEAD").setText("Waiting for other player to join");
+                try{
+                    gui.client.register("USER");
+                    gui.setCurrentState(GUI.GuiState.Preparation);
+                    gui.showEventDemo();
+                }catch (Exception ex){
+                    System.out.println(ex.getMessage());
+                    gui.setCurrentState(GUI.GuiState.StartScreen);
+                    gui.showEventDemo();
                 }
-                gui.setCurrentState(GUI.GuiState.Preparation);
-                gui.showEventDemo();
                 //           gui.setCurrentState(GUI.GuiState.Preparation);
                 //           gui.showEventDemo();
+            } else if (command.equals("RESTART")){
+                gui.setCurrentState(GUI.GuiState.StartScreen);
+                gui.showEventDemo();
             }
 
         }

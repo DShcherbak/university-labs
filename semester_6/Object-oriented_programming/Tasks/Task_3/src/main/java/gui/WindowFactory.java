@@ -9,9 +9,9 @@ public class WindowFactory {
     public static Window GetWindow(GUI gui, GUI.GuiState state){
         return switch (state) {
             case StartScreen -> createStartWindow(gui);
-            case Loading -> createLoadingWindow(gui);
             case Preparation -> createConstructorWindow(gui);
             case Game -> createGameWindow(gui);
+            case WIN -> createWinWindow(gui);
             default -> new Window(new JFrame(), "Alter", gui);
         };
     }
@@ -45,6 +45,9 @@ public class WindowFactory {
         JButton startButton = new JButton("START");
         startButton.setActionCommand("START");
         window.addButton(startButton,"START", 250,225,300, 50);
+
+        JLabel label = new JLabel("",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,175,200, 50);
 
         return window;
     }
@@ -99,7 +102,12 @@ public class WindowFactory {
         var window = new GameWindow(loadingFrame, "Battle sea", gui);
 
         JLabel label = new JLabel("Wait for your turn",JLabel.CENTER );
+        if(window.yourMove){
+            label.setText("Your move");
+        }
         window.addLabel(label,"HEAD", 325,0,150, 50);
+
+
 
         JButton exitButton = new JButton("EXIT");
         exitButton.setActionCommand("EXIT");
@@ -107,6 +115,20 @@ public class WindowFactory {
 
         window.addMyField(100,100);
         window.addField(700,100);
+
+        return window;
+    }
+
+    private static Window createWinWindow(GUI gui){
+        JFrame startGameFrame = defaultJFrame("You win!");
+        var window = new Window(startGameFrame,  "You win!", gui);
+
+        JButton startButton = new JButton("RESTART");
+        startButton.setActionCommand("RESTART");
+        window.addButton(startButton,"RESTART", 250,225,300, 50);
+
+        JLabel label = new JLabel("You win!",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,175,200, 50);
 
         return window;
     }

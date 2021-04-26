@@ -29,6 +29,7 @@ public class ServerObject implements ServerInterface {
                 thread = new Thread(new PlayerThread(games.get(currentGame), true, requestMessage.getMyMessage()));
                 thread.start();
                 thread.join();
+                System.out.println("Left user id : " + (lastGameId + 1));
                 return new MessageObject(requestMessage.getMyMessage(), lastGameId+1, "You play with " + games.get(currentGame).getMessage(1));
             }catch(Exception ex){
                 return new MessageObject("Server error: " + ex.getMessage());
@@ -39,6 +40,7 @@ public class ServerObject implements ServerInterface {
                 thread = new Thread(new PlayerThread(games.get(currentGame), false, requestMessage.getMyMessage()));
                 thread.start();
                 thread.join();
+                System.out.println("right user id : " + (lastGameId + 2));
                 return new MessageObject(requestMessage.getMyMessage(), lastGameId+2, "You play with " + games.get(currentGame).getMessage(2));
             }catch(Exception ex){
                 return new MessageObject("Server error: " + ex.getMessage());

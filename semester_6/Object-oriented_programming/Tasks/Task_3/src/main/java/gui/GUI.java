@@ -1,5 +1,7 @@
 package gui;
 
+import client.RmiClient;
+import game.EnemyField;
 import game.GameField;
 
 import java.util.HashMap;
@@ -7,13 +9,21 @@ import java.util.Map;
 import javax.swing.*;
 
 public class GUI {
-    public enum GuiState {StartScreen, Loading, Preparation, Game};
+    public enum GuiState {StartScreen, Preparation, Game, WIN};
     private GuiState currentState;
     private Map<GuiState, Window> windows = new HashMap<>();
     public GameField gameField;
+    public EnemyField enemyField;
+    public RmiClient client;
 
     public GUI(){
-        currentState = GuiState.Preparation;
+        try{
+            client = new RmiClient();
+        }catch (Exception ex){
+            System.out.println("Client error: " + ex.getMessage());
+        }
+        enemyField = new EnemyField();
+        currentState = GuiState.StartScreen;
         prepareGUI();
     }
     public static void main(String[] args){
@@ -34,6 +44,10 @@ public class GUI {
         }
     }
 
+    public void setFirstMove(){
+        windows.get(GuiState.Game).yourMove = (client.getClientId()) % 10 == 1;
+    }
+
     public void setGameField(GameField gf){
         gameField = gf;
         windows.get(GuiState.Game).recountField();
@@ -49,9 +63,12 @@ public class GUI {
 
     public void showEventDemo(){
         for(var window : windows.values()){
-            window.frame.setVisible(false);
+            window.setVisible(false);
         }
         Window currentWindow = GetCurrentWindow();
         currentWindow.setVisible(true);
+        if(currentState == GuiState.Game && currentWindow.yourMove == false){
+            currentWindow.receiveFirstMove();
+        }
     }
 }

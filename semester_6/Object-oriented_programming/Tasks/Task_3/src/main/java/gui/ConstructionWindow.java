@@ -91,6 +91,13 @@ public class ConstructionWindow extends Window{
         }
     }
 
+    private void startTheGame(){
+        gui.setFirstMove();
+        gui.setGameField(field);
+        gui.setCurrentState(GUI.GuiState.Game);
+        gui.showEventDemo();
+    }
+
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -98,16 +105,14 @@ public class ConstructionWindow extends Window{
             if(command.equals("START")) {
                 for(int i = 0; i < 10; i++){
                     if(ships[i].row == -1){
+                        System.out.println("Not placed ship number " + i);
                         return;
                     }
-                    gui.setCurrentState(GUI.GuiState.Game);
-                    gui.showEventDemo();
                 }
+                startTheGame();
             } else if(command.equals("RANDOM")) {
                 //...rnadom
-                gui.setCurrentState(GUI.GuiState.Game);
-                gui.setGameField(field);
-                gui.showEventDemo();
+                startTheGame();
             } else if(command.equals("ROTATE")) {
                 field.displaceShip(currentShip);
                 ships[currentShip].vertical ^= true;
