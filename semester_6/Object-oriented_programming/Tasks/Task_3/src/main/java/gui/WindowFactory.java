@@ -11,7 +11,8 @@ public class WindowFactory {
             case StartScreen -> createStartWindow(gui);
             case Preparation -> createConstructorWindow(gui);
             case Game -> createGameWindow(gui);
-            case WIN -> createWinWindow(gui);
+            case WIN -> createRestartWindow(gui, true);
+            case LOSE -> createRestartWindow(gui, false);
             default -> new Window(new JFrame(), "Alter", gui);
         };
     }
@@ -73,13 +74,9 @@ public class WindowFactory {
         startButton.setActionCommand("READY");
         window.addButton(startButton,"READY", 685,500,100, 50);
 
-        JButton randomButton = new JButton("RANDOM");
-        randomButton.setActionCommand("RANDOM");
-        window.addButton(randomButton,"RANDOM", 685,430,100, 50);
-
         JButton rotateButton = new JButton("ROTATE");
         rotateButton.setActionCommand("ROTATE");
-        window.addButton(rotateButton,"ROTATE", 685,360,100, 50);
+        window.addButton(rotateButton,"ROTATE", 685,430,100, 50);
 
         window.addField(100,100);
         window.ships = GuiShip.getStartingShips();
@@ -119,7 +116,7 @@ public class WindowFactory {
         return window;
     }
 
-    private static Window createWinWindow(GUI gui){
+    private static Window createRestartWindow(GUI gui, boolean win){
         JFrame startGameFrame = defaultJFrame("You win!");
         var window = new Window(startGameFrame,  "You win!", gui);
 
@@ -127,7 +124,11 @@ public class WindowFactory {
         startButton.setActionCommand("RESTART");
         window.addButton(startButton,"RESTART", 250,225,300, 50);
 
-        JLabel label = new JLabel("You win!",JLabel.CENTER );
+        JLabel label;
+        if(win)
+            label = new JLabel("You win!",JLabel.CENTER );
+        else
+            label = new JLabel("You lost!",JLabel.CENTER );
         window.addLabel(label,"HEAD", 350,175,200, 50);
 
         return window;

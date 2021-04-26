@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 public class ConstructionWindow extends Window{
     GameField field;
@@ -98,20 +99,33 @@ public class ConstructionWindow extends Window{
         gui.showEventDemo();
     }
 
+    private void placeShipRandomly(int number){
+        boolean placed = false;
+        int r = new Random().nextInt(10);
+        int c = new Random().nextInt(10);
+        while(!placed){
+            var ship= ships[number];
+            ship.row = r;
+            ship.column = c;
+            if(r + c % 3 == 0)
+                ship.vertical ^= true;
+            placed = field.placeShip(ship, number);
+            c = (c + 1) % 10;
+            if(c == 0)
+                r = (r + 1) % 10;
+        }
+    }
+
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             System.out.println(command);
-            if(command.equals("START")) {
+            if(command.equals("READY")) {
                 for(int i = 0; i < 10; i++){
                     if(ships[i].row == -1){
-                        System.out.println("Not placed ship number " + i);
-                        return;
+                        placeShipRandomly(i);
                     }
                 }
-                startTheGame();
-            } else if(command.equals("RANDOM")) {
-                //...rnadom
                 startTheGame();
             } else if(command.equals("ROTATE")) {
                 field.displaceShip(currentShip);

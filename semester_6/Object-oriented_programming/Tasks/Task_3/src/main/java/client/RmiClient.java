@@ -35,6 +35,10 @@ public class RmiClient {
         return serverInterface.performMove(new MessageObject("", clientId, "", "-"));
     }
 
+    public MessageObject lose() throws RemoteException {
+        return serverInterface.performMove(new MessageObject("", clientId, "", "LOSE"));
+    }
+
     public int getClientId(){
         return clientId;
     }

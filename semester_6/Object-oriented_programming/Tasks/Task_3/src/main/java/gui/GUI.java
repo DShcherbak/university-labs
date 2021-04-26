@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swing.*;
 
 public class GUI {
-    public enum GuiState {StartScreen, Preparation, Game, WIN};
+    public enum GuiState {StartScreen, Preparation, Game, WIN, LOSE};
     private GuiState currentState;
     private Map<GuiState, Window> windows = new HashMap<>();
     public GameField gameField;
@@ -67,7 +67,7 @@ public class GUI {
         }
         Window currentWindow = GetCurrentWindow();
         currentWindow.setVisible(true);
-        if(currentState == GuiState.Game && currentWindow.yourMove == false){
+        if(currentState == GuiState.Game && !currentWindow.yourMove){
             currentWindow.receiveFirstMove();
         }
     }

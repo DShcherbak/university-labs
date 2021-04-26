@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GameWindow extends Window{
+    private int shipsLeft = 10;
     public GameWindow(JFrame frame, String title, GUI gui) {
         super(frame, title, gui);
         System.out.println(gui.client.getClientId());
@@ -92,9 +93,19 @@ public class GameWindow extends Window{
                     }
                 else {
                     try {
-                        String nextMove = gui.client.performMove("K.O.");
-                        performMove(nextMove);
-                        yourMove = true;
+                        shipsLeft--;
+                        String nextMove;
+                        if(shipsLeft == 0){
+                            gui.client.lose();
+                            gui.setCurrentState(GUI.GuiState.WIN);
+                            gui.showEventDemo();
+                        }
+                        else {
+                            nextMove = gui.client.performMove("K.O.");
+                            performMove(nextMove);
+                            yourMove = true;
+                        }
+
                     } catch (Exception ex) {
                         System.out.println("Recursive exception: " + ex.getMessage());
                     }
@@ -141,10 +152,11 @@ public class GameWindow extends Window{
 
     private void markButtonShip(String name){
         buttonMap.get(name).setBackground(new Color(0,0,200));
-        buttonMap.get(name).setEnabled(false);
+        //buttonMap.get(name).setEnabled(false);
     }
 
     private void markButtonEmpty(String name){
+        buttonMap.get(name).setText("");
         buttonMap.get(name).setBackground(new Color(200,200,200));
         buttonMap.get(name).setEnabled(true);
     }
