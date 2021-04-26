@@ -27,39 +27,6 @@ public class GameWindow extends Window{
 
     }
 
-    private void colorShips(){
-        for(int i = 0; i < 10; i++){
-            for(int j = 0; j < 10; j++){
-                buttonMap.get("field" + i + "" + j).setBackground(new Color(200,200,200));
-            }
-            for(int t = 0; t < ships[i].size; t++){
-                buttonMap.get("ship" + i + "" + t).setBackground(new Color(200,200,200));
-            }
-        }
-
-        for(int i = 0; i < 10; i++){
-            if(i == currentShip)
-                continue;
-            var ship = ships[i];
-            if(ship.row == -1 || ship.column == -1){
-                ship.row = -1;
-                ship.column = -1;
-                for(int t = 0; t < ship.size; t++){
-                    buttonMap.get("ship" + i + "" + t).setVisible(true);
-                }
-            } else {
-                for(int t = 0; t < ship.size; t++){
-                    buttonMap.get("ship" + i + "" + t).setVisible(false);
-                    if(ship.vertical){
-                        buttonMap.get("field" + (ship.row + t) + "" + ship.column).setBackground(new Color(0,0,200));
-                    } else {
-                        buttonMap.get("field" + ship.row + "" + (ship.column + t)).setBackground(new Color(0,0,200));
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public void receiveFirstMove(){
         System.out.println("WAITING ON FIRST MOVE");
@@ -190,11 +157,11 @@ public class GameWindow extends Window{
             System.out.println(command);
             if(command.equals("EXIT")) {
                 try{
-                gui.client.performMove("LOSE");
+                gui.client.lose();
                 }catch(Exception ex){
                     System.out.println("Client-Server error 1: " + ex.getMessage());
                 }
-                gui.setCurrentState(GUI.GuiState.StartScreen);
+                gui.setCurrentState(GUI.GuiState.LOSE);
                 gui.showEventDemo();
             } else if(command.startsWith("field")) {
                 int r = command.charAt(5) - '0';
