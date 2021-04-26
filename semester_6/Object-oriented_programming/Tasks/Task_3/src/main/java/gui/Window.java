@@ -28,6 +28,10 @@ public class Window {
         this.listener = new ButtonClickListener();
     }
 
+    public void setMove(boolean newMove){
+
+    }
+
     public void receiveFirstMove(){
 
     }

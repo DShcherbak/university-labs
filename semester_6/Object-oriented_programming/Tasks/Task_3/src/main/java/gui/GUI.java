@@ -45,7 +45,7 @@ public class GUI {
     }
 
     public void setFirstMove(){
-        windows.get(GuiState.Game).yourMove = (client.getClientId()) % 10 == 1;
+        windows.get(GuiState.Game).setMove((client.getClientId()) % 10 == 1);
     }
 
     public void setGameField(GameField gf){

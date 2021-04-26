@@ -12,7 +12,6 @@ public class GameWindow extends Window{
     public GameWindow(JFrame frame, String title, GUI gui) {
         super(frame, title, gui);
         System.out.println(gui.client.getClientId());
-        yourMove = (gui.client.getClientId() % 10) == 1;
         listener = new ButtonClickListener();
     }
 
@@ -42,7 +41,7 @@ public class GameWindow extends Window{
 
     private void performMove(String move){
         if(move == ""){
-            yourMove = true;
+            setMove(true);
         }
         int r1 = move.charAt(0) - '0';
         int c1 = move.charAt(1) - '0';
@@ -54,7 +53,7 @@ public class GameWindow extends Window{
                     try {
                         String nextMove = gui.client.performMove("HIT");
                         performMove(nextMove);
-                        yourMove = true;
+                        setMove(true);
                     } catch (Exception ex) {
                         System.out.println("Recursive exception: " + ex.getMessage());
                     }
@@ -64,13 +63,13 @@ public class GameWindow extends Window{
                         String nextMove;
                         if(shipsLeft == 0){
                             gui.client.lose();
-                            gui.setCurrentState(GUI.GuiState.WIN);
+                            gui.setCurrentState(GUI.GuiState.LOSE);
                             gui.showEventDemo();
                         }
                         else {
                             nextMove = gui.client.performMove("K.O.");
                             performMove(nextMove);
-                            yourMove = true;
+                            setMove(true);
                         }
 
                     } catch (Exception ex) {
@@ -82,7 +81,7 @@ public class GameWindow extends Window{
             }
         } else {
             markButtonMiss("myField" + r1 + "" + c1);
-            yourMove = true;
+            setMove(true);
         }
     }
 
@@ -151,6 +150,16 @@ public class GameWindow extends Window{
         gui.enemyField.killShip(r,c);
     }
 
+    @Override
+    public void setMove(boolean newMove){
+        yourMove = newMove;
+        if(yourMove){
+            labelMap.get("HEAD").setText("Your move");
+        } else {
+            labelMap.get("HEAD").setText("Wait for your turn");
+        }
+    }
+
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
@@ -168,7 +177,7 @@ public class GameWindow extends Window{
                 int c = command.charAt(6) - '0';
                 if(yourMove){
                     try{
-                        yourMove = false;
+                        setMove(false);
                         String response = gui.client.performMove("" + r + "" + c);
                         if(response.equals("LOSE")) {
                             gui.setCurrentState(GUI.GuiState.WIN);
@@ -176,11 +185,11 @@ public class GameWindow extends Window{
                         }else if(response.equals("HIT")){
                             hitShip(r,c);
                             fixField();
-                            yourMove = true;
+                            setMove(true);
                         } else if (response.equals("K.O.")){
                             killShip(r,c);
                             fixField();
-                            yourMove = true;
+                            setMove(true);
                         } else { // opponent move
                             markButtonMiss("field" + r + "" + c);
                             performMove(response);

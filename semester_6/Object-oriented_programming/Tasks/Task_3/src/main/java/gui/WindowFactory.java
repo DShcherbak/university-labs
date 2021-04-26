@@ -40,7 +40,7 @@ public class WindowFactory {
     }
 
     private static Window createStartWindow(GUI gui){
-        JFrame startGameFrame = defaultJFrame("Java SWING Examples");
+        JFrame startGameFrame = defaultJFrame("Start Screen");
         var window = new Window(startGameFrame,  "Start Screen", gui);
 
         JButton startButton = new JButton("START");
@@ -53,15 +53,6 @@ public class WindowFactory {
         return window;
     }
 
-    private static Window createLoadingWindow(GUI gui){
-        JFrame loadingFrame = defaultJFrame("Loading");
-        var window = new Window(loadingFrame,  "Loading...", gui);
-
-        JLabel label = new JLabel("Waiting for other player to join...",JLabel.CENTER );
-        window.addLabel(label,"LOADING", 350,175,100, 50);
-
-        return window;
-    }
 
     private static Window createConstructorWindow(GUI gui){
         JFrame loadingFrame = defaultJFrame("Game preparations");
@@ -98,7 +89,7 @@ public class WindowFactory {
         JFrame loadingFrame = GameFrame("Battle sea");
         var window = new GameWindow(loadingFrame, "Battle sea", gui);
 
-        JLabel label = new JLabel("Wait for your turn",JLabel.CENTER );
+        JLabel label = new JLabel("HEAD",JLabel.CENTER );
         if(window.yourMove){
             label.setText("Your move");
         }
@@ -117,8 +108,15 @@ public class WindowFactory {
     }
 
     private static Window createRestartWindow(GUI gui, boolean win){
-        JFrame startGameFrame = defaultJFrame("You win!");
-        var window = new Window(startGameFrame,  "You win!", gui);
+        JFrame startGameFrame;
+        Window window;
+        if(win){
+            startGameFrame = defaultJFrame("You win!");
+            window = new Window(startGameFrame,  "You win!", gui);
+        } else {
+            startGameFrame = defaultJFrame("You lost!");
+            window = new Window(startGameFrame,  "You lost!", gui);
+        }
 
         JButton startButton = new JButton("RESTART");
         startButton.setActionCommand("RESTART");
