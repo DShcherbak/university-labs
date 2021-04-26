@@ -10,6 +10,7 @@ import java.rmi.registry.Registry;
 import java.util.Scanner;
 
 public class RmiClient {
+
     public static void main(String[] args) throws RemoteException, NotBoundException{
         Registry registry = LocateRegistry.getRegistry("127.0.0.1");
         ServerInterface serverInterface = (ServerInterface) registry.lookup("GameInstance");

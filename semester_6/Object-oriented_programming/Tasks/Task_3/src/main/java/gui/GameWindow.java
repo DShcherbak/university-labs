@@ -7,10 +7,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ConstructionWindow extends Window{
+public class GameWindow extends Window{
     GameField field;
     boolean successfullyPlaced = true;
-    public ConstructionWindow(JFrame frame, String title, GUI gui) {
+    public GameWindow(JFrame frame, String title, GUI gui) {
         super(frame, title, gui);
         field = new GameField();
         listener = new ButtonClickListener();
@@ -19,6 +19,16 @@ public class ConstructionWindow extends Window{
     private void displaceShip(int n){
         ships[n].row = -1;
         field.displaceShip(n);
+    }
+
+    public void addMyField(int dx, int dy){
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++){
+                JButton fieldButton = new JButton();
+                addButton(fieldButton,"myField" + i + "" + j, dx+a*j,dy+a*i,a,a);
+            }
+        }
+
     }
 
     private void colorShips(){
@@ -95,24 +105,8 @@ public class ConstructionWindow extends Window{
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             System.out.println(command);
-            if(command.equals("START")) {
-                for(int i = 0; i < 10; i++){
-                    if(ships[i].row == -1){
-                        return;
-                    }
-                    gui.setCurrentState(GUI.GuiState.Game);
-                    gui.showEventDemo();
-                }
-            } else if(command.equals("RANDOM")) {
-                //...rnadom
-                gui.setCurrentState(GUI.GuiState.Game);
-                gui.setGameField(field);
-                gui.showEventDemo();
-            } else if(command.equals("ROTATE")) {
-                field.displaceShip(currentShip);
-                ships[currentShip].vertical ^= true;
-                successfullyPlaced = field.placeShip(ships[currentShip], currentShip);
-                colorShips();
+            if(command.equals("EXIT")) {
+                gui.setCurrentState(GUI.GuiState.StartScreen);
             } else if(command.startsWith("field")) {
                 int r = command.charAt(5) - '0';
                 int c = command.charAt(6) - '0';

@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -40,6 +41,18 @@ public class Window {
                 JButton fieldButton = new JButton();
                 fieldButton.setActionCommand("field" + i + "" + j);
                 addButton(fieldButton,"field" + i + "" + j, dx+a*j,dy+a*i,a,a);
+            }
+        }
+    }
+
+    public void recountField(){
+        for(int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                if(gui.gameField.getShip(i, j) >= 0) {
+                    buttonMap.get("myField" + i + "" + j).setBackground(new Color(0, 0, 200));
+                } else {
+                    buttonMap.get("myField" + i + "" + j).setBackground(new Color(200, 200, 200));
+                }
             }
         }
     }

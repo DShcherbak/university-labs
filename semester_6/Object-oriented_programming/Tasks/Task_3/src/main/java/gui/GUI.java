@@ -1,5 +1,7 @@
 package gui;
 
+import game.GameField;
+
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -8,6 +10,7 @@ public class GUI {
     public enum GuiState {StartScreen, Loading, Preparation, Game};
     private GuiState currentState;
     private Map<GuiState, Window> windows = new HashMap<>();
+    public GameField gameField;
 
     public GUI(){
         currentState = GuiState.Preparation;
@@ -29,6 +32,11 @@ public class GUI {
             SwingUtilities.updateComponentTreeUI(window.frame);
             windows.put(state, window);
         }
+    }
+
+    public void setGameField(GameField gf){
+        gameField = gf;
+        windows.get(GuiState.Game).recountField();
     }
 
     private Window GetCurrentWindow(){

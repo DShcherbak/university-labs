@@ -11,6 +11,7 @@ public class WindowFactory {
             case StartScreen -> createStartWindow(gui);
             case Loading -> createLoadingWindow(gui);
             case Preparation -> createConstructorWindow(gui);
+            case Game -> createGameWindow(gui);
             default -> new Window(new JFrame(), "Alter", gui);
         };
     }
@@ -26,6 +27,14 @@ public class WindowFactory {
                 System.exit(0);
             }
         });
+        return f;
+    }
+
+    private static JFrame GameFrame(String title){
+        JFrame f = defaultJFrame(title);
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension dimension = toolkit.getScreenSize();
+        f.setBounds(dimension.width/2 - Window.width/2, dimension.height/2 - Window.height/2, Window.width * 3 / 2,Window.height);
         return f;
     }
 
@@ -81,6 +90,23 @@ public class WindowFactory {
                 window.addButton(shipButton, "ship" + i + "" + t, window.ships[i].x + t * shipBlock, window.ships[i].y, shipBlock, shipBlock);
             }
         }
+
+        return window;
+    }
+
+    private static Window createGameWindow(GUI gui){
+        JFrame loadingFrame = GameFrame("Battle sea");
+        var window = new GameWindow(loadingFrame, "Battle sea", gui);
+
+        JLabel label = new JLabel("Wait for your turn",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 325,0,150, 50);
+
+        JButton exitButton = new JButton("EXIT");
+        exitButton.setActionCommand("EXIT");
+        window.addButton(exitButton,"EXIT", 685,500,100, 50);
+
+        window.addMyField(100,100);
+        window.addField(700,100);
 
         return window;
     }
