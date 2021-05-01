@@ -8,8 +8,7 @@ To see full project and commit history, visit full project respoitory: https://g
 
 Time tracking: 
 29.04: 20:00 - 01:30
-30.04: 22:00 - 00:00
-01.05: 12:00 - 17:00, 19:00 - 21:00
-Total: 14 hours
+01.05: 12:00 - 16:00, 19:00 - 21:00
+Total: 11 hours
 
 It's still a lot, but i might have accomplished this in deadline, if not for my job and other distractions.
