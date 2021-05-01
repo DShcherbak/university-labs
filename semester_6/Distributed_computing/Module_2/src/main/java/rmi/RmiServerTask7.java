@@ -1,7 +1,7 @@
 package rmi;
 
 import entity.*;
-import jdbc.DAOtask7;
+import dao.DAOtask7;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

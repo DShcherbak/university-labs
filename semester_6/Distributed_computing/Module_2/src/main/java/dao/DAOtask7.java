@@ -1,7 +1,6 @@
-package jdbc;
+package dao;
 
 import entity.*;
-import jdbc.ConnectionPool;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetFactory;

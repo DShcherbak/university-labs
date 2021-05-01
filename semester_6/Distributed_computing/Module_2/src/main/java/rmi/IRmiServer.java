@@ -1,18 +1,9 @@
 package rmi;
 
 import entity.*;
-import jdbc.ConnectionPool;
 
-import javax.sql.rowset.CachedRowSet;
-import javax.sql.rowset.RowSetFactory;
-import javax.sql.rowset.RowSetProvider;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 public interface IRmiServer extends Remote {

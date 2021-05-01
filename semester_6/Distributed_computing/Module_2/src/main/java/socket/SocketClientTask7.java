@@ -1,41 +1,33 @@
-package rmi;
+package socket;
 
 import entity.*;
 
-import java.rmi.AccessException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.sql.Timestamp;
+import java.io.*;
+import java.net.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class RmiClientTask7 {
+// Client class
+public class SocketClientTask7 {
 
     static Scanner input;
-
-    private RmiClientTask7() { }
-
     private static int inputInt(String s) {
         System.out.print(s);
         return input.nextInt();
     }
 
-    public static void main(String[] args) throws RemoteException {
+    // driver code
+    public static void main(String[] args)
+    {
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
         input = new Scanner(System.in);
-        System.out.println("Operation codes are two-digit integers XY, where X stands for operation type and Y stands for entity type");
-        System.out.println("Possible X values:\n 1 - select all\n 2 - select by id\n3 - create\n4 - update\5 - delete ");
-        System.out.println("Possible Y values:\n 1 - product\n 2 - parameter\n3 - product group\n4 - parameter group");
-        System.out.println("Also codes 01-06 correspond to 6 specific queries apart from CRUD. Code 00 corresponds to exit");
-        System.out.println("All other codes aren't valid");
 
-        try {
-            Registry registry = LocateRegistry.getRegistry(1235);
-            IRmiServer server = (IRmiServer) registry.lookup("productDatabase");
+        try (Socket socket = new Socket("localhost", 1234)) {
+            System.out.println("Connected to the server");
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+
 
             boolean clientRunning = true;
             String code = "11";
@@ -54,23 +46,17 @@ public class RmiClientTask7 {
                         clientRunning = false;
                         continue;
                     }
+                    out.writeObject("/task/" + entityCode);
                     switch (entityCode) {
-                        case 1 -> {
-                            groupId = inputInt("Enter group id:");
-                            result = server.task1(groupId);
-                        }
-                        case 2 -> {
-                            parameterId = inputInt("Enter parameter id:");
-                            result = server.task2(parameterId);
-                        }
-                        case 3 -> {
-                            groupId = inputInt("Enter group id:");
-                            result = server.task3(groupId);
-                        }
-                        case 4 -> {
-                            groupId = inputInt("Enter group id:");
-                            result = server.task4(groupId);
-                            //result.add(new ProductWithParameters(new Product("a", 1, "b", new Timestamp(0)), new HashMap<>()));
+                        case 1,2,3,4 -> {
+                            if(entityCode == 2){
+                                parameterId = inputInt("Enter parameter id:");
+                                out.writeInt(parameterId);
+                            } else {
+                                groupId = inputInt("Enter group id:");
+                                out.writeInt(groupId);                            }
+                            out.flush();
+                            result = (List) in.readObject();
                         }
                         case 5 -> {
                             int n = inputInt("Enter number of parameters:");
@@ -79,13 +65,17 @@ public class RmiClientTask7 {
                             for (int i = 0; i < n; i++) {
                                 params.set(i, inputInt(""));
                             }
-                            server.task5(params);
+                            out.writeObject(params);
                         }
                         case 6 -> {
                             parameterId = inputInt("Enter parameter id:");
                             int oldProductId = inputInt("Enter old product group id:");
-                            int newProductId = inputInt("Enter old product group id:");
-                            server.task6(parameterId, oldProductId, newProductId);
+                            int newProductId = inputInt("Enter new product group id:");
+                            ArrayList<Integer> list = new ArrayList<>();
+                            list.add(parameterId);
+                            list.add(oldProductId);
+                            list.add(newProductId);
+                            out.writeObject(list);
                         }
                     }
                     if(result != null) {
@@ -99,13 +89,16 @@ public class RmiClientTask7 {
                         continue;
                     }
                     if(operationCode == 1) {
-                        result = switch (entityCode) {
-                            case 1 -> server.selectParameterList();
-                            case 2 -> server.selectProductList();
-                            case 3 -> server.selectParameterGroupList();
-                            case 4 -> server.selectProductGroupList();
-                            default -> null;
-                        };
+                        switch (entityCode) {
+                            case 1 -> out.writeObject("/selectAll/parameter");
+                            case 2 -> out.writeObject("/selectAll/product");
+                            case 3 -> out.writeObject("/selectAll/parameterGroup");
+                            case 4 -> out.writeObject("/selectAll/productGroup");
+                            default -> {
+                            }
+                        }
+                        out.flush();
+                        result = (List) in.readObject();
                         if(result != null) {
                             for (var elem : result) {
                                 System.out.println(elem.toString());
@@ -113,74 +106,95 @@ public class RmiClientTask7 {
                         }
                     } else if(operationCode == 2) {
                         int id = inputInt("Enter id: ");
-                        var T = switch (entityCode) {
-                            case 1 -> server.selectParameter(id);
-                            case 2 -> server.selectProduct(id);
-                            case 3 -> server.selectParameterGroup(id);
-                            case 4 -> server.selectProductGroup(id);
-                            default -> null;
-                        };
+                        switch (entityCode) {
+                            case 1 -> out.writeObject("/select/parameter");
+                            case 2 -> out.writeObject("/select/product");
+                            case 3 -> out.writeObject("/select/parameterGroup");
+                            case 4 -> out.writeObject("/select/productGroup");
+                            default -> {
+                            }
+                        }
+                        out.writeInt(id);
+                        out.flush();
+                        var T = in.readObject();
                         System.out.println(T.toString());
                     } else if(operationCode == 3) {
                         switch (entityCode) {
                             case 1 -> {
                                 Parameter p = Parameter.createFromConsole();
-                                server.insertParameter(p);
+                                out.writeObject("/create/parameter");
+                                out.writeObject(p);
                             }
                             case 2 -> {
                                 Product p = Product.createFromConsole();
-                                server.insertProduct(p);
+                                out.writeObject("/create/product");
+                                out.writeObject(p);
                             }
                             case 3 -> {
                                 ParameterGroup p = ParameterGroup.createFromConsole();
-                                server.insertParameterGroup(p);
+                                out.writeObject("/create/parameterGroup");
+                                out.writeObject(p);
                             }
                             case 4 -> {
                                 ProductGroup p = ProductGroup.createFromConsole();
-                                server.insertProductGroup(p);
+                                out.writeObject("/create/productGroup");
+                                out.writeObject(p);
                             }
                             default -> {}
                         };
+                        out.flush();
                     } else if(operationCode == 4) {
                         int id = inputInt("Enter id: ");
                         switch (entityCode) {
                             case 1 -> {
                                 Parameter p = Parameter.createFromConsole();
-                                server.updateParameter(id, p);
+                                out.writeObject("/update/parameter");
+                                out.writeInt(id);
+                                out.writeObject(p);
                             }
                             case 2 -> {
                                 Product p = Product.createFromConsole();
-                                server.updateProduct(id, p);
+                                out.writeObject("/update/product");
+                                out.writeInt(id);
+                                out.writeObject(p);
                             }
                             case 3 -> {
                                 ParameterGroup p = ParameterGroup.createFromConsole();
-                                server.updateParameterGroup(id, p);
+                                out.writeObject("/update/parameterGroup");
+                                out.writeInt(id);
+                                out.writeObject(p);
                             }
                             case 4 -> {
                                 ProductGroup p = ProductGroup.createFromConsole();
-                                server.updateProductGroup(id, p);
+                                out.writeObject("/update/productGroup");
+                                out.writeInt(id);
+                                out.writeObject(p);
                             }
                             default -> {}
                         };
                     } else if(operationCode == 5) {
                         int id = inputInt("Enter id: ");
                         switch (entityCode) {
-                            case 1 -> server.deleteParameter(id);
-                            case 2 -> server.deleteProduct(id);
-                            case 3 -> server.deleteParameterGroup(id);
-                            case 4 -> server.deleteProductGroup(id);
+                            case 1 -> out.writeObject("/delete/parameter");
+                            case 2 -> out.writeObject("/delete/product");
+                            case 3 -> out.writeObject("/delete/parameterGroup");
+                            case 4 -> out.writeObject("/delete/productGroup");
                             default -> {
                             }
                         }
+                        out.writeInt(id);
                         ;
                     } else {
                         System.out.println("Incorrect operation code, try again");
                     }
                 }
             }
-        } catch (NotBoundException e) {
+            out.close();
+            in.close();
+        }
+        catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 }
-
