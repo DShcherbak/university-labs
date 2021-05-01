@@ -1,9 +1,6 @@
 package main;
 
-import entity.Parameter;
-import entity.ParameterGroup;
-import entity.Product;
-import entity.ProductGroup;
+import entity.*;
 import jdbc.ConnectionPool;
 
 import javax.sql.rowset.CachedRowSet;
@@ -70,10 +67,10 @@ public class DAOtask7 {
         return result;
     }
 
-    public List<Parameter> selectParameterList(){
+    private List<Parameter> selectParameterListInternal(String query){
         ArrayList<Parameter> result = new ArrayList<>();
         try{
-            CachedRowSet rs = selectQuery("select * from parameter");
+            CachedRowSet rs = selectQuery(query);
             while (rs.next()) {
                 result.add(Parameter.parseParameter(rs));
             }
@@ -83,21 +80,25 @@ public class DAOtask7 {
         return result;
     }
 
+    public List<Parameter> selectParameterList(){
+        return selectParameterListInternal("select * from parameter");
+    }
+
     public void insertParameter(Parameter parameter){
         String query = "insert into Parameter (name, unit, groupId) "
-                + "VALUES (" + parameter.toStringInsert() + ")";
+                + "values (" + parameter.toStringInsert() + ")";
         updateQuery(query);
     }
 
     public void updateParameter(int id, Parameter parameter){
-        String query = "UPDATE Parameter set ";
+        String query = "update Parameter set ";
         query += parameter.toStringUpdate();
-        query += " WHERE id = " +  id;
+        query += " where id = " +  id;
         updateQuery(query);
     }
 
     public void deleteParameter(int id){
-        String query = "DELETE FROM Parameter WHERE id = " + id;
+        String query = "delete from Parameter where id = " + id;
         updateQuery(query);
     }
 
@@ -114,10 +115,10 @@ public class DAOtask7 {
         return result;
     }
 
-    public List<Product> selectProductList(){
+    private List<Product> selectProductListInternal(String query){
         ArrayList<Product> result = new ArrayList<>();
         try{
-            CachedRowSet rs = selectQuery("select * from Product");
+            CachedRowSet rs = selectQuery(query);
             while (rs.next()) {
                 result.add(Product.parseProduct(rs));
             }
@@ -127,21 +128,25 @@ public class DAOtask7 {
         return result;
     }
 
+    public List<Product> selectProductList(){
+        return selectProductListInternal("select * from Product");
+    }
+
     public void insertProduct(Product Product){
         String query = "insert into Product (name, unit, groupId) "
-                + "VALUES (" + Product.toStringInsert() + ")";
+                + "values (" + Product.toStringInsert() + ")";
         updateQuery(query);
     }
 
     public void updateProduct(int id, Product Product){
-        String query = "UPDATE Product set ";
+        String query = "update Product set ";
         query += Product.toStringUpdate();
-        query += " WHERE id = " +  id;
+        query += " where id = " +  id;
         updateQuery(query);
     }
 
     public void deleteProduct(int id){
-        String query = "DELETE FROM Product WHERE id = " + id;
+        String query = "delete from Product where id = " + id;
         updateQuery(query);
     }
 
@@ -173,19 +178,19 @@ public class DAOtask7 {
 
     public void insertParameterGroup(ParameterGroup ParameterGroup){
         String query = "insert into ParameterGroup (name, unit, groupId) "
-                + "VALUES (" + ParameterGroup.toStringInsert() + ")";
+                + "values (" + ParameterGroup.toStringInsert() + ")";
         updateQuery(query);
     }
 
     public void updateParameterGroup(int id, ParameterGroup ParameterGroup){
-        String query = "UPDATE ParameterGroup set ";
+        String query = "update ParameterGroup set ";
         query += ParameterGroup.toStringUpdate();
-        query += " WHERE id = " +  id;
+        query += " where id = " +  id;
         updateQuery(query);
     }
 
     public void deleteParameterGroup(int id){
-        String query = "DELETE FROM ParameterGroup WHERE id = " + id;
+        String query = "delete from ParameterGroup where id = " + id;
         updateQuery(query);
     }
 
@@ -217,20 +222,85 @@ public class DAOtask7 {
 
     public void insertProductGroup(ProductGroup ProductGroup){
         String query = "insert into ProductGroup (name, unit, groupId) "
-                + "VALUES (" + ProductGroup.toStringInsert() + ")";
+                + "values (" + ProductGroup.toStringInsert() + ")";
         updateQuery(query);
     }
 
     public void updateProductGroup(int id, ProductGroup ProductGroup){
-        String query = "UPDATE ProductGroup set ";
+        String query = "update ProductGroup set ";
         query += ProductGroup.toStringUpdate();
-        query += " WHERE id = " +  id;
+        query += " where id = " +  id;
         updateQuery(query);
     }
 
     public void deleteProductGroup(int id){
-        String query = "DELETE FROM ProductGroup WHERE id = " + id;
+        String query = "delete from ProductGroup where id = " + id;
         updateQuery(query);
     }
+
+
+    //Вывести перечень параметров для заданной группы продукции.
+    public List<Parameter> task1(int groupId){
+        String query = "select distinct pa.* from parameter pa " +
+                "inner join parameterGroup pag on  pa.groupId = pag.Id " +
+                "inner join group_x_group gg on gg.parameterId = pag.Id " +
+                "inner join productGroup prg on prg.id = gg.productId " +
+                "where prg.id = " + groupId;
+        return selectParameterListInternal(query);
+    }
+
+    //Вывести перечень продукции, не содержащий заданного параметра.
+    public List<Product> task2(int parameterId){
+        String query = "select * from product where not id in " +
+                    "(select productId from product_x_parameter where parameterId = " + parameterId + ")";
+        return selectProductListInternal(query);
+    }
+
+    //Вывести информацию о продукции для заданной группы
+    public List<Product> task3(int groupId){
+        String query = "select * from product where product.groupId = " + groupId;
+        return selectProductListInternal(query);
+    }
+
+    //Вывести информацию о продукции для заданной группы
+    public List<ProductWithParameters> task4(int groupId){
+        String query = "select * from product where product.groupId = " + groupId;
+        List<ProductWithParameters> result = new ArrayList<>();
+        try{
+            CachedRowSet rs = selectQuery(query);
+            while (rs.next()) {
+                result.add(ProductWithParameters.parseProduct(rs));
+            }
+        } catch (SQLException e) {
+            throw new Error("Couldn't parse route: ", e);
+        }
+        result = ProductWithParameters.accumulate(result);
+        return result;
+    }
+
+    private String makeStringList(List<Integer> list){
+        StringBuilder result = new StringBuilder("(");
+        for(var elem : list){
+            result.append(elem.toString()).append(",");
+        }
+        return result.substring(0, result.length()-1) + ")";
+    }
+
+    //Удалить из базы продукцию, содержащую заданные параметры.
+    public void task5(List<Integer> parameters) {
+        String list = makeStringList(parameters);
+        String sql = "delete from Product where id in " +
+                "(select productId from product_x_parameter where parameterId in " + list + ")";
+        updateQuery(sql);
+        sql = "delete from product_x_parameter where parameterId in " + list;
+        updateQuery(sql);
+    }
+
+    //Переместить группу параметров из одной группы товаров в другую.
+    public void task6(long parameterGroupId, long fromGroupId, long toGroupId) {
+        String sql = "update group_x_group set productId = " + toGroupId + " where productId = " + fromGroupId + " and parameterId = " + parameterGroupId;
+        updateQuery(sql);
+    }
+
 
 }

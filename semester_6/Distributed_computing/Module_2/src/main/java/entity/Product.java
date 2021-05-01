@@ -8,10 +8,10 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 public class Product implements Serializable {
-    private long id;
+    private int id;
     private String name;
     private String description;
-    private long groupId;
+    private int groupId;
     private Timestamp timestamp;
 
     public static Product parseProduct(RowSet rs) {
@@ -29,7 +29,7 @@ public class Product implements Serializable {
     }
 
 
-    public Product(long id, String name, long groupId, String description, Timestamp timestamp) {
+    public Product(int id, String name, int groupId, String description, Timestamp timestamp) {
         this.id = id;
         this.name = name;
         this.groupId = groupId;
@@ -37,7 +37,7 @@ public class Product implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Product(String name, long groupId, String description, Timestamp timestamp) {
+    public Product(String name, int groupId, String description, Timestamp timestamp) {
         this.name = name;
         this.groupId = groupId;
         this.description = description;
@@ -73,6 +73,10 @@ public class Product implements Serializable {
                 "'" + description + "', " +
                 "'" + timestamp.toString() + "'";
 
+    }
+
+    public int getId() {
+        return id;
     }
 }
 
