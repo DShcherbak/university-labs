@@ -1,4 +1,4 @@
-package main;
+package jdbc;
 
 import entity.*;
 import jdbc.ConnectionPool;
@@ -133,7 +133,7 @@ public class DAOtask7 {
     }
 
     public void insertProduct(Product Product){
-        String query = "insert into Product (name, unit, groupId) "
+        String query = "insert into Product (name, groupId, description, creationDate) "
                 + "values (" + Product.toStringInsert() + ")";
         updateQuery(query);
     }
@@ -177,7 +177,7 @@ public class DAOtask7 {
     }
 
     public void insertParameterGroup(ParameterGroup ParameterGroup){
-        String query = "insert into ParameterGroup (name, unit, groupId) "
+        String query = "insert into ParameterGroup (name) "
                 + "values (" + ParameterGroup.toStringInsert() + ")";
         updateQuery(query);
     }
@@ -221,7 +221,7 @@ public class DAOtask7 {
     }
 
     public void insertProductGroup(ProductGroup ProductGroup){
-        String query = "insert into ProductGroup (name, unit, groupId) "
+        String query = "insert into ProductGroup (name) "
                 + "values (" + ProductGroup.toStringInsert() + ")";
         updateQuery(query);
     }
@@ -264,7 +264,10 @@ public class DAOtask7 {
 
     //Вывести информацию о продукции для заданной группы
     public List<ProductWithParameters> task4(int groupId){
-        String query = "select * from product where product.groupId = " + groupId;
+        String query = "SELECT pr.*, pa.name, pp.value FROM product pr " +
+                "inner join product_x_parameter pp on pr.id = pp.productId " +
+                "inner join parameter pa on pa.id = pp.parameterId " +
+                "order by pr.id";
         List<ProductWithParameters> result = new ArrayList<>();
         try{
             CachedRowSet rs = selectQuery(query);

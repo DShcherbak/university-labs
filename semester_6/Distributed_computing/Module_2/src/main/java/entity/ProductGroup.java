@@ -2,6 +2,8 @@ package entity;
 
 import java.io.Serializable;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.Scanner;
 
 public class ProductGroup implements Serializable {
     private long id;
@@ -35,7 +37,22 @@ public class ProductGroup implements Serializable {
         return result + "name='" + name + "'";
     }
 
+    @Override
+    public String toString() {
+        return "ProductGroup{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public String toStringInsert(){
         return "'" + name + "'";
+    }
+
+    public static ProductGroup createFromConsole(){
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter name: ");
+        String name = input.next();
+        return new ProductGroup(name);
     }
 }

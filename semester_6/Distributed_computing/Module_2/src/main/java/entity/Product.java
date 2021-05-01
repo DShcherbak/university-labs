@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class Product implements Serializable {
     private int id;
@@ -77,6 +78,35 @@ public class Product implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public static Product createFromConsole(){
+        try{
+            Scanner input = new Scanner(System.in);
+            System.out.print("Enter name: ");
+            String name = input.next();
+            System.out.print("Enter groupId: ");
+            int groupId = input.nextInt();
+            System.out.print("Enter description: ");
+            String description = input.next();
+            System.out.print("Enter creation date (in format yyyy-mm-dd) : ");
+            String creationTime = input.nextLine();
+            while(creationTime.length() != 10){
+                System.out.println(creationTime);
+                System.out.println(creationTime.length());
+                creationTime = input.next();
+            }
+            //2021-04-12
+            Timestamp t = null;
+            try{
+                t = Timestamp.valueOf(creationTime + " 00:00:00");
+            }catch (Exception ignored){
+            }
+            return new Product(name, groupId, description, t);
+        }catch (Exception ignored){
+
+        }
+        return null;
     }
 }
 

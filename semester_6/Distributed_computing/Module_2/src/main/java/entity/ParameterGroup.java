@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.sql.ResultSet;
 import java.util.Objects;
+import java.util.Scanner;
 
 public class ParameterGroup implements Serializable {
     private long id;
@@ -38,5 +39,20 @@ public class ParameterGroup implements Serializable {
 
     public String toStringInsert(){
         return "'" + name + "'";
+    }
+
+    @Override
+    public String toString() {
+        return "ParameterGroup{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public static ParameterGroup createFromConsole(){
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter name: ");
+        String name = input.next();
+        return new ParameterGroup(name);
     }
 }
