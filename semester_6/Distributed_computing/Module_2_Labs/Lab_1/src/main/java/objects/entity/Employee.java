@@ -45,6 +45,10 @@ public class Employee implements Serializable {
         this.surname = surname;
     }
 
+    public String getFullName(){
+        return name + " " + surname;
+    }
+
     public long getSalary() {
         return salary;
     }

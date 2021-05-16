@@ -8,9 +8,11 @@ import gui.Window;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EmployeeWindow extends Window {
-
+    protected Map<String, JTextField> fieldMap = new HashMap<>();
     public EmployeeWindow(JFrame frame, String title, GUI gui) {
         super(frame, title, gui);
         this.listener = new EmployeeWindowListener();
@@ -28,5 +30,19 @@ public class EmployeeWindow extends Window {
 
 
         }
+    }
+
+    public void addField(JTextField field, String name, int x, int y, int w, int h){
+        field.setBounds(x,y, w,h);
+        field.setSize(w,h);
+        frame.add(field);
+        fieldMap.put(name, field);
+        field.addActionListener(listener);
+    }
+
+    public void addComboBox(JComboBox<String> list, int x, int y, int w, int h){
+        list.setBounds(x,y, w,h);
+        list.setSize(w,h);
+        frame.add(list);
     }
 }

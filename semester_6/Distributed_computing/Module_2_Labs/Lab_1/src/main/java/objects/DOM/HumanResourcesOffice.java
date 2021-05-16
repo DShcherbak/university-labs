@@ -17,7 +17,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import objects.DAO.iDAO;
@@ -61,7 +60,7 @@ public class HumanResourcesOffice implements iDAO {
         for(var department : departments){
             hr.employees.put(department.getName(), new ArrayList<>());
             for(var employee : department.getEmployees()){
-                hr.employees.get(department.getName()).add(employee.getName());
+                hr.employees.get(department.getName()).add(employee.getFullName());
             }
         }
         return hr;
@@ -178,7 +177,7 @@ public class HumanResourcesOffice implements iDAO {
     @Override
     public Employee getEmployeeByName(String name) {
         var employee = employees.stream()
-                .filter(employee1 -> employee1.getName().equals(name)).findFirst();
+                .filter(employee1 -> employee1.getFullName().equals(name)).findFirst();
         if(employee.isEmpty())
             return null;
         else

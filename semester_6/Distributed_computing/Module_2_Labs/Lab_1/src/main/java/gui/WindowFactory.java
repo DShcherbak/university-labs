@@ -2,6 +2,8 @@ package gui;
 
 import connection.client.ClientProgram;
 import gui.windows.*;
+import objects.entity.Department;
+import objects.entity.Employee;
 import objects.entity.HumanResources;
 
 import javax.swing.*;
@@ -12,6 +14,7 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class WindowFactory {
     public static Window GetWindow(GUI gui, GUI.GuiState state){
@@ -134,24 +137,83 @@ public class WindowFactory {
     }
 
     private static Window createDepartmentScreen(GUI gui){
-        String departmentName = ClientProgram.getCurrentDepartment().getName();
-        JFrame startGameFrame = defaultJFrame("Department " + departmentName);
+        Department department = ClientProgram.getCurrentDepartment();
+        JFrame startGameFrame = defaultJFrame("Department " + department.getName());
         var window = new DepartmentWindow(startGameFrame,  "Start Screen", gui);
 
         JButton backButton = new JButton("Назад");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
+
+        JLabel nameLabel = new JLabel("Назва відділу");
+        window.addLabel(nameLabel,"NAME", 50,80,200, 50);
+        JTextField nameField = new JTextField(department.getName());
+        window.addField(nameField, "NAME", 250,80,200, 50);
+
+        JLabel powerLabel = new JLabel("Вплив");
+        window.addLabel(powerLabel,"POWER", 50,130,200, 50);
+        JTextField powerField = new JTextField(String.valueOf(department.getPower()));
+        window.addField(powerField, "POWER", 250,130,200, 50);
+
+        JLabel employeesLabel = new JLabel("Співробітники");
+        window.addLabel(employeesLabel,"EMPLOYEES", 50,180,200, 50);
+
+        ArrayList<String> list = (ArrayList<String>) department.getEmployees().stream().map(Employee::getFullName).collect(Collectors.toList());
+        String[] data1 = list.toArray(new String[0]);
+        JList<String> employeesList = new JList<>(data1);
+
+        window.addList(employeesList, 250, 180, 200, 200);
         return window;
     }
 
     private static Window createEmployeeScreen(GUI gui){
-        String employeeName = ClientProgram.getCurrentEmployee().getName();
-        JFrame startGameFrame = defaultJFrame("Employee " + employeeName);
+        Employee employee = ClientProgram.getCurrentEmployee();
+        JFrame startGameFrame = defaultJFrame("Employee " + employee.getFullName());
         var window = new EmployeeWindow(startGameFrame,  "Start Screen", gui);
 
         JButton backButton = new JButton("Назад");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
+
+        JLabel nameLabel = new JLabel("Ім'я");
+        window.addLabel(nameLabel,"NAME", 50,80,200, 50);
+        JTextField nameField = new JTextField(employee.getName());
+        window.addField(nameField, "NAME", 250,80,200, 50);
+
+        JLabel surnameLabel = new JLabel("Прізвище");
+        window.addLabel(surnameLabel,"SURNAME", 50,130,200, 50);
+        JTextField surnameField = new JTextField(employee.getSurname());
+        window.addField(surnameField, "SURNAME", 250,130,200, 50);
+
+        JLabel powerLabel = new JLabel("Зарплатня");
+        window.addLabel(powerLabel,"SALARY", 50,180,200, 50);
+        JTextField powerField = new JTextField(String.valueOf(employee.getSalary()));
+        window.addField(powerField, "SALARY", 250,180,200, 50);
+
+        JLabel positionLabel = new JLabel("Посада");
+        window.addLabel(positionLabel,"POSITION", 50,230,200, 50);
+        JTextField positionField = new JTextField(employee.getPosition());
+        window.addField(positionField, "POSITION", 250,230,200, 50);
+
+        JLabel departmentLabel = new JLabel("Відділ");
+        window.addLabel(departmentLabel,"DEPARTMENT", 50,280,200, 50);
+        ArrayList<String> departmentsNames;
+        ArrayList<Department> departments = new ArrayList<>();
+        try {
+           departments = (ArrayList<Department>) gui.Client().getDepartments();
+        }catch (Exception ignored){}
+        departmentsNames = (ArrayList<String>) departments.stream()
+                .map(Department::getName).collect(Collectors.toList());
+        long chosenIndex = 0;
+        for(int i = 0; i < departments.size(); i++){
+            if(departments.get(i).getId() == employee.getDepartmentId()){
+                chosenIndex = i;
+            }
+        }
+        String[] data1 = departmentsNames.toArray(new String[0]);
+        JComboBox<String> department = new JComboBox<>(data1);
+        department.setSelectedIndex((int) chosenIndex);
+        window.addComboBox(department, 250, 280,200,50);
 
         return window;
     }
