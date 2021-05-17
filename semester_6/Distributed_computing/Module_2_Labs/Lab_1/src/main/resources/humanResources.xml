@@ -1,1 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><HumanResources><Department id="0" name="IT" power="5"><Employee departmentId="0" id="0" name="Den" position="Department Head" salary="3000" surname="Shcherbak"/><Employee departmentId="0" id="1" name="Ivan" position="Senior developer" salary="2500" surname="Ramyk"/><Employee departmentId="0" id="2" name="Vasya" position="Senior developer" salary="2500" surname="Borysiuk"/></Department><Department id="1" name="Management" power="2"><Employee departmentId="1" id="3" name="Volodymyr Anatoliyovych" position="Head of department" salary="5000" surname="Shcherbak"/></Department><Department id="2" name="Legal" power="4"><Employee departmentId="2" id="4" name="Oleg" position="Legal expert" salary="2500" surname="Fedoruk"/><Employee departmentId="2" id="5" name="Den" position="Legal expert" salary="2500" surname="Panchuk"/></Department></HumanResources>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<HumanResources>
+    <Department id="0" name="IT" power="5">
+        <Employee departmentId="0" id="0" name="Den" position="Department Head" salary="3000" surname="Shcherbak the second"/>
+        <Employee departmentId="0" id="1" name="Ivan" position="Senior developer" salary="2500" surname="Ramyk"/>
+        <Employee departmentId="0" id="2" name="Vasya" position="Senior developer" salary="2500" surname="Borysiuk"/>
+    </Department>
+    <Department id="1" name="Management" power="2">
+    <Employee departmentId="1" id="3" name="Volodymyr Anatoliyovych" position="Head of department" salary="5000" surname="Shcherbak"/>
+    </Department>
+    <Department id="2" name="Legal" power="4">
+        <Employee departmentId="2" id="4" name="Oleg" position="Legal expert" salary="2500" surname="Fedoruk"/>
+        <Employee departmentId="2" id="5" name="Den" position="Legal expert" salary="2500" surname="Panchuk"/>
+    </Department>
+    <Department id="3" name="Empty" power="0">
+        <Employee departmentId="3" id="6" name="Empty" position="Doing nothing" salary="1500" surname="Worker"/>
+    </Department></HumanResources>

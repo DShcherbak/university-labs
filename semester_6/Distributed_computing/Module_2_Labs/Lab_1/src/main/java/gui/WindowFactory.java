@@ -80,20 +80,20 @@ public class WindowFactory {
         return window;
     }
 
-    final static String ROOT = "Відділ кадрів";
+    final static String ROOT = "Human Resources";
     private static Window createDaoWindow(GUI gui){
         JFrame startGameFrame = defaultJFrame("Human Resources");
         var window = new DaoWindow(startGameFrame,  "Start Screen", gui);
 
-        JButton saveButton = new JButton("Зберегти зміни");
+        JButton saveButton = new JButton("Save changes");
         saveButton.setActionCommand("SAVE");
         window.addButton(saveButton,"SAVE", 50,10,200, 40);
 
-        JButton addDepButton = new JButton("Створити відділ");
+        JButton addDepButton = new JButton("Create a department");
         addDepButton.setActionCommand("ADD DEP");
         window.addButton(addDepButton,"ADD DEP", 300,10,200, 40);
 
-        JButton addEmpButton = new JButton("Найняти співробітника");
+        JButton addEmpButton = new JButton("Hire an employee");
         addEmpButton.setActionCommand("ADD EMP");
         window.addButton(addEmpButton,"ADD EMP", 550,10,200, 40);
 
@@ -157,21 +157,21 @@ public class WindowFactory {
         JLabel label = new JLabel("",JLabel.CENTER );
         window.addLabel(label,"HEAD", 350,10,200, 50);
 
-        JButton backButton = new JButton("Назад");
+        JButton backButton = new JButton("Back");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
 
-        JLabel nameLabel = new JLabel("Назва відділу");
+        JLabel nameLabel = new JLabel("Department name");
         window.addLabel(nameLabel,"NAME", 50,80,200, 50);
         JTextField nameField = new JTextField(department.getName());
         window.addField(nameField, "NAME", 250,80,200, 50);
 
-        JLabel powerLabel = new JLabel("Вплив");
+        JLabel powerLabel = new JLabel("Influence");
         window.addLabel(powerLabel,"POWER", 50,130,200, 50);
         JTextField powerField = new JTextField(String.valueOf(department.getPower()));
         window.addField(powerField, "POWER", 250,130,200, 50);
 
-        JLabel employeesLabel = new JLabel("Співробітники");
+        JLabel employeesLabel = new JLabel("Employees");
         window.addLabel(employeesLabel,"EMPLOYEES", 50,180,200, 50);
 
         ArrayList<String> list = (ArrayList<String>) department.getEmployees().stream().map(Employee::getFullName).collect(Collectors.toList());
@@ -180,11 +180,11 @@ public class WindowFactory {
 
         window.addList(employeesList, 250, 180, 200, 200);
 
-        JButton updateButton = new JButton("Зберегти зміни");
+        JButton updateButton = new JButton("Save changes");
         updateButton.setActionCommand("UPDATE");
         window.addButton(updateButton,"UPDATE", 50,480,200, 40);
 
-        JButton deleteButton = new JButton("Розпустити відділ");
+        JButton deleteButton = new JButton("Dissolve department");
         deleteButton.setActionCommand("DELETE");
         window.addButton(deleteButton,"DELETE", 250,480,200, 40);
         return window;
@@ -195,26 +195,26 @@ public class WindowFactory {
         JFrame startGameFrame = defaultJFrame("Employee " + employee.getFullName());
         var window = new EmployeeWindow(startGameFrame,  "Start Screen", gui);
 
-        JButton backButton = new JButton("Назад");
+        JButton backButton = new JButton("Back");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
 
-        JLabel nameLabel = new JLabel("Ім'я");
+        JLabel nameLabel = new JLabel("Name");
         window.addLabel(nameLabel,"NAME", 50,80,200, 50);
         JTextField nameField = new JTextField(employee.getName());
         window.addField(nameField, "NAME", 250,80,200, 50);
 
-        JLabel surnameLabel = new JLabel("Прізвище");
+        JLabel surnameLabel = new JLabel("Surname");
         window.addLabel(surnameLabel,"SURNAME", 50,130,200, 50);
         JTextField surnameField = new JTextField(employee.getSurname());
         window.addField(surnameField, "SURNAME", 250,130,200, 50);
 
-        JLabel powerLabel = new JLabel("Зарплатня");
+        JLabel powerLabel = new JLabel("Salary");
         window.addLabel(powerLabel,"SALARY", 50,180,200, 50);
         JTextField powerField = new JTextField(String.valueOf(employee.getSalary()));
         window.addField(powerField, "SALARY", 250,180,200, 50);
 
-        JLabel positionLabel = new JLabel("Посада");
+        JLabel positionLabel = new JLabel("Position");
         window.addLabel(positionLabel,"POSITION", 50,230,200, 50);
         JTextField positionField = new JTextField(employee.getPosition());
         window.addField(positionField, "POSITION", 250,230,200, 50);
@@ -222,7 +222,7 @@ public class WindowFactory {
         JLabel label = new JLabel("",JLabel.CENTER );
         window.addLabel(label,"HEAD", 350,10,200, 50);
 
-        JLabel departmentLabel = new JLabel("Відділ");
+        JLabel departmentLabel = new JLabel("Department");
         window.addLabel(departmentLabel,"DEPARTMENT", 50,280,200, 50);
         ArrayList<String> departmentsNames;
         ArrayList<Department> departments = new ArrayList<>();
@@ -242,6 +242,16 @@ public class WindowFactory {
         department.setSelectedIndex((int) chosenIndex);
         window.addComboBox(department, 250, 280,200,50);
 
+        JButton deleteButton = new JButton("Fire worker");
+        deleteButton.setActionCommand("DELETE");
+        window.addButton(deleteButton,"DELETE", 250,480,200, 40);
+
+        JButton updateButton = new JButton("Save changes");
+        updateButton.setActionCommand("UPDATE");
+        window.addButton(updateButton,"UPDATE", 50,480,200, 40);
+
+
+
         return window;
     }
 
@@ -252,22 +262,22 @@ public class WindowFactory {
         JLabel label = new JLabel("",JLabel.CENTER );
         window.addLabel(label,"HEAD", 350,10,200, 50);
 
-        JButton backButton = new JButton("Назад");
+        JButton backButton = new JButton("Back");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
 
-        JLabel nameLabel = new JLabel("Назва відділу");
+        JLabel nameLabel = new JLabel("Department name");
         window.addLabel(nameLabel,"NAME", 50,80,200, 50);
         JTextField nameField = new JTextField("");
         window.addField(nameField, "NAME", 250,80,200, 50);
 
-        JLabel powerLabel = new JLabel("Вплив");
+        JLabel powerLabel = new JLabel("Influence");
         window.addLabel(powerLabel,"POWER", 50,130,200, 50);
         JTextField powerField = new JTextField();
         window.addField(powerField, "POWER", 250,130,200, 50);
 
 
-        JButton updateButton = new JButton("Створити");
+        JButton updateButton = new JButton("Create");
         updateButton.setActionCommand("ADD");
         window.addButton(updateButton,"ADD", 50,480,200, 40);
         return window;
@@ -277,34 +287,34 @@ public class WindowFactory {
         JFrame startGameFrame = defaultJFrame("New Employee");
         var window = new EmployeeWindow(startGameFrame,  "Start Screen", gui);
 
-        JButton backButton = new JButton("Назад");
+        JButton backButton = new JButton("Back");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
 
         JLabel label = new JLabel("",JLabel.CENTER );
         window.addLabel(label,"HEAD", 350,10,200, 50);
 
-        JLabel nameLabel = new JLabel("Ім'я");
+        JLabel nameLabel = new JLabel("Name");
         window.addLabel(nameLabel,"NAME", 50,80,200, 50);
         JTextField nameField = new JTextField();
         window.addField(nameField, "NAME", 250,80,200, 50);
 
-        JLabel surnameLabel = new JLabel("Прізвище");
+        JLabel surnameLabel = new JLabel("Surname");
         window.addLabel(surnameLabel,"SURNAME", 50,130,200, 50);
         JTextField surnameField = new JTextField();
         window.addField(surnameField, "SURNAME", 250,130,200, 50);
 
-        JLabel powerLabel = new JLabel("Зарплатня");
+        JLabel powerLabel = new JLabel("Salary");
         window.addLabel(powerLabel,"SALARY", 50,180,200, 50);
         JTextField powerField = new JTextField();
         window.addField(powerField, "SALARY", 250,180,200, 50);
 
-        JLabel positionLabel = new JLabel("Посада");
+        JLabel positionLabel = new JLabel("Position");
         window.addLabel(positionLabel,"POSITION", 50,230,200, 50);
         JTextField positionField = new JTextField();
         window.addField(positionField, "POSITION", 250,230,200, 50);
 
-        JLabel departmentLabel = new JLabel("Відділ");
+        JLabel departmentLabel = new JLabel("Department");
         window.addLabel(departmentLabel,"DEPARTMENT", 50,280,200, 50);
         ArrayList<Department> departments = new ArrayList<>();
         ArrayList<String> departmentsNames;
@@ -318,7 +328,7 @@ public class WindowFactory {
         department.setSelectedIndex(0);
         window.addComboBox(department, 250, 280,200,50);
 
-        JButton updateButton = new JButton("Створити");
+        JButton updateButton = new JButton("Create");
         updateButton.setActionCommand("ADD");
         window.addButton(updateButton,"ADD", 50,480,200, 40);
         return window;
