@@ -33,6 +33,8 @@ public class HumanResourcesOffice implements iDAO {
     @Override
     public boolean read() {
         try{
+            departments = new ArrayList<>();
+            employees = new ArrayList<>();
             loadFromFile("humanResources.xml");
         }catch (Exception ex){
             System.out.println("Error while loading from xml-file: " + ex.getMessage());

@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.swing.*;
 
 public class GUI {
-    public enum GuiState {StartScreen, ClientScreen, DaoScreen, DepartmentScreen, EmployeeScreen};
+    public enum GuiState {StartScreen, ClientScreen, DaoScreen, DepartmentScreen, EmployeeScreen, AddDepartmentScreen, AddEmployeeScreen};
     private GuiState currentState;
     private Map<GuiState, Window> windows = new HashMap<>();
     private iClient client;

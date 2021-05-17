@@ -47,4 +47,25 @@ public class Window {
             label.setVisible(visibility);
         }
     }
+
+    public boolean correctName(String name){
+        for(int i = 0; i < name.length(); i++){
+            if((Character.toLowerCase(name.charAt(i)) >= 'a' && Character.toLowerCase(name.charAt(i)) <= 'z')
+                || name.charAt(i) == ' ' || name.charAt(i) == '-'){
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public boolean correctNumber(String name){
+        for(int i = 0; i < name.length(); i++){
+            if(name.charAt(i) <= '9' && name.charAt(i) >= '0'){
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
 }

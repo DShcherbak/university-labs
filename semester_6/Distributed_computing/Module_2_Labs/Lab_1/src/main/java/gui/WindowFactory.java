@@ -24,6 +24,8 @@ public class WindowFactory {
             case DaoScreen -> createDaoWindow(gui);
             case DepartmentScreen -> createDepartmentScreen(gui);
             case EmployeeScreen -> createEmployeeScreen(gui);
+            case AddDepartmentScreen -> createAddDepartmentScreen(gui);
+            case AddEmployeeScreen -> createAddEmployeeScreen(gui);
         };
     }
     private static JFrame defaultJFrame(String title){
@@ -82,6 +84,19 @@ public class WindowFactory {
     private static Window createDaoWindow(GUI gui){
         JFrame startGameFrame = defaultJFrame("Human Resources");
         var window = new DaoWindow(startGameFrame,  "Start Screen", gui);
+
+        JButton saveButton = new JButton("Зберегти зміни");
+        saveButton.setActionCommand("SAVE");
+        window.addButton(saveButton,"SAVE", 50,10,200, 40);
+
+        JButton addDepButton = new JButton("Створити відділ");
+        addDepButton.setActionCommand("ADD DEP");
+        window.addButton(addDepButton,"ADD DEP", 300,10,200, 40);
+
+        JButton addEmpButton = new JButton("Найняти співробітника");
+        addEmpButton.setActionCommand("ADD EMP");
+        window.addButton(addEmpButton,"ADD EMP", 550,10,200, 40);
+
         var humanResources = ClientProgram.getHumanResources();
         TreeModel model = createTreeModel(humanResources);
         JTree tree = new JTree(model);
@@ -91,15 +106,14 @@ public class WindowFactory {
         tree.addTreeSelectionListener(new SelectionListener());
         JPanel contents = new JPanel(new GridLayout(1, 3));
         contents.add(new JScrollPane(tree));
-        contents.setBounds(0,0, 800,600);
+        contents.setBounds(0,50, 800,600);
         contents.setSize(800,600);
         window.treePanel = contents;
         window.frame.add(contents);
         return window;
     }
 
-    private static TreeModel createTreeModel(HumanResources humanResources)
-    {
+    private static TreeModel createTreeModel(HumanResources humanResources) {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(ROOT);
         ArrayList<DefaultMutableTreeNode> nodes = new ArrayList<>();
         int i = 0;
@@ -116,8 +130,7 @@ public class WindowFactory {
         return new DefaultTreeModel(root);
     }
 
-    static class SelectionListener implements TreeSelectionListener
-    {
+    static class SelectionListener implements TreeSelectionListener {
         public void valueChanged(TreeSelectionEvent e)
         {
             String name = e.getPath().getLastPathComponent().toString();
@@ -141,6 +154,9 @@ public class WindowFactory {
         JFrame startGameFrame = defaultJFrame("Department " + department.getName());
         var window = new DepartmentWindow(startGameFrame,  "Start Screen", gui);
 
+        JLabel label = new JLabel("",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,10,200, 50);
+
         JButton backButton = new JButton("Назад");
         backButton.setActionCommand("BACK");
         window.addButton(backButton,"BACK", 10,10,100, 25);
@@ -163,6 +179,14 @@ public class WindowFactory {
         JList<String> employeesList = new JList<>(data1);
 
         window.addList(employeesList, 250, 180, 200, 200);
+
+        JButton updateButton = new JButton("Зберегти зміни");
+        updateButton.setActionCommand("UPDATE");
+        window.addButton(updateButton,"UPDATE", 50,480,200, 40);
+
+        JButton deleteButton = new JButton("Розпустити відділ");
+        deleteButton.setActionCommand("DELETE");
+        window.addButton(deleteButton,"DELETE", 250,480,200, 40);
         return window;
     }
 
@@ -195,6 +219,9 @@ public class WindowFactory {
         JTextField positionField = new JTextField(employee.getPosition());
         window.addField(positionField, "POSITION", 250,230,200, 50);
 
+        JLabel label = new JLabel("",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,10,200, 50);
+
         JLabel departmentLabel = new JLabel("Відділ");
         window.addLabel(departmentLabel,"DEPARTMENT", 50,280,200, 50);
         ArrayList<String> departmentsNames;
@@ -218,82 +245,83 @@ public class WindowFactory {
         return window;
     }
 
-/*
-    private static Window createConstructorWindow(GUI gui){
-        JFrame loadingFrame = defaultJFrame("Game preparations");
-        var window = new ConstructionWindow(loadingFrame,  "Place your ships", gui);
+    private static Window createAddDepartmentScreen(GUI gui){
+        JFrame startGameFrame = defaultJFrame("New Department");
+        var window = new DepartmentWindow(startGameFrame,  "Start Screen", gui);
 
-        JLabel label = new JLabel("Place your ships!",JLabel.CENTER );
-        window.addLabel(label,"PLACE", 325,0,150, 50);
+        JLabel label = new JLabel("",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,10,200, 50);
 
-        JButton startButton = new JButton("READY");
-        startButton.setActionCommand("READY");
-        window.addButton(startButton,"READY", 685,500,100, 50);
+        JButton backButton = new JButton("Назад");
+        backButton.setActionCommand("BACK");
+        window.addButton(backButton,"BACK", 10,10,100, 25);
 
-        JButton rotateButton = new JButton("ROTATE");
-        rotateButton.setActionCommand("ROTATE");
-        window.addButton(rotateButton,"ROTATE", 685,430,100, 50);
+        JLabel nameLabel = new JLabel("Назва відділу");
+        window.addLabel(nameLabel,"NAME", 50,80,200, 50);
+        JTextField nameField = new JTextField("");
+        window.addField(nameField, "NAME", 250,80,200, 50);
 
-        window.addField(100,100);
-        window.ships = GuiShip.getStartingShips();
+        JLabel powerLabel = new JLabel("Вплив");
+        window.addLabel(powerLabel,"POWER", 50,130,200, 50);
+        JTextField powerField = new JTextField();
+        window.addField(powerField, "POWER", 250,130,200, 50);
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(window.ships[i].size);
-            for(int t = 0; t < window.ships[i].size; t++){
-                int shipBlock = 20;
-                JButton shipButton = new JButton();
-                shipButton.setActionCommand("ship" + i);
-                window.addButton(shipButton, "ship" + i + "" + t, window.ships[i].x + t * shipBlock, window.ships[i].y, shipBlock, shipBlock);
-            }
-        }
 
+        JButton updateButton = new JButton("Створити");
+        updateButton.setActionCommand("ADD");
+        window.addButton(updateButton,"ADD", 50,480,200, 40);
         return window;
     }
 
-    private static Window createGameWindow(GUI gui){
-        JFrame loadingFrame = GameFrame("Battle sea");
-        var window = new GameWindow(loadingFrame, "Battle sea", gui);
+    private static Window createAddEmployeeScreen(GUI gui){
+        JFrame startGameFrame = defaultJFrame("New Employee");
+        var window = new EmployeeWindow(startGameFrame,  "Start Screen", gui);
 
-        JLabel label = new JLabel("HEAD",JLabel.CENTER );
-        if(window.yourMove){
-            label.setText("Your move");
-        }
-        window.addLabel(label,"HEAD", 325,0,150, 50);
+        JButton backButton = new JButton("Назад");
+        backButton.setActionCommand("BACK");
+        window.addButton(backButton,"BACK", 10,10,100, 25);
 
+        JLabel label = new JLabel("",JLabel.CENTER );
+        window.addLabel(label,"HEAD", 350,10,200, 50);
 
+        JLabel nameLabel = new JLabel("Ім'я");
+        window.addLabel(nameLabel,"NAME", 50,80,200, 50);
+        JTextField nameField = new JTextField();
+        window.addField(nameField, "NAME", 250,80,200, 50);
 
-        JButton exitButton = new JButton("EXIT");
-        exitButton.setActionCommand("EXIT");
-        window.addButton(exitButton,"EXIT", 685,500,100, 50);
+        JLabel surnameLabel = new JLabel("Прізвище");
+        window.addLabel(surnameLabel,"SURNAME", 50,130,200, 50);
+        JTextField surnameField = new JTextField();
+        window.addField(surnameField, "SURNAME", 250,130,200, 50);
 
-        window.addMyField(100,100);
-        window.addField(700,100);
+        JLabel powerLabel = new JLabel("Зарплатня");
+        window.addLabel(powerLabel,"SALARY", 50,180,200, 50);
+        JTextField powerField = new JTextField();
+        window.addField(powerField, "SALARY", 250,180,200, 50);
 
+        JLabel positionLabel = new JLabel("Посада");
+        window.addLabel(positionLabel,"POSITION", 50,230,200, 50);
+        JTextField positionField = new JTextField();
+        window.addField(positionField, "POSITION", 250,230,200, 50);
+
+        JLabel departmentLabel = new JLabel("Відділ");
+        window.addLabel(departmentLabel,"DEPARTMENT", 50,280,200, 50);
+        ArrayList<Department> departments = new ArrayList<>();
+        ArrayList<String> departmentsNames;
+        try {
+            departments = (ArrayList<Department>) gui.Client().getDepartments();
+        }catch (Exception ignored){}
+        departmentsNames = (ArrayList<String>) departments.stream()
+                .map(Department::getName).collect(Collectors.toList());
+        String[] data1 = departmentsNames.toArray(new String[0]);
+        JComboBox<String> department = new JComboBox<>(data1);
+        department.setSelectedIndex(0);
+        window.addComboBox(department, 250, 280,200,50);
+
+        JButton updateButton = new JButton("Створити");
+        updateButton.setActionCommand("ADD");
+        window.addButton(updateButton,"ADD", 50,480,200, 40);
         return window;
     }
 
-    private static Window createRestartWindow(GUI gui, boolean win){
-        JFrame startGameFrame;
-        Window window;
-        if(win){
-            startGameFrame = defaultJFrame("You win!");
-            window = new Window(startGameFrame,  "You win!", gui);
-        } else {
-            startGameFrame = defaultJFrame("You lost!");
-            window = new Window(startGameFrame,  "You lost!", gui);
-        }
-
-        JButton startButton = new JButton("RESTART");
-        startButton.setActionCommand("RESTART");
-        window.addButton(startButton,"RESTART", 250,225,300, 50);
-
-        JLabel label;
-        if(win)
-            label = new JLabel("You win!",JLabel.CENTER );
-        else
-            label = new JLabel("You lost!",JLabel.CENTER );
-        window.addLabel(label,"HEAD", 350,175,200, 50);
-
-        return window;
-    }*/
 }

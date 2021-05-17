@@ -5,6 +5,8 @@ import objects.entity.Department;
 import objects.entity.Employee;
 import objects.entity.HumanResources;
 
+import java.rmi.RemoteException;
+
 public class ClientProgram {
     public enum DaoType {XML, JDBC};
 
@@ -56,12 +58,14 @@ public class ClientProgram {
     }
 
     public static HumanResources getHumanResources() {
+        try {
+            humanResources = gui.Client().getHumanResources();
+        } catch (RemoteException remoteException) {
+            remoteException.printStackTrace();
+        }
         return humanResources;
     }
 
-    public static void setHumanResources(HumanResources humanResources) {
-        ClientProgram.humanResources = humanResources;
-    }
 
     public static void setDaoType(DaoType type){
         daoType = type;

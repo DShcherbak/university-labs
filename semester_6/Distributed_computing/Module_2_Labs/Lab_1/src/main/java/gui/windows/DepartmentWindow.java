@@ -26,6 +26,48 @@ public class DepartmentWindow extends Window {
                 gui.setCurrentState(GUI.GuiState.DaoScreen);
                 gui.showEventDemo();
                 return;
+            } else if (command.equals("UPDATE")){
+                String name = fieldMap.get("NAME").getText();
+                String power = fieldMap.get("POWER").getText();
+                if(correctName(name) && correctNumber(power)){
+                    labelMap.get("HEAD").setText("");
+                    var currentDepartment = ClientProgram.getCurrentDepartment();
+                    if(currentDepartment.getName() != name ||
+                        currentDepartment.getPower() != Long.parseLong(power)){
+                        try{
+                            String result = gui.Client().updateDepartment(currentDepartment.getId(),
+                                    currentDepartment.getId(),
+                                    name,
+                                    Long.parseLong(power));
+                            labelMap.get("HEAD").setText(result);
+                        }catch (Exception ex){
+                            System.out.println("Couldn't update department: " + ex.getMessage());
+                        }
+                    }
+                } else {
+                    labelMap.get("HEAD").setText("INCORRECT DATA!");
+                }
+            } else if (command.equals("DELETE")){
+                try{
+                    var id = ClientProgram.getCurrentDepartment().getId();
+                    String result = gui.Client().deleteDepartment(id);
+                    labelMap.get("HEAD").setText(result);
+                }catch (Exception ex){
+                    System.out.println("Couldn't delete department: " + ex.getMessage());
+                }
+            } else if (command.equals("ADD")){
+                String name = fieldMap.get("NAME").getText();
+                String power = fieldMap.get("POWER").getText();
+                if(correctName(name) && correctNumber(power)){
+                    try{
+                        String result = gui.Client().addDepartment(name,Long.parseLong(power));
+                        labelMap.get("HEAD").setText(result);
+                    }catch (Exception ex){
+                        System.out.println("Couldn't add department: " + ex.getMessage());
+                    }
+                } else {
+                    labelMap.get("HEAD").setText("INCORRECT DATA!");
+                }
             }
         }
     }

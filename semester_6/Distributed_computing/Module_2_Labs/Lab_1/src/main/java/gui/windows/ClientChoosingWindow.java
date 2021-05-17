@@ -27,11 +27,6 @@ public class ClientChoosingWindow extends Window {
                 return;
             }
             ClientProgram.connectClient();
-            try {
-                ClientProgram.setHumanResources(gui.Client().getHumanResources());
-            } catch (RemoteException remoteException) {
-                remoteException.printStackTrace();
-            }
             gui.showEventDemo();
 
         }
