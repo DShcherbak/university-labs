@@ -24,7 +24,7 @@ public class StartWindow extends Window {
             } else if (command.equals("JDBC")){
                 ClientProgram.setDaoType(ClientProgram.DaoType.JDBC);
             }
-            gui.setCurrentState(GUI.GuiState.ClientScreen);
+            gui.setCurrentState(GUI.GuiState.DaoScreen);
             gui.showEventDemo();
         }
     }

@@ -26,6 +26,7 @@ public class ClientChoosingWindow extends Window {
             } else if (command.equals("JDBC")){
                 return;
             }
+            ClientProgram.setClient(new RmiClient());
             ClientProgram.connectClient();
             gui.showEventDemo();
 

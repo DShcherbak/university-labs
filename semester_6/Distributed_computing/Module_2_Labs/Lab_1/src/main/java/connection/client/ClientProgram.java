@@ -5,7 +5,11 @@ import objects.entity.Department;
 import objects.entity.Employee;
 import objects.entity.HumanResources;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.rmi.RemoteException;
+import java.util.Scanner;
 
 public class ClientProgram {
     public enum DaoType {XML, JDBC};
@@ -21,6 +25,35 @@ public class ClientProgram {
 
     public static void main(String[] args) throws Exception{
         gui = GUI.setupGUI();
+        boolean rmi = false;
+        if(rmi){
+            var rmiClient = new RmiClient();
+            ClientProgram.setClient(rmiClient);
+            ClientProgram.connectClient();
+        } else {
+            ObjectOutputStream out = null;
+            ObjectInputStream in = null;
+
+            try (Socket socket = new Socket("localhost", 1234)) {
+                System.out.println("Connected to the server");
+                out = new ObjectOutputStream(socket.getOutputStream());
+                in = new ObjectInputStream(socket.getInputStream());
+
+                var socketClient = new SocketClient(in, out);
+                ClientProgram.setClient(socketClient);
+                ClientProgram.connectClient();
+
+                boolean clientRunning = true;
+                String code = "11";
+                while (clientRunning) {
+
+                }
+            }catch (Exception ex){
+
+            }
+        }
+
+
     }
 
     public static void connectClient(){
