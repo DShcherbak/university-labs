@@ -249,4 +249,24 @@ public class SocketClient implements iClient{
             return null;
         }
     }
+
+    @Override
+    public void switchToJDBC() throws RemoteException {
+        try{
+            out.writeObject("/jdbc");
+            out.flush();
+        }catch (Exception ex){
+            System.out.println("Couldn't send socket request: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void switchToXML() throws RemoteException {
+        try{
+            out.writeObject("/xml");
+            out.flush();
+        }catch (Exception ex){
+            System.out.println("Couldn't send socket request: " + ex.getMessage());
+        }
+    }
 }

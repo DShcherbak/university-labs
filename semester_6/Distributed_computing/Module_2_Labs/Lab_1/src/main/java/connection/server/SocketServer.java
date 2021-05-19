@@ -1,15 +1,14 @@
 package connection.server;
 
-import connection.common.ServerInterface;
 import objects.DAO.iDAO;
-import objects.DOM.HumanResourcesOffice;
+import objects.DOM.XmlParser;
+import objects.JDBC.JDBC;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class SocketServer {
     public static void main(String[] args)
@@ -46,12 +45,16 @@ public class SocketServer {
         ObjectOutputStream out = null;
         ObjectInputStream in = null;
         iDAO dao;
+        iDAO jdbc;
+        iDAO xml;
 
         // Constructor
         public ClientHandler(Socket socket)
         {
             this.clientSocket = socket;
-            this.dao = new HumanResourcesOffice();
+            jdbc = new JDBC();
+            xml = new XmlParser();
+            this.dao = jdbc;
         }
 
         public boolean iteration() {
@@ -77,6 +80,8 @@ public class SocketServer {
                     case "/employee/delete" -> out.writeObject(dao.deleteEmployee(in.readLong()));
                     case "/employee/getByName" -> out.writeObject(dao.getEmployeeByName((String)in.readObject()));
                     case "/humanResources" -> out.writeObject(dao.getHumanResources());
+                    case "/jdbc" -> {dao = jdbc;dao.read();}
+                    case "/xml" -> {dao = xml;dao.read();}
                     default -> out.writeObject("Unknown command: " + request);
                 }
                 out.flush();

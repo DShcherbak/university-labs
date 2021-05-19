@@ -25,7 +25,7 @@ public class ClientProgram {
 
     public static void main(String[] args) throws Exception{
         gui = GUI.setupGUI();
-        boolean rmi = false;
+        boolean rmi = true;
         if(rmi){
             var rmiClient = new RmiClient();
             ClientProgram.setClient(rmiClient);
@@ -102,6 +102,19 @@ public class ClientProgram {
 
     public static void setDaoType(DaoType type){
         daoType = type;
+        if(type == DaoType.XML){
+            try {
+                gui.Client().switchToXML();
+            } catch (RemoteException remoteException) {
+                remoteException.printStackTrace();
+            }
+        }else if (type == DaoType.JDBC){
+            try {
+                gui.Client().switchToJDBC();
+            } catch (RemoteException remoteException) {
+                remoteException.printStackTrace();
+            }
+        }
     }
 
     public static GUI getGui() {

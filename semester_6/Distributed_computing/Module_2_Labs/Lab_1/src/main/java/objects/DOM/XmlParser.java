@@ -21,11 +21,11 @@ import java.util.stream.Collectors;
 
 import objects.DAO.iDAO;
 
-public class HumanResourcesOffice implements iDAO {
+public class XmlParser implements iDAO {
     protected ArrayList<Department> departments;
     protected ArrayList<Employee> employees;
 
-    public HumanResourcesOffice(){
+    public XmlParser(){
         departments = new ArrayList<>();
         employees = new ArrayList<>();
     }

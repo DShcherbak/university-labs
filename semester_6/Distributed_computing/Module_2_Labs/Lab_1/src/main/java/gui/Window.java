@@ -51,7 +51,7 @@ public class Window {
     public boolean correctName(String name){
         for(int i = 0; i < name.length(); i++){
             if((Character.toLowerCase(name.charAt(i)) >= 'a' && Character.toLowerCase(name.charAt(i)) <= 'z')
-                || name.charAt(i) == ' ' || name.charAt(i) == '-'){
+                || name.charAt(i) == ' ' || name.charAt(i) == '-' || name.charAt(i) == '.'){
                 continue;
             }
             return false;

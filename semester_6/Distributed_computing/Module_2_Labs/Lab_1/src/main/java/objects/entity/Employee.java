@@ -1,5 +1,6 @@
 package objects.entity;
 
+import javax.sql.rowset.CachedRowSet;
 import java.io.Serializable;
 
 public class Employee implements Serializable {
@@ -19,6 +20,21 @@ public class Employee implements Serializable {
         this.salary = salary;
         this.position = position;
         this.departmentId = departmentId;
+    }
+
+    public static Employee parseEmployee(CachedRowSet rs){
+        try{
+            long id = rs.getInt(1);
+            String name = rs.getString(2);
+            String surname = rs.getString(3);
+            long salary = rs.getInt(4);
+            String position = rs.getString(5);
+            long departmentId = rs.getInt(6);
+            return new Employee(id, name, surname, salary, position, departmentId);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     public long getId() {

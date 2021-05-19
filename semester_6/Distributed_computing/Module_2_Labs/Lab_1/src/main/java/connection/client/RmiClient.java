@@ -94,4 +94,14 @@ public class RmiClient implements iClient {
     public Department getDepartmentByName(String name) throws RemoteException {
         return server.getDepartmentByName(name);
     }
+
+    @Override
+    public void switchToJDBC() throws RemoteException {
+        server.switchToJDBC();
+    }
+
+    @Override
+    public void switchToXML() throws RemoteException {
+        server.switchToXML();
+    }
 }

@@ -1,7 +1,9 @@
 package connection.server;
 
-import objects.DOM.HumanResourcesOffice;
+import objects.DAO.iDAO;
+import objects.DOM.XmlParser;
 import connection.common.ServerInterface;
+import objects.JDBC.JDBC;
 import objects.entity.Department;
 import objects.entity.Employee;
 import objects.entity.HumanResources;
@@ -11,10 +13,15 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public class RmiServerObject implements ServerInterface {
-    HumanResourcesOffice dao;
+    iDAO dao;
+    iDAO JDBC;
+    iDAO XML;
 
     public RmiServerObject(){
-        dao = new HumanResourcesOffice();
+        JDBC = new JDBC();
+        XML = new XmlParser();
+        dao = JDBC;
+
     }
 
     @Override
@@ -90,5 +97,17 @@ public class RmiServerObject implements ServerInterface {
     @Override
     public Department getDepartmentByName(String name) throws RemoteException {
         return dao.getDepartmentByName(name);
+    }
+
+    @Override
+    public void switchToJDBC() throws RemoteException {
+        dao = JDBC;
+        dao.read();
+    }
+
+    @Override
+    public void switchToXML() throws RemoteException {
+        dao = XML;
+        dao.read();
     }
 }

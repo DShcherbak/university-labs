@@ -30,4 +30,8 @@ public interface ServerInterface extends Remote {
 
     Employee getEmployeeByName(String name) throws RemoteException;
     Department getDepartmentByName(String name) throws RemoteException;
+
+    void switchToJDBC() throws RemoteException;
+    void switchToXML() throws RemoteException;
+
 }

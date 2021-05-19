@@ -1,6 +1,8 @@
 package objects.entity;
 
+import javax.sql.rowset.CachedRowSet;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Department implements Serializable {
@@ -8,6 +10,18 @@ public class Department implements Serializable {
     String name;
     long power;
     List<Employee> employees;
+
+    public static Department parseDepartment(CachedRowSet rs){
+        try{
+            long id = rs.getInt(1);
+            String name = rs.getString(2);
+            long power = rs.getInt(3);
+            return new Department(id, name, power, new ArrayList<>());
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
+    }
 
     public Department(long id, String name, long power, List<Employee> employees) {
         this.id = id;
