@@ -1,0 +1,2 @@
+---------------------------Tokens list---------------------------
+Token type            |row|col|  symbol table index and value
