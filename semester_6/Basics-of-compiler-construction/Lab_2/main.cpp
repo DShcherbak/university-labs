@@ -3,7 +3,6 @@
 #include <fstream>
 #include "FiniteAuto.h"
 #include "Lexer.h"
-#include "LexerPrinter.h"
 
 void printHeading(std::ofstream ofstream);
 
@@ -14,10 +13,7 @@ int main()
     auto result = lexer1.getAllTokens("../input.hs");
     if (result.lexerCompleted)
     {
-        lexer::LexerPrinter printer;
-        printer.setSaveToFile(false);
-        printer.printErrorLogs(false);
-        printer.print(result);
+        lexer1.output("../output.txt");
         std::cout << "Finished!";
     } else {
         std::cerr << "An error occured during lexer execution";

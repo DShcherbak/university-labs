@@ -31,13 +31,13 @@ namespace lexer
 
     bool isPunctuation(char const c)
     {
-        std::string punctuation = ",;[]{}()";
+        std::string punctuation = "";
         return punctuation.find(c) != std::string::npos;
     }
 
     bool isOperator(char const c)
     {
-        std::string operators = "+-*/%^|&=<>!?:$";
+        std::string operators = "+-*/%^|&=<>!?:$.,;[]{}()";
         return operators.find(c) != std::string::npos;
     }
 
@@ -83,7 +83,7 @@ namespace lexer
     }
 
     bool isEndOfToken(char const c){
-        return isWhitespace(c) || isTab(c);
+        return isWhitespace(c) || isTab(c) || isPunctuation(c) || isOperator(c);
     }
 
 }

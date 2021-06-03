@@ -36,7 +36,6 @@ namespace lexer
         FiniteAuto operatorsAuto;
         FiniteAuto keyWords;
 
-        void processTagError(TokenType type, size_t finalPosition);
         void getOperatorToken();
         void addEmptyToken(TokenType token, size_t size);
 
@@ -68,6 +67,9 @@ namespace lexer
             bool lexerCompleted;
         };
 
+
+        bool printWhiteSpaces = false;
+
         Lexer();
         LexerResponse getAllTokens(std::string const &path_to_file);
 
@@ -81,8 +83,14 @@ namespace lexer
         std::pair<TokenType, size_t> getKeyWordToken();
 
         void getTokenFromAuto(FiniteAuto automata);
+
+        void addLongToken(TokenType token, std::string cache, size_t size);
+
+        void output(const std::string &path_to_file) const;
     };
 }
+
+
 
 
 #endif //LEXER_LEXER_H

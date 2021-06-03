@@ -1,18 +1,15 @@
-#ifndef LEXER_TOKENTYPESLIST_H
-#define LEXER_TOKENTYPESLIST_H
-
 #include <stdint.h>
+#include <vector>
+
+
 
 namespace lexer
 {
     enum class TokenType : size_t
     {
-        Identifier,
-        DollarIdentifier,          // $
-        // key words
-        Include,                   // include
-        Import,                   // include
-        Namespace,                 // namespace
+        Identifier, // 1
+        Include,                   //
+        Import,
         If,
         Then,
         Else,
@@ -25,8 +22,7 @@ namespace lexer
         Deriving,
         Echo,
         Print,
-        //types
-        Int,
+        Int, //types
         Integer,
         Bool,
         Scientific,
@@ -37,8 +33,7 @@ namespace lexer
         Float,
         Fractional,
         Double,
-        Complex,
-        //type classes
+        Complex,  //type classes
         Eq,
         Num,
         Ord,
@@ -58,14 +53,13 @@ namespace lexer
         LT,
         EQ,
         GT,
-        //
-        CharValueOneQuote,
+        True,
+        False,
         StringValueInTwoQuotes,
         IntValue,
         FloatValue,
-        True,
-        False,
-        // arithmetic tokens 14
+        CharValueOneQuote,
+        Dollar, // arithmetic tokens 14
         Add,
         Sub
         ,Multi
@@ -81,7 +75,6 @@ namespace lexer
         ,GreaterThanEqual
         ,LessThanEqual
         ,Concat
-        // logic
         ,Ampersand
         ,AndSymb
         ,OrSymb
@@ -93,8 +86,7 @@ namespace lexer
         ,BitwiseOrAssignment
         ,BitwiseXorAssignment
         ,LeftShiftAssignment
-        ,RightShiftOrAssignment
-        //special
+        ,RightShiftOrAssignment    //special
         ,MinusLess
         ,MinusMinusLess
         ,Dot
@@ -103,12 +95,7 @@ namespace lexer
         ,NullCoalescing
         ,ArrayKey
         ,VarReference,
-        DoubleColon
-        //comments
-        ,SingleLineComment
-        ,MultiLineComment
-        , MultiLineArray,
-        //punkuation
+        DoubleColon ,   //comments
         Comma
         ,Semicolon
         ,LParen
@@ -119,23 +106,29 @@ namespace lexer
         ,RBrace
         ,Cat
         ,Dash
-        , DotDotDot,
-        XorWord,
-        SESSION,
-        This,
+        , DotDotDot
+        ,SingleLineComment       //punkuation
+        ,MultiLineComment
+        , MultiLineArray,
         WhiteSpace,
         Tab,
         INVALID,
         TOKEN_NUMBER
     };
 
+
+
+
+
+
+
+
+
     std::string const TokenValue[static_cast<size_t>(TokenType::TOKEN_NUMBER)] =
     {
-        "Identifier", //2
-        "$",                       // DollarIdentifier
-        // key words
-        "include",                 // Include //14
-        "import",                 // Import
+        "Identifier", //1
+        "include",   //2              // Include //14
+        "import",       //3          // Import
         "if",                      // If
         "then",                    // Else
         "else",                  // ElseIf
@@ -148,7 +141,6 @@ namespace lexer
         "deriving",                    // Global
         "echo",                      // Echo
         "print",                     // Print
-        //data types cast
         "Int", //12
         "Integer",
         "Bool",
@@ -161,7 +153,6 @@ namespace lexer
         "Fractional",
         "Double",
         "Complex",
-        //type classes //19
         "Eq",
         "Num",
         "Ord",
@@ -181,13 +172,13 @@ namespace lexer
         "LT",
         "EQ",
         "GT",
-        "StringValueOneQuote",
+        "True",
+        "False",
         "StringValueInTwoQuotes",
         "IntValue",
         "FloatValue",
-        "True",
-        "False",
-        // arithmetic tokens 14
+        "CharValueOneQuote",
+        "$",                       // DollarIdentifier
         "+",                        // Add
         "-",                        // Sub
         "*",                        // Multi
@@ -202,8 +193,7 @@ namespace lexer
         "<",                        // LessThan
         ">=",                       // GreaterThanEqual
         "<=",                       // LessThanEqual
-        "++",                       // Concat
-        // logic //14
+        "++",
         "&",                        // Ampersand
         "&&",                       // AndSymb
         "||",                       // OrSymb
@@ -218,7 +208,6 @@ namespace lexer
         ">>=",                      // RightShiftOrAssignment
         "-<",                      // MinusLess
         "--<",                      // MinusMinusLess
-        // operations with string //7
         ".",                        // Dot
         "?",                        // QuestMark
         ":",                        // Colon
@@ -226,11 +215,7 @@ namespace lexer
         "=>",                       // ArrayKey
         "->",                       // VarReference,
         "::",                       // DoubleColon
-        // comments 4
-        "--",                       // SingleLineComment
-        "{- -}",                    // MultiLineComment
-        "[|, |]",                    // MultiLineArray
-        // punctuation 12
+
         ",",                        // Comma
         ";",                        // Semicolon
         "(",                        // LParen
@@ -242,13 +227,16 @@ namespace lexer
         "@",                        // Cat
         "_",                        // Dash
         "...",                        // DotDotDot
-        "xor",                        // DotDotDot
-        "_SESSION",                        // DotDotDot
-        "this",                        // DotDotDot
-        " ",
-        "\t"
+        "--",                       // SingleLineComment
+        "{- -}",                    // MultiLineComment
+        "[|, |]",                    // MultiLineArray
+        "Whitespace",
+        "Tab",
         "INVALID"
     };
+
+
+
 
 
 
@@ -288,4 +276,3 @@ namespace lexer
 */
 }
 
-#endif //LEXER_TOKENTYPESLIST_H
