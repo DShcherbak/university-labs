@@ -314,21 +314,6 @@ namespace lexer
         return true;
     }
 
-    Lexer::LexerResponse::LexerResponse(std::vector<Token> tokens, std::vector<std::string> symbolTable,
-                                        std::vector<InvalidToken> invalidTokens) {
-        this->tokens = std::move(tokens);
-        this->symbolTable = std::move(symbolTable);
-        this->invalidTokens = std::move(invalidTokens);
-        this->lexerCompleted = true;
-    }
-
-    Lexer::LexerResponse::LexerResponse() {
-        this->tokens = {};
-        this->symbolTable = {};
-        this->invalidTokens = {};
-        this->lexerCompleted = false;
-    }
-
     void Lexer::printResult(std::string const &pathToFile) const
     {
         std::ofstream ofs(pathToFile);
