@@ -1,6 +1,3 @@
-#ifndef LEXER_DETFINITEAUTOMATON_H
-#define LEXER_DETFINITEAUTOMATON_H
-
 #include <vector>
 #include <map>
 #include "Token.h"
@@ -36,6 +33,3 @@ namespace lexer
 
     };
 }
-
-
-#endif //LEXER_DETFINITEAUTOMATON_H
