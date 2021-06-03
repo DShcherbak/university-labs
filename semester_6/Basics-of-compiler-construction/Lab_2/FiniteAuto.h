@@ -7,23 +7,26 @@
 
 namespace lexer
 {
+    struct AutoState
+    {
+        TokenType type = TokenType::INVALID;
+        char c = '\0';
+        std::vector <AutoState> nextState;
+    };
+
     class FiniteAuto
     {
         bool const commentingOnConstrucion = false;
-        struct AutoState
-        {
-            TokenType type = TokenType::INVALID;
-            char c = '\0';
-            std::vector <AutoState> nextState;
-        };
 
-        static AutoState root;
-        FiniteAuto() = default;
-        static void DfsInitialisation(AutoState &state, TokenList const &tokenList, size_t const &depth);
-        static std::pair<TokenType, size_t> checkValueInternal(AutoState const &state, std::string const &code, size_t const pos);
+        AutoState root;
+
+        void DfsInitialisation(AutoState &state, TokenList const &tokenList, size_t const &depth);
+        std::pair<TokenType, size_t> checkValueInternal(AutoState const &state, std::string const &code, size_t const pos);
     public:
-        static void initStates();
-        static std::pair<TokenType, size_t> checkValue(std::string const &code, size_t const &start_pos);
+        void initStates();
+        std::pair<TokenType, size_t> checkValue(std::string const &code, size_t const &start_pos);
+
+        FiniteAuto() = default;
     };
 }
 

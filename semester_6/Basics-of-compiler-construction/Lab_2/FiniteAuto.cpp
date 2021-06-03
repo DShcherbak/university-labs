@@ -4,7 +4,7 @@
 
 namespace lexer
 {
-    FiniteAuto::AutoState FiniteAuto::root;
+    AutoState root;
 
     void FiniteAuto::DfsInitialisation(AutoState &state, TokenList const &tokenList, size_t const &depth)
     {

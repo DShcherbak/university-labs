@@ -11,18 +11,33 @@ namespace lexer
 {
     Lexer::Lexer()
     {
-        FiniteAuto::initStates();
+        operatorsAuto.initStates();
+        keyWords.initStates();
     }
 
 
-    void Lexer::getAutoToken(){
-        std::pair<TokenType, size_t> autoToken = FiniteAuto::checkValue(currentLine.line, currentLine.column);
+    void Lexer::getTokenFromAuto(FiniteAuto automata){
+        std::pair<TokenType, size_t> autoToken = automata.checkValue(currentLine.line, currentLine.column);
         if (autoToken.first == TokenType::INVALID)
             processBadToken(autoToken.second - currentLine.column);
         else
         {
             addEmptyToken(autoToken.first, autoToken.second - currentLine.column);
         }
+    }
+
+    void Lexer::getOperatorToken() {
+        std::pair<TokenType, size_t> autoToken = operatorsAuto.checkValue(currentLine.line, currentLine.column);
+        if (autoToken.first == TokenType::INVALID)
+            processBadToken(autoToken.second - currentLine.column);
+        else
+        {
+            addEmptyToken(autoToken.first, autoToken.second - currentLine.column);
+        }
+    }
+
+     std::pair<TokenType, size_t> Lexer::getKeyWordToken(){
+         return keyWords.checkValue(currentLine.line, currentLine.column);
     }
 
     void Lexer::getSingleLineComment(TokenType const type){
@@ -70,7 +85,6 @@ namespace lexer
             return;
         }
     }
-
 
     void Lexer::getTwoQuoteString(){
         currentState = String;
@@ -181,13 +195,45 @@ namespace lexer
 
     void Lexer::processWord()
     {
+        size_t forward = 0;
+        char currentSymbol;
+        while(!currentLine.ended(forward + 1)){
+            forward++;
+            currentSymbol = currentLine.getNextSymbol(forward);
+            if(isEndOfToken(currentSymbol)){
+                auto pair = getKeyWordToken();
+                if(pair.first == TokenType::INVALID){
+                    addToken(TokenType::Identifier, forward);
+                } else {
+                    addToken(pair.first, forward);
+                }
+                return;
+            }
+            if(currentState == Identifier){
+                if(currentSymbol == '\\'){
+                    currentState = StringSlash;
+                }
+                else if (currentSymbol == '\"'){
+
+                }
+            }
+        }
+        std::string errorText = "No matching \" found to this quotation mark: (";
+        errorText += std::to_string(currentLine.row);
+        errorText += ", ";
+        errorText += std::to_string(currentLine.column);
+        errorText += ")";
+        registerError(errorText,
+                      currentLine.line.substr(currentLine.column, forward),
+                      currentLine.row,
+                      currentLine.column);
         size_t first_ind = currentLine.column;
         char c;
         std::string word;
         do
         {
             c = currentLine.getNextSymbol();;
-            if (!isIdentificator(c))
+            if (!isIdentifier(c))
                 break;
             word += c;
             currentLine.column += 1;
@@ -299,7 +345,7 @@ namespace lexer
             return;
         }
 
-        if (isFirstIdentificatorSymbol(currentSymbol))
+        if (isFirstIdentifierSymbol(currentSymbol))
         {
             processWord();
             return;
@@ -317,7 +363,7 @@ namespace lexer
         }
         if (isOperator(currentSymbol))
         {
-            getAutoToken();
+            getOperatorToken();
             return;
         }
         if (isPunctuation(currentSymbol))

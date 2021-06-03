@@ -23,7 +23,7 @@ namespace lexer
                 String,
                 StringSlash,
                 Operator,
-                Identificator
+                Identifier
         };
 
 
@@ -33,9 +33,11 @@ namespace lexer
         lexer::CurrentLineWrapper currentLine;
         LexerState currentState = Default;
         std::string cache;
+        FiniteAuto operatorsAuto;
+        FiniteAuto keyWords;
 
         void processTagError(TokenType type, size_t finalPosition);
-        void getAutoToken();
+        void getOperatorToken();
         void addEmptyToken(TokenType token, size_t size);
 
         void getSingleLineComment(TokenType type);
@@ -75,6 +77,10 @@ namespace lexer
         void processBadToken(size_t forward);
 
         void registerError(const std::string& errorName, const std::string& errorLexem, size_t row, size_t col);
+
+        std::pair<TokenType, size_t> getKeyWordToken();
+
+        void getTokenFromAuto(FiniteAuto automata);
     };
 }
 

@@ -10,7 +10,7 @@ namespace lexer
         return ('0' <= c && c <= '9');
     }
 
-    bool isFirstIdentificatorSymbol(char const c)
+    bool isFirstIdentifierSymbol(char const c)
     {
         return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z') || c == '_';
     }
@@ -52,9 +52,9 @@ namespace lexer
         return c2 == '-' && (c1 == '-' || c1 == '{');
     }
 
-    bool isIdentificator(char const c)
+    bool isIdentifier(char const c)
     {
-        return isFirstIdentificatorSymbol(c) || isDigit(c) || c == '\'';
+        return isFirstIdentifierSymbol(c) || isDigit(c) || c == '\'';
     }
 
     bool isSingleQuote(char const c)
