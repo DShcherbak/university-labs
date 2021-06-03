@@ -107,6 +107,7 @@ namespace lexer
         ,Cat
         ,Dash
         , DotDotDot
+        , BackwardArror
         ,SingleLineComment       //punkuation
         ,MultiLineComment
         , MultiLineArray,
@@ -227,8 +228,9 @@ namespace lexer
         "@",                        // Cat
         "_",                        // Dash
         "...",                        // DotDotDot
-        "--",                       // SingleLineComment
-        "{- -}",                    // MultiLineComment
+        "<-",                        // DotDotDot
+        "SingleLineComment",                       // SingleLineComment
+        "MultiLineComment",                    // MultiLineComment
         "[|, |]",                    // MultiLineArray
         "Whitespace",
         "Tab",

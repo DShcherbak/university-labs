@@ -1,6 +1,3 @@
-#ifndef LEXER_CHARCHECKS_H
-#define LEXER_CHARCHECKS_H
-
 #include "Lexer.h"
 
 namespace lexer
@@ -42,20 +39,11 @@ namespace lexer
     }
 
 
-    bool isCorrectAfterNumber(char const c)
-    {
-        return isPunctuation(c) || isWhitespace(c) || isOperator(c);
-    }
-
     bool isComment(char const c1, char const c2)
     {
         return c2 == '-' && (c1 == '-' || c1 == '{');
     }
 
-    bool isIdentifier(char const c)
-    {
-        return isFirstIdentifierSymbol(c) || isDigit(c) || c == '\'';
-    }
 
     bool isSingleQuote(char const c)
     {
@@ -87,4 +75,3 @@ namespace lexer
     }
 
 }
-#endif //LEXER_CHARCHECKS_H

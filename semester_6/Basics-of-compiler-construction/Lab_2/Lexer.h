@@ -14,7 +14,6 @@ namespace lexer
     {
         enum LexerState {Default,
                 Error,
-                Comment,
                 LongComment,
                 LongCommentEnding,
                 Integer,
@@ -22,14 +21,13 @@ namespace lexer
                 Char,
                 String,
                 StringSlash,
-                Operator,
                 Identifier
         };
 
 
         std::vector<std::string> symbolTable;
         std::vector<Token> tokens;
-        std::vector<InvalidToken> invalidTokens;
+        std::vector<InvalidToken> errors;
         lexer::CurrentLineWrapper currentLine;
         LexerState currentState = Default;
         std::string cache;
@@ -41,52 +39,29 @@ namespace lexer
 
         void getSingleLineComment(TokenType type);
         void getMultilineComment();
-        void getOneQuoteChar();
-        void getTwoQuoteString();
-        size_t in_key_words(std::string const &word) const;
         void processMultilineMode();
         void processNumber();
         void processComment();
         void processWord();
         void processOneQuoteChar();
         void processTwoQuoteString();
-        void processPunctuation();
         void processNextToken();
 
     public:
 
-        struct LexerResponse{
-            LexerResponse();
-
-            LexerResponse(std::vector<Token> tokens, std::vector<std::string> symbolTable,
-                          std::vector<InvalidToken> invalidTokens);
-
-            std::vector<Token> tokens;
-            std::vector<std::string> symbolTable;
-            std::vector<InvalidToken> invalidTokens;
-            bool lexerCompleted;
-        };
-
-
         bool printWhiteSpaces = false;
 
         Lexer();
-        LexerResponse getAllTokens(std::string const &path_to_file);
+        static std::vector<std::string> getKeywordsFromFile(std::string const &pathToFile);
 
-
+        bool getAllTokens(std::string const &pathToFile);
         void addToken(TokenType token, size_t size);
-
         void processBadToken(size_t forward);
-
-        void registerError(const std::string& errorName, const std::string& errorLexem, size_t row, size_t col);
-
+        void registerError(const std::string& errorName, const std::string& errorLexeme, size_t row, size_t col);
         std::pair<TokenType, size_t> getKeyWordToken();
+        void addLongToken(TokenType token, size_t size);
 
-        void getTokenFromAuto(FiniteAuto automata);
-
-        void addLongToken(TokenType token, std::string cache, size_t size);
-
-        void output(const std::string &path_to_file) const;
+        void printResult(const std::string &pathToFile) const;
     };
 }
 

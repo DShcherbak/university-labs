@@ -20,22 +20,18 @@ namespace lexer
     {
         bool const commentingOnConstruction = false;
         std::shared_ptr<AutoState> root;
-        unsigned long startToken = 0;
 
-
-        void
-        DfsInitialisation(std::shared_ptr<AutoState> state,
+        void DfsInitialisation(const std::shared_ptr<AutoState>& state,
                           TokenList const &tokenList,
                           const size_t &depth);
 
-        std::pair<TokenType, size_t> checkValueInternal(std::shared_ptr<AutoState> state, std::string const &code, size_t const pos);
+        std::pair<TokenType, size_t> checkValueInternal(const std::shared_ptr<AutoState>& state, std::string const &code, size_t pos);
     public:
         std::pair<TokenType, size_t> checkValue(std::string const &code, size_t const &start_pos);
 
         FiniteAuto() = default;
         void setupAuto(std::vector<std::string> tokensList, int shiftToken);
 
-        void printAuto(const AutoState &root, const size_t &depth);
 
 
     };

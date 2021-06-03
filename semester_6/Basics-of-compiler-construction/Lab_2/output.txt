@@ -1,192 +1,191 @@
 ---------------------------Tokens list---------------------------
 Token type            |row|col|  symbol table index and value
 -----------------------------------------------------------------
---                       1|0     0) |--Lesson 20-21|
-import                   2|0     1) |import|
-Identifier               2|7     3) |Data|
-.                        2|11    4) |.|
-Identifier               2|12    5) |Monoi|
-Identifier               2|17    6) |d|
-{- -}                    6|0     7) |{- \nloncomment -|
-}                        6|9     8) |}|
-Identifier               8|0     9) |mult2|
-::                       8|6     11) |::|
-Integer                  8|9     13) |Integer|
-->                       8|17    15) |->|
-Integer                  8|20    17) |Intege|
-Identifier               8|26    18) |r|
-Identifier               9|0     19) |mult2|
-Identifier               9|6     21) |a|
-=                        9|8     23) |=|
-Identifier               9|10    25) |a|
-*                        9|12    27) |*|
-Identifier              11|0     29) |ccc|
-::                      11|4     31) |::|
-Char                    11|7     33) |Char|
-->                      11|12    35) |->|
-Char                    11|15    37) |Cha|
-Identifier              11|18    38) |r|
-Identifier              12|0     39) |ccc|
-Identifier              12|4     41) |x|
-=                       12|6     43) |=|
-CharValueOneQuote       12|9     46) |a'|
-Identifier              14|0     47) |fldr|
-::                      14|5     49) |::|
-(                       14|8     51) |(|
-Identifier              14|9     52) |a|
-->                      14|11    54) |->|
-Identifier              14|14    56) |b|
-->                      14|16    58) |->|
-Identifier              14|19    60) |b|
-)                       14|20    61) |)|
-->                      14|22    63) |->|
-Identifier              14|25    65) |b|
-->                      14|27    67) |->|
-[                       14|30    69) |[|
-Identifier              14|31    70) |a|
-]                       14|32    71) |]|
-->                      14|34    73) |->|
-Identifier              14|37    75) |b|
-Identifier              15|0     76) |fldr|
-Identifier              15|5     78) |f|
-Identifier              15|7     80) |acc|
-[                       15|11    82) |[|
-]                       15|12    83) |]|
-=                       15|14    85) |=|
-Identifier              15|16    87) |ac|
-Identifier              15|18    88) |c|
-Identifier              16|0     89) |fldr|
-Identifier              16|5     91) |f|
-Identifier              16|7     93) |acc|
-(                       16|11    95) |(|
-Identifier              16|12    96) |x|
-:                       16|13    97) |:|
-Identifier              16|14    98) |xs|
-)                       16|16    99) |)|
-=                       16|18    101) |=|
-Identifier              16|20    103) |f|
-Identifier              16|22    105) |x|
-(                       16|24    107) |(|
-Identifier              16|25    108) |fldr|
-Identifier              16|30    110) |f|
-Identifier              16|32    112) |acc|
-Identifier              16|36    114) |xs|
-)                       16|38    115) |)|
-Identifier              18|0     116) |fldl|
-::                      18|5     118) |::|
-(                       18|8     120) |(|
-Identifier              18|9     121) |b|
-->                      18|11    123) |->|
-Identifier              18|14    125) |a|
-->                      18|16    127) |->|
-Identifier              18|19    129) |b|
-)                       18|20    130) |)|
-->                      18|22    132) |->|
-Identifier              18|25    134) |b|
-->                      18|27    136) |->|
-[                       18|30    138) |[|
-Identifier              18|31    139) |a|
-]                       18|32    140) |]|
-->                      18|34    142) |->|
-Identifier              18|37    144) |b|
-Identifier              19|0     145) |fldl|
-Identifier              19|5     147) |f|
-Identifier              19|7     149) |acc|
-[                       19|11    151) |[|
-]                       19|12    152) |]|
-=                       19|14    154) |=|
-Identifier              19|16    156) |ac|
-Identifier              19|18    157) |c|
-Identifier              20|0     158) |fldl|
-Identifier              20|5     160) |f|
-Identifier              20|7     162) |acc|
-(                       20|11    164) |(|
-Identifier              20|12    165) |x|
-:                       20|13    166) |:|
-Identifier              20|14    167) |xs|
-)                       20|16    168) |)|
-=                       20|18    170) |=|
-Identifier              20|20    172) |fldl|
-Identifier              20|25    174) |f|
-(                       20|27    176) |(|
-Identifier              20|28    177) |f|
-Identifier              20|30    179) |acc|
-Identifier              20|34    181) |x|
-)                       20|35    182) |)|
-Identifier              20|37    184) |x|
-Identifier              20|38    185) |s|
-Identifier              23|0     186) |binding|
-::                      23|8     188) |::|
-Identifier              23|11    190) |IO|
-(                       23|14    192) |(|
-)                       23|15    193) |)|
-Identifier              24|0     194) |binding|
-=                       24|8     196) |=|
-do                      24|10    198) |d|
-Identifier              24|11    199) |o|
-Identifier              25|4     204) |putStr|
-Identifier              25|25    206) |me|
-Identifier              25|28    208) |please|
-:                       25|34    209) |:|
-Identifier              26|4     215) |name|
-<                       26|9     217) |<|
--                       26|10    218) |-|
-Identifier              26|12    220) |getLin|
-Identifier              26|18    221) |e|
-Identifier              27|4     226) |putStrLn|
-(                       27|13    228) |(|
-(                       27|14    229) |(|
-++                      27|15    230) |++|
-)                       27|17    231) |)|
-Identifier              30|0     233) |sum'|
-::                      30|5     235) |::|
-(                       30|8     237) |(|
-Identifier              30|9     238) |Foldable|
-Identifier              30|18    240) |t|
-,                       30|19    241) |,|
-Num                     30|21    243) |Num|
-Identifier              30|25    245) |a|
-)                       30|26    246) |)|
-=>                      30|28    248) |=>|
-Identifier              30|31    250) |t|
-Identifier              30|33    252) |a|
-->                      30|35    254) |->|
-Identifier              30|38    256) |a|
-Identifier              31|0     257) |sum'|
-Identifier              31|5     259) |x|
-=                       31|7     261) |=|
-Identifier              31|9     263) |getSum|
-(                       31|16    265) |(|
-Identifier              31|17    266) |foldMap|
-Identifier              31|25    268) |Sum|
-Identifier              31|29    270) |x|
-)                       31|30    271) |)|
-Identifier              34|0     272) |eq|
-::                      34|3     274) |::|
-Eq                      34|6     276) |Eq|
-Identifier              34|9     278) |a|
-=>                      34|11    280) |=>|
-Identifier              34|14    282) |a|
-->                      34|16    284) |->|
-(                       34|19    286) |(|
-Identifier              34|20    287) |a|
-->                      34|22    289) |->|
-Bool                    34|25    291) |Bool|
-)                       34|29    292) |)|
-Identifier              35|0     293) |eq|
-Identifier              35|3     295) |a|
-=                       35|5     297) |=|
-(                       35|7     299) |(|
-==                      35|8     300) |==|
-)                       35|10    301) |)|
-Identifier              35|12    303) |a|
+SingleLineComment        0|0      --Lesson 20-21
+import                   1|0      import
+Identifier               1|7      Data
+.                        1|11     .
+Identifier               1|12     Monoid
+MultiLineComment         5|0      {- \nloncomment -}
+Identifier               7|0      mult2
+::                       7|6      ::
+Integer                  7|9      Integer
+->                       7|17     ->
+Integer                  7|20     Integer
+Identifier               8|0      mult2
+Identifier               8|6      a
+=                        8|8      =
+Identifier               8|10     a
+*                        8|12     *
+IntValue                 8|14     2
+Identifier              10|0      floatFunc
+::                      10|10     ::
+Float                   10|13     Float
+->                      10|19     ->
+Float                   10|22     Float
+->                      10|28     ->
+Float                   10|31     Float
+Identifier              11|0      floatFunc
+Identifier              11|10     x
+Identifier              11|12     y
+=                       11|14     =
+Identifier              11|16     x
+*                       11|18     *
+FloatValue              11|20     2.5 
++                       11|24     +
+FloatValue              11|26     976.33 
+/                       11|33     /
+Identifier              11|35     y
+Identifier              13|0      binding
+::                      13|8      ::
+Identifier              13|11     IO
+(                       13|14     (
+)                       13|15     )
+Identifier              14|0      binding
+=                       14|8      =
+do                      14|10     do
+Identifier              15|4      putStr
+StringValueInTwoQuotes  15|11     "Enter your name please: "
+Identifier              16|4      name
+<-                      16|9      <-
+Identifier              16|12     getLine
+Identifier              17|4      putStrLn
+(                       17|13     (
+(                       17|14     (
+++                      17|15     ++
+)                       17|17     )
+StringValueInTwoQuotes  17|19     "Hello, "
+Identifier              17|29     name
+)                       17|33     )
+Identifier              19|0      ccc
+::                      19|4      ::
+Char                    19|7      Char
+->                      19|12     ->
+Char                    19|15     Char
+Identifier              20|0      ccc
+Identifier              20|4      x
+=                       20|6      =
+CharValueOneQuote       20|8      'a'
+Identifier              22|0      fldr
+::                      22|5      ::
+(                       22|8      (
+Identifier              22|9      a
+->                      22|11     ->
+Identifier              22|14     b
+->                      22|16     ->
+Identifier              22|19     b
+)                       22|20     )
+->                      22|22     ->
+Identifier              22|25     b
+->                      22|27     ->
+[                       22|30     [
+Identifier              22|31     a
+]                       22|32     ]
+->                      22|34     ->
+Identifier              22|37     b
+Identifier              23|0      fldr
+Identifier              23|5      f
+Identifier              23|7      acc
+[                       23|11     [
+]                       23|12     ]
+=                       23|14     =
+Identifier              23|16     acc
+Identifier              24|0      fldr
+Identifier              24|5      f
+Identifier              24|7      acc
+(                       24|11     (
+Identifier              24|12     x
+:                       24|13     :
+Identifier              24|14     xs
+)                       24|16     )
+=                       24|18     =
+Identifier              24|20     f
+Identifier              24|22     x
+(                       24|24     (
+Identifier              24|25     fldr
+Identifier              24|30     f
+Identifier              24|32     acc
+Identifier              24|36     xs
+)                       24|38     )
+Identifier              26|0      fldl
+::                      26|5      ::
+(                       26|8      (
+Identifier              26|9      b
+->                      26|11     ->
+Identifier              26|14     a
+->                      26|16     ->
+Identifier              26|19     b
+)                       26|20     )
+->                      26|22     ->
+Identifier              26|25     b
+->                      26|27     ->
+[                       26|30     [
+Identifier              26|31     a
+]                       26|32     ]
+->                      26|34     ->
+Identifier              26|37     b
+Identifier              27|0      fldl
+Identifier              27|5      f
+Identifier              27|7      acc
+[                       27|11     [
+]                       27|12     ]
+=                       27|14     =
+Identifier              27|16     acc
+Identifier              28|0      fldl
+Identifier              28|5      f
+Identifier              28|7      acc
+(                       28|11     (
+Identifier              28|12     x
+:                       28|13     :
+Identifier              28|14     xs
+)                       28|16     )
+=                       28|18     =
+Identifier              28|20     fldl
+Identifier              28|25     f
+(                       28|27     (
+Identifier              28|28     f
+Identifier              28|30     acc
+Identifier              28|34     x
+)                       28|35     )
+Identifier              28|37     xs
+Identifier              31|0      sum'
+::                      31|5      ::
+(                       31|8      (
+Identifier              31|9      Foldable
+Identifier              31|18     t
+Identifier              32|0      sum'
+Identifier              32|5      x
+=                       32|7      =
+Identifier              32|9      getSum
+(                       32|16     (
+Identifier              32|17     foldMap
+Identifier              32|25     Sum
+Identifier              32|29     x
+)                       32|30     )
+Identifier              35|0      eq
+::                      35|3      ::
+Eq                      35|6      Eq
+Identifier              35|9      a
+=>                      35|11     =>
+Identifier              35|14     a
+->                      35|16     ->
+(                       35|19     (
+Identifier              35|20     a
+->                      35|22     ->
+Bool                    35|25     Bool
+)                       35|29     )
+Identifier              36|0      eq
+Identifier              36|3      a
+=                       36|5      =
+(                       36|7      (
+==                      36|8      ==
+)                       36|10     )
+Identifier              36|12     a
 
 ---------------------------Invalid tokens---------------------------
 |row|col|    Error explanation
 --------------------------------------------------------------------
- 9|14      Invalid token  ||
-25|12      No matching " found to this quotation mark: (25, 12) |Enter your name please: |
-27|20      No matching " found to this quotation mark: (27, 20) |Hello, " name|
+31|19      Invalid token  |, Num a) => t a -> |
 
 ---------------------------Symbol table---------------------------
 0) |--Lesson 20-21|
@@ -194,302 +193,308 @@ Identifier              35|12    303) |a|
 2) | |
 3) |Data|
 4) |.|
-5) |Monoi|
-6) |d|
-7) |{- \nloncomment -|
-8) |}|
-9) |mult2|
+5) |Monoid|
+6) |{- \nloncomment -}|
+7) |mult2|
+8) | |
+9) |::|
 10) | |
-11) |::|
+11) |Integer|
 12) | |
-13) |Integer|
+13) |->|
 14) | |
-15) |->|
-16) | |
-17) |Intege|
-18) |r|
-19) |mult2|
-20) | |
-21) |a|
-22) | |
-23) |=|
-24) | |
-25) |a|
-26) | |
-27) |*|
+15) |Integer|
+16) |mult2|
+17) | |
+18) |a|
+19) | |
+20) |=|
+21) | |
+22) |a|
+23) | |
+24) |*|
+25) | |
+26) |2|
+27) |floatFunc|
 28) | |
-29) |ccc|
+29) |::|
 30) | |
-31) |::|
+31) |Float|
 32) | |
-33) |Char|
+33) |->|
 34) | |
-35) |->|
+35) |Float|
 36) | |
-37) |Cha|
-38) |r|
-39) |ccc|
-40) | |
-41) |x|
-42) | |
-43) |=|
-44) | |
-45) |'\n|
-46) |a'|
-47) |fldr|
-48) | |
-49) |::|
-50) | |
-51) |(|
-52) |a|
-53) | |
-54) |->|
-55) | |
-56) |b|
+37) |->|
+38) | |
+39) |Float|
+40) |floatFunc|
+41) | |
+42) |x|
+43) | |
+44) |y|
+45) | |
+46) |=|
+47) | |
+48) |x|
+49) | |
+50) |*|
+51) | |
+52) |2.5 |
+53) |+|
+54) | |
+55) |976.33 |
+56) |/|
 57) | |
-58) |->|
-59) | |
-60) |b|
-61) |)|
+58) |y|
+59) |binding|
+60) | |
+61) |::|
 62) | |
-63) |->|
+63) |IO|
 64) | |
-65) |b|
-66) | |
-67) |->|
+65) |(|
+66) |)|
+67) |binding|
 68) | |
-69) |[|
-70) |a|
-71) |]|
+69) |=|
+70) | |
+71) |do|
 72) | |
-73) |->|
+73) | |
 74) | |
-75) |b|
-76) |fldr|
+75) | |
+76) |putStr|
 77) | |
-78) |f|
+78) |"Enter your name please: "|
 79) | |
-80) |acc|
+80) | |
 81) | |
-82) |[|
-83) |]|
+82) | |
+83) |name|
 84) | |
-85) |=|
+85) |<-|
 86) | |
-87) |ac|
-88) |c|
-89) |fldr|
+87) |getLine|
+88) | |
+89) | |
 90) | |
-91) |f|
-92) | |
-93) |acc|
-94) | |
+91) | |
+92) |putStrLn|
+93) | |
+94) |(|
 95) |(|
-96) |x|
-97) |:|
-98) |xs|
-99) |)|
+96) |++|
+97) |)|
+98) | |
+99) |"Hello, "|
 100) | |
-101) |=|
-102) | |
-103) |f|
+101) |name|
+102) |)|
+103) |ccc|
 104) | |
-105) |x|
+105) |::|
 106) | |
-107) |(|
-108) |fldr|
-109) | |
-110) |f|
-111) | |
-112) |acc|
+107) |Char|
+108) | |
+109) |->|
+110) | |
+111) |Char|
+112) |ccc|
 113) | |
-114) |xs|
-115) |)|
-116) |fldl|
+114) |x|
+115) | |
+116) |=|
 117) | |
-118) |::|
-119) | |
-120) |(|
-121) |b|
+118) |'a'|
+119) |fldr|
+120) | |
+121) |::|
 122) | |
-123) |->|
-124) | |
-125) |a|
-126) | |
-127) |->|
-128) | |
-129) |b|
-130) |)|
+123) |(|
+124) |a|
+125) | |
+126) |->|
+127) | |
+128) |b|
+129) | |
+130) |->|
 131) | |
-132) |->|
-133) | |
-134) |b|
-135) | |
-136) |->|
-137) | |
-138) |[|
-139) |a|
-140) |]|
-141) | |
-142) |->|
-143) | |
-144) |b|
-145) |fldl|
+132) |b|
+133) |)|
+134) | |
+135) |->|
+136) | |
+137) |b|
+138) | |
+139) |->|
+140) | |
+141) |[|
+142) |a|
+143) |]|
+144) | |
+145) |->|
 146) | |
-147) |f|
-148) | |
-149) |acc|
-150) | |
-151) |[|
-152) |]|
+147) |b|
+148) |fldr|
+149) | |
+150) |f|
+151) | |
+152) |acc|
 153) | |
-154) |=|
-155) | |
-156) |ac|
-157) |c|
-158) |fldl|
-159) | |
-160) |f|
+154) |[|
+155) |]|
+156) | |
+157) |=|
+158) | |
+159) |acc|
+160) |fldr|
 161) | |
-162) |acc|
+162) |f|
 163) | |
-164) |(|
-165) |x|
-166) |:|
-167) |xs|
-168) |)|
-169) | |
-170) |=|
+164) |acc|
+165) | |
+166) |(|
+167) |x|
+168) |:|
+169) |xs|
+170) |)|
 171) | |
-172) |fldl|
+172) |=|
 173) | |
 174) |f|
 175) | |
-176) |(|
-177) |f|
-178) | |
-179) |acc|
+176) |x|
+177) | |
+178) |(|
+179) |fldr|
 180) | |
-181) |x|
-182) |)|
-183) | |
-184) |x|
-185) |s|
-186) |binding|
-187) | |
-188) |::|
-189) | |
-190) |IO|
-191) | |
-192) |(|
-193) |)|
-194) |binding|
+181) |f|
+182) | |
+183) |acc|
+184) | |
+185) |xs|
+186) |)|
+187) |fldl|
+188) | |
+189) |::|
+190) | |
+191) |(|
+192) |b|
+193) | |
+194) |->|
 195) | |
-196) |=|
+196) |a|
 197) | |
-198) |d|
-199) |o|
-200) | |
-201) | |
+198) |->|
+199) | |
+200) |b|
+201) |)|
 202) | |
-203) | |
-204) |putStr|
-205) | |
-206) |me|
-207) | |
-208) |please|
-209) |:|
-210) | |
-211) | |
+203) |->|
+204) | |
+205) |b|
+206) | |
+207) |->|
+208) | |
+209) |[|
+210) |a|
+211) |]|
 212) | |
-213) | |
+213) |->|
 214) | |
-215) |name|
-216) | |
-217) |<|
-218) |-|
+215) |b|
+216) |fldl|
+217) | |
+218) |f|
 219) | |
-220) |getLin|
-221) |e|
-222) | |
-223) | |
+220) |acc|
+221) | |
+222) |[|
+223) |]|
 224) | |
-225) | |
-226) |putStrLn|
-227) | |
-228) |(|
-229) |(|
-230) |++|
-231) |)|
-232) | |
-233) |sum'|
-234) | |
-235) |::|
-236) | |
-237) |(|
-238) |Foldable|
+225) |=|
+226) | |
+227) |acc|
+228) |fldl|
+229) | |
+230) |f|
+231) | |
+232) |acc|
+233) | |
+234) |(|
+235) |x|
+236) |:|
+237) |xs|
+238) |)|
 239) | |
-240) |t|
-241) |,|
-242) | |
-243) |Num|
-244) | |
-245) |a|
-246) |)|
-247) | |
-248) |=>|
-249) | |
-250) |t|
-251) | |
-252) |a|
+240) |=|
+241) | |
+242) |fldl|
+243) | |
+244) |f|
+245) | |
+246) |(|
+247) |f|
+248) | |
+249) |acc|
+250) | |
+251) |x|
+252) |)|
 253) | |
-254) |->|
-255) | |
-256) |a|
-257) |sum'|
+254) |xs|
+255) |sum'|
+256) | |
+257) |::|
 258) | |
-259) |x|
-260) | |
-261) |=|
-262) | |
-263) |getSum|
+259) |(|
+260) |Foldable|
+261) | |
+262) |t|
+263) |sum'|
 264) | |
-265) |(|
-266) |foldMap|
-267) | |
-268) |Sum|
-269) | |
-270) |x|
-271) |)|
-272) |eq|
+265) |x|
+266) | |
+267) |=|
+268) | |
+269) |getSum|
+270) | |
+271) |(|
+272) |foldMap|
 273) | |
-274) |::|
+274) |Sum|
 275) | |
-276) |Eq|
-277) | |
-278) |a|
+276) |x|
+277) |)|
+278) |eq|
 279) | |
-280) |=>|
+280) |::|
 281) | |
-282) |a|
+282) |Eq|
 283) | |
-284) |->|
+284) |a|
 285) | |
-286) |(|
-287) |a|
-288) | |
-289) |->|
-290) | |
-291) |Bool|
-292) |)|
-293) |eq|
+286) |=>|
+287) | |
+288) |a|
+289) | |
+290) |->|
+291) | |
+292) |(|
+293) |a|
 294) | |
-295) |a|
+295) |->|
 296) | |
-297) |=|
-298) | |
-299) |(|
-300) |==|
-301) |)|
+297) |Bool|
+298) |)|
+299) |eq|
+300) | |
+301) |a|
 302) | |
-303) |a|
+303) |=|
+304) | |
+305) |(|
+306) |==|
+307) |)|
+308) | |
+309) |a|

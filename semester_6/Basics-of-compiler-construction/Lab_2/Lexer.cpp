@@ -5,21 +5,9 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <utility>
 
 namespace lexer
 {
-
-
-    void Lexer::getTokenFromAuto(FiniteAuto automata){
-        std::pair<TokenType, size_t> autoToken = automata.checkValue(currentLine.line, currentLine.column);
-        if (autoToken.first == TokenType::INVALID)
-            processBadToken(autoToken.second - currentLine.column);
-        else
-        {
-            addEmptyToken(autoToken.first, autoToken.second - currentLine.column);
-        }
-    }
 
     void Lexer::getOperatorToken() {
         std::pair<TokenType, size_t> autoToken = operatorsAuto.checkValue(currentLine.line, currentLine.column);
@@ -53,7 +41,7 @@ namespace lexer
                 continue;
             } else if (currentState == LongCommentEnding){
                 if(currentSymbol == '}'){
-                    addLongToken(TokenType::MultiLineComment, cache, forward+1);
+                    addLongToken(TokenType::MultiLineComment, forward+1);
                     return;
                 } else if (currentSymbol != '-'){
                     currentState = LongComment;
@@ -66,15 +54,15 @@ namespace lexer
         currentState = LongComment;
     }
 
-    void Lexer::getOneQuoteChar(){
+    void Lexer::processOneQuoteChar(){
         currentState = Char;
         char c = currentLine.getNextSymbol();
-        if(c == '\\' && !currentLine.ended(2)){
-            char next = currentLine.getNextSymbol(2);
+        if(c == '\\' && !currentLine.ended(3)){
+            char next = currentLine.getNextSymbol(3);
             if(next == '\''){
                 addToken(TokenType::CharValueOneQuote, 4);
             }
-        } else if (!currentLine.ended(1) && currentLine.getNextSymbol(1) == '\'') {
+        } else if (!currentLine.ended(2) && currentLine.getNextSymbol(2) == '\'') {
             addToken(TokenType::CharValueOneQuote, 3);
         } else {
             processBadToken(1);
@@ -82,19 +70,19 @@ namespace lexer
         }
     }
 
-    void Lexer::getTwoQuoteString(){
+    void Lexer::processTwoQuoteString(){
         currentState = String;
         char currentSymbol;
         size_t forward = 0;
         while(!currentLine.ended(forward + 1)){
             forward++;
             currentSymbol = currentLine.getNextSymbol(forward);
-            if(currentState == LongComment){
+            if(currentState == String){
                 if(currentSymbol == '\\'){
                     currentState = StringSlash;
                 }
                 else if (currentSymbol == '\"'){
-                    addToken(TokenType::String, forward);
+                    addToken(TokenType::StringValueInTwoQuotes, forward + 1);
                     return;
                 }
             } else if (currentState == StringSlash){
@@ -125,13 +113,15 @@ namespace lexer
         char currentSymbol = currentLine.getNextSymbol();
         int forward = 0;
 
-        while(!currentLine.ended(forward + 1) && isDigit(currentSymbol) || isDot(currentSymbol)){
+        while(!currentLine.ended(forward + 1) && isDigit(currentSymbol)){
             forward++;
             currentSymbol = currentLine.getNextSymbol(forward);
         }
 
         if(isDot(currentSymbol)){
             currentState = Float;
+            forward++;
+            currentSymbol = currentLine.getNextSymbol(forward);
         }
 
         while(!currentLine.ended(forward + 1) && isDigit(currentSymbol)){
@@ -139,8 +129,8 @@ namespace lexer
             currentSymbol = currentLine.getNextSymbol(forward);
         }
 
-        if(currentLine.ended(forward) || isEndOfToken(currentSymbol)) {
-            addToken(currentState == Integer ? TokenType::IntValue : TokenType::FloatValue, forward);
+        if(currentLine.ended(forward + 1) || isEndOfToken(currentSymbol)) {
+            addToken(currentState == Integer ? TokenType::IntValue : TokenType::FloatValue, forward + 1);
             return;
         }
         else {
@@ -148,8 +138,8 @@ namespace lexer
         }
     }
 
-    void Lexer::registerError(const std::string& errorName, const std::string& errorLexem, size_t row, size_t col){
-        invalidTokens.emplace_back(errorName, errorLexem, row, col);
+    void Lexer::registerError(const std::string& errorName, const std::string& errorLexeme, size_t row, size_t col){
+        errors.emplace_back(errorName, errorLexeme, row, col);
         currentLine.column += col + 1;
         currentState = Default;
     }
@@ -175,7 +165,6 @@ namespace lexer
         else {
             getMultilineComment();
         }
-
     }
 
     void Lexer::processWord()
@@ -206,52 +195,10 @@ namespace lexer
         while(!currentLine.ended(forward + 1));
         auto pair = getKeyWordToken();
         if(pair.first == TokenType::INVALID){
-            addToken(TokenType::Identifier, forward);
+            addToken(TokenType::Identifier, forward + 1);
         } else {
-            addToken(pair.first, forward);
+            addToken(pair.first, forward + 1);
         }
-    }
-
-    void Lexer::processOneQuoteChar()
-    {
-        currentLine.token = Token(TokenType::CharValueOneQuote, currentLine.row, currentLine.column, symbolTable.size());
-        symbolTable.emplace_back("'");
-        currentLine.column += 1;
-        getOneQuoteChar();
-    }
-
-
-    void Lexer::processTwoQuoteString()
-    {
-        currentLine.column += 1;
-        if (currentLine.column < currentLine.line.length())
-        {
-            getTwoQuoteString();
-        }
-        else
-        {
-            symbolTable[currentLine.token.symbolTableIndex] += "\\n";
-        }
-    }
-
-
-    void Lexer::processPunctuation()
-    {
-        std::string word;
-        word += currentLine.getNextSymbol();;
-        auto start = static_cast<size_t>(TokenType::Comma);
-        auto end = static_cast<size_t>(TokenType::RBrace);
-        size_t pos = SYMBOL_TABLE_MAX;
-        for (size_t i = start;i <= end; ++i)
-        {
-            if (word == TokenValue[i])
-            {
-                pos = i;
-                break;
-            }
-        }
-        tokens.emplace_back(static_cast<TokenType>(pos), currentLine.row, currentLine.column);
-        currentLine.column += 1;
     }
 
     void Lexer::addEmptyToken(TokenType token, size_t size){
@@ -268,11 +215,12 @@ namespace lexer
         currentState = Default;
     }
 
-    void Lexer::addLongToken(TokenType token, std::string cache, size_t size){
+    void Lexer::addLongToken(TokenType token, size_t size){
         int index = symbolTable.size();
         tokens.emplace_back(token, currentLine.row, currentLine.column, index);
         symbolTable.emplace_back(cache + currentLine.line.substr(currentLine.column, size));
         currentLine.column += size;
+        cache.clear();
         currentState = Default;
     }
 
@@ -340,17 +288,17 @@ namespace lexer
      //   }
         std::string symbol;
         symbol += currentLine.getNextSymbol();
-        invalidTokens.emplace_back("Invalid symbol", symbol, currentLine.row, currentLine.column);
+        errors.emplace_back("Invalid symbol", symbol, currentLine.row, currentLine.column);
         currentLine.column += 1;
     }
 
-    Lexer::LexerResponse Lexer::getAllTokens(std::string const &path_to_file)
+    bool Lexer::getAllTokens(std::string const &pathToFile)
     {
-        std::ifstream ifs(path_to_file);
+        std::ifstream ifs(pathToFile);
         if (!ifs)
         {
             std::cerr << "\tFile doesn't exists!\n";
-            return {};
+            return false;
         }
         while (!ifs.eof())
         {
@@ -363,7 +311,7 @@ namespace lexer
             currentLine.row += 1;
         }
 
-        return LexerResponse(tokens, symbolTable, invalidTokens);
+        return true;
     }
 
     Lexer::LexerResponse::LexerResponse(std::vector<Token> tokens, std::vector<std::string> symbolTable,
@@ -381,9 +329,9 @@ namespace lexer
         this->lexerCompleted = false;
     }
 
-    void Lexer::output(std::string const &path_to_file) const
+    void Lexer::printResult(std::string const &pathToFile) const
     {
-        std::ofstream ofs(path_to_file);
+        std::ofstream ofs(pathToFile);
 
         ofs << "---------------------------Tokens list---------------------------\n";
         ofs << std::left << std::setw(22) << "Token type";
@@ -391,17 +339,16 @@ namespace lexer
         ofs << std::left << std::setw(6) << "col|";
         ofs << std::left << "symbol table index and value\n";
         ofs << "-----------------------------------------------------------------\n";
-        for (int i = 0;i < tokens.size(); ++i)
+        for (auto token : tokens)
         {
-            if(printWhiteSpaces || tokens[i].type != TokenType::WhiteSpace){
-                ofs << std::left << std::setw(22) << TokenValue[static_cast<size_t>(tokens[i].type)];
-                ofs << std::right <<std::setw(4) << tokens[i].row_pos << "|";
-                ofs << std::left << std::setw(6) << tokens[i].column_pos;
+            if(printWhiteSpaces || token.type != TokenType::WhiteSpace){
+                ofs << std::left << std::setw(22) << TokenValue[static_cast<size_t>(token.type)];
+                ofs << std::right <<std::setw(4) << token.row_pos << "|";
+                ofs << std::left << std::setw(6) << token.column_pos;
 
 
-                if (tokens[i].symbolTableIndex != SYMBOL_TABLE_MAX)
-                    ofs << std::left << tokens[i].symbolTableIndex << ") |"
-                        << symbolTable[tokens[i].symbolTableIndex] << "|";
+                if (token.symbolTableIndex != SYMBOL_TABLE_MAX)
+                    ofs << " " << symbolTable[token.symbolTableIndex] << "";
                 ofs << '\n';
             }
         }
@@ -410,123 +357,35 @@ namespace lexer
         ofs << std::left << std::setw(8) << "col|";
         ofs << "Error explanation";
         ofs << "\n--------------------------------------------------------------------\n";
-        for (int i = 0;i < invalidTokens.size(); ++i)
+        for (const auto & error : errors)
         {
-            ofs << std::right <<std::setw(2) << invalidTokens[i].row_pos << "|";
-            ofs << std::left << std::setw(8) << invalidTokens[i].column_pos;
-            ofs << invalidTokens[i].error_message + " |" + invalidTokens[i].error_symbol + "|\n";
+            ofs << std::right << std::setw(2) << error.row_pos << "|";
+            ofs << std::left << std::setw(8) << error.column_pos;
+            ofs << error.error_message + " |" + error.error_symbol + "|\n";
         }
         ofs << "\n---------------------------Symbol table---------------------------\n";
-        for (int i = 0;i < symbolTable.size(); ++i)
+        for (int i = 0; i < symbolTable.size(); ++i)
         {
             ofs << i << ") |" << symbolTable[i] << "|\n";
         }
     }
 
+    std::vector<std::string> Lexer::getKeywordsFromFile(std::string const &pathToFile){
+        std::vector<std::string> result;
+        std::ifstream ifs(pathToFile);
+        std::string s;
+        while(!ifs.eof()) {
+            std::getline(ifs, s);
+            result.push_back(s);
+        }
+        return result;
+    }
+
     Lexer::Lexer()
     {
-        std::vector<std::string> operators = {"$", "+", "-",                        // Sub
-                     "*",
-                     "/",
-                     "%",
-                     "**",
-                     "=",
-                     "==",
-                     "/=",                       // NotEqualQuest
-                     "<>",                       // NotEqualBracket
-                     ">",                        // GreaterThan
-                     "<",                        // LessThan
-                     ">=",                       // GreaterThanEqual
-                     "<=",                       // LessThanEqual
-                     "++",                       // Concat
-                // logic //14
-                     "&",                        // Ampersand
-                     "&&",                       // AndSymb
-                     "||",                       // OrSymb
-                     "!",                        // Not
-                     "|",                        // BitwiseOr
-                     "^",                        // BitwiseXor
-                     "<<",                       // LeftShift
-                     ">>",                       // RightShift
-                     "|=",                       // BitwiseOrAssignment
-                     "^=",                       // BitwiseXorAssignment
-                     "<<=",                      // LeftShiftAssignment
-                     ">>=",                      // RightShiftOrAssignment
-                     "-<",                      // MinusLess
-                     "--<",
-                     ".",                        // Dot
-                     "?",                        // QuestMark
-                     ":",                        // Colon
-                     "??",                       // NullCoalescing
-                     "=>",                       // ArrayKey
-                     "->",                       // VarReference,
-                     "::",
-                  ",",                        // Comma
-                  ";",                        // Semicolon
-                  "(",                        // LParen
-                  ")",                        // RParen
-                  "[",                        // LBracket
-                  "]",                        // RBracket
-                  "{",                        // LBrace
-                  "}",                        // RBrace
-                  "@",                        // Cat
-                  "_",                        // Dash
-                  "...",                        // DotDotDot
-        };
-
-        std::vector<std::string> keywords = { //47
-                "include",                 // Include //14
-                "import",                 // Import
-                "if",                      // If
-                "then",                    // Else
-                "else",                  // ElseIf
-                "class",                // Function
-                "where",                  // Return
-                "do",                    // Define
-                "case",                    // Static
-                "of",                    // Global
-                "error",                    // Global
-                "deriving",                    // Global
-                "echo",                      // Echo
-                "print",                     // Print
-                //data types cast
-                "Int", //12
-                "Integer",
-                "Bool",
-                "Scientific",
-                "Char",
-                "String",
-                "Integral",
-                "Ratio",
-                "Float",
-                "Fractional",
-                "Double",
-                "Complex",
-                //type classes //19
-                "Eq",
-                "Num",
-                "Ord",
-                "Show",
-                "Bounded",
-                "Enum",
-                "Read",
-                "Monad",
-                "Maybe",
-                "Functor",
-                "Either",
-                "Ordering",
-                "Nothing",
-                "Just",
-                "Left",
-                "Right",
-                "LT",
-                "EQ",
-                "GT",
-                "True",
-                "False"
-        };
+        std::vector<std::string> operators = getKeywordsFromFile("../operators.txt");
+        std::vector<std::string> keywords = getKeywordsFromFile("../keywords.txt");
         operatorsAuto.setupAuto(operators, 52);
         keyWords.setupAuto(keywords, 1);
-
     }
 }
