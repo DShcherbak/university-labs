@@ -1,3 +1,5 @@
+#ifndef LAB_2_FINITEAUTO_H
+#define LAB_2_FINITEAUTO_H
 #include <vector>
 #include <map>
 #include "Token.h"
@@ -33,3 +35,5 @@ namespace lexer
 
     };
 }
+
+#endif
