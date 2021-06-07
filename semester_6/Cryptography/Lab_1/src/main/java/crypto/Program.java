@@ -145,9 +145,9 @@ public class Program {
         System.out.println(millerRabin(BigInteger.valueOf(24), 5));
 
 
-        BigInteger A = BigInteger.valueOf(243);
+        BigInteger A = BigInteger.valueOf(3235);
         BigInteger B = BigInteger.valueOf(156);
-        BigInteger N = BigInteger.valueOf(14441);
+        BigInteger N = BigInteger.valueOf(11);
         BigInteger c1 = Karatsuba(A, B).mod(N);
         MontgomeryArithmetic ma = new MontgomeryArithmetic(N);
         BigInteger c2 = ma.multiplication(A, B);
@@ -160,12 +160,7 @@ public class Program {
         System.out.println(c1);
         System.out.println(c2);
 
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(3)));
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(5)));
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(7)));
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(9)));
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(10)));
-        System.out.println(ma.power(BigInteger.TWO,BigInteger.valueOf(141)));
+        System.out.println(ma.power(A,BigInteger.valueOf(5)));
 
     }
 }

@@ -17,7 +17,7 @@ public class MontgomeryArithmetic {
         R = BigInteger.ONE.shiftLeft(power);
         var result = Program.expandedEuclid(N, R);
         N1 = result.x.negate();
-        R2 = R.multiply(R).mod(N);
+        R2 = toMontgomery(R.multiply(R).multiply(R));
     }
 
     //По суті, (X * R^-1) % N, без самої операції взяття за модулем N
