@@ -138,6 +138,58 @@ public class Program {
         return new EuclidResult(x,y,euclidResult.gcd);
     }
 
+    private static BigInteger MontgomeryRepresentation(BigInteger number, BigInteger N, BigInteger R, int power) {
+        EuclidResult euclid = expandedEuclid(N, R);
+
+        //m = number * N' mod R
+        BigInteger m = (number.multiply(euclid.x.negate())).mod(R);
+        //result = (number + m * N) >> power
+        BigInteger result = (number.add(m.multiply(N))).shiftRight(power);
+
+        while (N.compareTo(result) < 0) {
+            result = result.subtract(N);
+        }
+        return result;
+    }
+
+    private static int createR(BigInteger N, BigInteger R){
+        int power = 10;
+        while(!expandedEuclid(N, R).gcd.equals(BigInteger.ONE)){
+            R = R.shiftLeft(1);
+            power++;
+        }
+        return power;
+    }
+
+    public static BigInteger multiplyMontgomery(BigInteger a, BigInteger b, BigInteger N) {
+        if(!expandedEuclid(N, BigInteger.TWO).gcd.equals(BigInteger.ONE)){
+            return Karatsuba(a,b).mod(N);
+        }
+        BigInteger R = BigInteger.valueOf(1024);
+        int power = createR(N, R);
+        BigInteger a1 = a.shiftLeft(power).mod(N);  //a1 = aR mod N
+        BigInteger b1 = b.shiftLeft(power).mod(N);  //b1 = bR mod N
+        BigInteger c1 = a1.multiply(b1).mod(N);
+
+        BigInteger c2 = MontgomeryRepresentation(a1.multiply(b1), N, R, power);
+        return MontgomeryRepresentation(c1, N, R, power);
+    }
+
+    public static BigInteger powerMontgomery(BigInteger a, BigInteger e, BigInteger N) {
+        if(!expandedEuclid(N, BigInteger.TWO).gcd.equals(BigInteger.ONE)){
+            return powMod(a,e,N);
+        }
+        BigInteger R = BigInteger.valueOf(1024);
+        int power = createR(N, R);
+        BigInteger a1 = a.shiftLeft(power).mod(N);
+        BigInteger x1 = BigInteger.ONE;
+        while (e.compareTo(BigInteger.ZERO) > 0) {
+            x1 = MontgomeryRepresentation(x1.multiply(a1), N, R, power);
+            e = e.subtract(BigInteger.ONE);
+        }
+        return x1;
+    }
+
     public static void main(String[] args){
         System.out.println(checkFermat(BigInteger.valueOf(3253), 5));
         System.out.println(checkFermat(BigInteger.valueOf(13), 5));
@@ -151,7 +203,12 @@ public class Program {
         System.out.println(millerRabin(BigInteger.valueOf(18), 5));
         System.out.println(millerRabin(BigInteger.valueOf(24), 5));
 
-        System.out.println(Karatsuba(BigInteger.valueOf(12345678), BigInteger.valueOf(12345679)));
+        BigInteger c1 = Karatsuba(BigInteger.valueOf(12345678), BigInteger.valueOf(12345679)).mod(BigInteger.valueOf(100001));
+        BigInteger c2 = multiplyMontgomery(BigInteger.valueOf(12345678),
+                                            BigInteger.valueOf(12345679),
+                                            BigInteger.valueOf(100001));
+        System.out.println(c1);
+        System.out.println(c2);
     }
 }
 
