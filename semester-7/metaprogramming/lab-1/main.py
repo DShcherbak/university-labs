@@ -1,27 +1,36 @@
 import pygame
-import objects
+
+import additional_drawing
+from objects import *
 from constants import *
 
-pygame.init()
-screen = pygame.display.set_mode([cell_size * field_width, cell_size * window_height])
-running = True
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode([field_width_pix, window_height_pix])
+    running = True
+    arrow = Arrow()
 
-field = [[objects.Cell(x,y,False,'BLACK') for x in range(25)] for y in range(15)]
+    field = [[Cell(x,y) for y in range(field_height)] for x in range(field_width)]
 
-while running:
+    while running:
 
-    for event in pygame.event.get(pygame.draw.rectangle(screen, (0, 0, 255), (250, 250), 75)):
-        if event.type == pygame.QUIT:
-            running = False
-    screen.fill((255, 255, 255))
+        arrow.grow(field)
 
-    for line in field:
-        for cell in line:
-            if cell.x == cell.y:
-                pygame.draw.rectangle(screen, (10, 10, 10), cell.rect)
-            else:
-                pygame.draw.rectangle(screen, (200, 0, 0), cell.rect)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if not arrow.visible:
+                    arrow.init(pygame.mouse.get_pos())
+            elif event.type == pygame.KEYDOWN:
+                if not arrow.visible and event.key == pygame.K_SPACE:
+                    arrow.flip_vertical()
 
-    pygame.display.flip()
+        additional_drawing.redraw(screen, field, arrow)
 
-pygame.quit()
+        pygame.display.flip()
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
