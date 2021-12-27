@@ -119,10 +119,6 @@ class Arrow:
                             field[cell_x][row].block(Color.BLUE)
                         if not field[center][row].blocked:
                             field[center][row].block(Color.BLUE)
-
-
-
-
         self.width = self.width + arrow_speed
     
 
@@ -152,9 +148,6 @@ class Arrow:
         if self.left_dead_end:
             self.visible = False
             width = 0
-    
-    
-
 
     def flip_vertical(self):
         self.vertical = not self.vertical
@@ -206,8 +199,9 @@ class Ball:
             if field[column][bottom].blocked:
                 self.angle = top_bottom_change_angle(self.angle)
 
+        self.check_collision_with_arrow(arrow) 
 
-    def collides_with_arrow(self, arrow):
+    def check_collision_with_arrow(self, arrow):
         if not arrow.left_dead_end:
             (x1, y1, x2, y2) = arrow.left_part()
             if (x1 <= self.x <= x2) and (y1 <= self.y - radius <= self.y + radius <= y2):
@@ -237,6 +231,9 @@ class Ball:
             elif self.collides_with_point(x2,y2):
                 arrow.right_strike()
                 
+
+    def collides_with_point(self, x, y):
+        return math.sqrt((self.x - x)**2 + (self.y - y)**2) <= radius
 
 
 def left_right_change_angle(angle):
