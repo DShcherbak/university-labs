@@ -9,7 +9,7 @@ def main():
     screen = pygame.display.set_mode([field_width_pix, window_height_pix])
     running = True
     arrow = Arrow()
-    level = 16
+    level = 2
 
     field = [[Cell(x,y) for y in range(field_height)] for x in range(field_width)]
     balls = [Ball() for _ in range(level + 1)]

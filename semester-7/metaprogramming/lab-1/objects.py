@@ -4,7 +4,7 @@ import pygame
 from constants import *
 from random import randint
 
-radius = 8
+
 balls_speed = 1
 arrow_speed = 1
 class Cell:
@@ -151,23 +151,24 @@ class Ball:
         row = self.y // cell_size
         column = self.x // cell_size
 
-        if (self.x - radius) % cell_size == 0:
-            left = (self.x - radius) // cell_size - 1
+        if (3 * math.pi / 2 > self.angle > math.pi / 2) and (balls_speed >= (radius - (self.x % cell_size))) >= 0:
+            left = (self.x - radius) // cell_size # - 1 if self.x % cell_size == radius else 0
             if field[left][row].blocked:
                 self.angle = left_right_change_angle(self.angle)
 
-        elif (self.x + radius) % cell_size == 0:
+
+        if ((self.angle > 3 * math.pi / 2) or  (self.angle < math.pi / 2)) and (balls_speed >= (radius - (cell_size - (self.x % cell_size)))) >= 0:
             right = (self.x + radius) // cell_size
             if field[right][row].blocked:
                 self.angle = left_right_change_angle(self.angle)
 
-        elif (self.y - radius) % cell_size == 0:
-            top = (self.y - radius) // cell_size - 1
+        if (self.angle > math.pi) and (balls_speed >= (radius - (self.y % cell_size))) >= 0:
+            top = (self.y - radius) // cell_size
             if field[column][top].blocked:
                 self.angle = top_bottom_change_angle(self.angle)
 
 
-        elif (self.y + radius) % cell_size == 0:
+        if (self.angle < math.pi) and (balls_speed >= (radius - (cell_size - (self.y % cell_size)))) >= 0:
             bottom = (self.y + radius) // cell_size
             if field[column][bottom].blocked:
                 self.angle = top_bottom_change_angle(self.angle)
