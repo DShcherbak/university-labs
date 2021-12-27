@@ -1,6 +1,12 @@
+import math
+
 import pygame
 from constants import *
+from random import randint
 
+radius = 8
+balls_speed = 1
+arrow_speed = 1
 class Cell:
     def __init__(self, x, y):
         self.x = x
@@ -117,8 +123,62 @@ class Arrow:
 
 
 
-        self.width = self.width + 1
+        self.width = self.width + arrow_speed
 
 
     def flip_vertical(self):
         self.vertical = not self.vertical
+
+class Ball:
+    def __init__(self):
+        self.xf = float(randint(cell_size + radius, field_width_pix-cell_size-radius))
+        self.yf = float(randint(cell_size + radius, field_height_pix-cell_size-radius))
+        self.angle = 2 * math.pi * randint(0,360) / 360
+        self.set_coordinates()
+
+    def set_coordinates(self):
+        self.x = int(self.xf)
+        self.y = int(self.yf)
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, color(Color.YELLOW), (self.x, self.y), radius)
+
+    def move(self, field, arrow):
+        self.xf = self.xf + balls_speed * math.cos(self.angle)
+        self.yf = self.yf + balls_speed * math.sin(self.angle)
+        self.set_coordinates()
+
+        row = self.y // cell_size
+        column = self.x // cell_size
+
+        if (self.x - radius) % cell_size == 0:
+            left = (self.x - radius) // cell_size - 1
+            if field[left][row].blocked:
+                self.angle = left_right_change_angle(self.angle)
+
+        elif (self.x + radius) % cell_size == 0:
+            right = (self.x + radius) // cell_size
+            if field[right][row].blocked:
+                self.angle = left_right_change_angle(self.angle)
+
+        elif (self.y - radius) % cell_size == 0:
+            top = (self.y - radius) // cell_size - 1
+            if field[column][top].blocked:
+                self.angle = top_bottom_change_angle(self.angle)
+
+
+        elif (self.y + radius) % cell_size == 0:
+            bottom = (self.y + radius) // cell_size
+            if field[column][bottom].blocked:
+                self.angle = top_bottom_change_angle(self.angle)
+
+
+def left_right_change_angle(angle):
+    if angle < math.pi:
+        return math.pi - angle
+    else:
+        return 2 * math.pi - (angle - math.pi)
+
+
+def top_bottom_change_angle(angle):
+    return math.pi * 2 - angle

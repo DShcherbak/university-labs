@@ -3,13 +3,15 @@ from constants import *
 
 
 
-def redraw(screen, field, arrow):
+def redraw(screen, field, arrow, balls):
     for line in field:
         for cell in line:
             cell.draw(screen)
     draw_lines(screen)
     if arrow.visible:
         arrow.draw(screen)
+    for ball in balls:
+        ball.draw(screen)
 
 def draw_lines(screen):
     for x in range(field_width):
