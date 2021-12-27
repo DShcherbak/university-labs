@@ -6,6 +6,7 @@ field_width = 25
 field_height = 17
 window_height = 20
 cell_size = 50
+half_cell = cell_size // 2
 radius = 8
 field_width_pix = field_width * cell_size
 field_height_pix = field_height * cell_size

@@ -53,11 +53,11 @@ class Arrow:
         if (pos[0] < 0 or pos[1] < 0 or pos[0] > field_width_pix or pos[1] > field_height_pix):
             return
         else:
-            x = (pos[0] // cell_size) * cell_size + cell_size // 2
-            y = (pos[1] // cell_size) * cell_size + cell_size // 2
+            x = (pos[0] // cell_size) * cell_size + half_cell
+            y = (pos[1] // cell_size) * cell_size + half_cell
             self.x = x
             self.y = y
-            self.width = cell_size // 2
+            self.width = half_cell
             self.visible = True
             self.left_dead_end = False
             self.right_dead_end = False
@@ -67,25 +67,25 @@ class Arrow:
             return
         if self.vertical:
             if not self.left_dead_end:
-                pygame.draw.rect(screen, color(Color.RED), (self.x-cell_size//2, self.y - self.width, cell_size, self.width))
+                pygame.draw.rect(screen, color(Color.RED), (self.x-half_cell, self.y - self.width, cell_size, self.width))
             if not self.right_dead_end:
-                pygame.draw.rect(screen, color(Color.BLUE), (self.x-cell_size//2, self.y, cell_size, self.width))
+                pygame.draw.rect(screen, color(Color.BLUE), (self.x-half_cell, self.y, cell_size, self.width))
         else:
             if not self.left_dead_end:
-                pygame.draw.rect(screen, color(Color.RED), (self.x - self.width, self.y - cell_size // 2, self.width, cell_size))
+                pygame.draw.rect(screen, color(Color.RED), (self.x - self.width, self.y - half_cell, self.width, cell_size))
             if not self.right_dead_end:
-                pygame.draw.rect(screen, color(Color.BLUE), (self.x, self.y - cell_size // 2, self.width, cell_size))
+                pygame.draw.rect(screen, color(Color.BLUE), (self.x, self.y - half_cell, self.width, cell_size))
 
     def grow(self, field):
         if self.left_dead_end and self.right_dead_end:
             self.visible = False
             return
-        if (self.width + (cell_size // 2)) % cell_size == 0:
+        if (self.width + (half_cell)) % cell_size == 0:
             if self.vertical:
                 center = self.y // cell_size
                 column = self.x // cell_size
                 if not self.left_dead_end:
-                    top = (self.y - (self.width + (cell_size // 2))) // cell_size - 1
+                    top = (self.y - (self.width + (half_cell))) // cell_size - 1
                     if field[column][top].blocked:
                         self.left_dead_end = True
                         for cell_y in range(top + 1, self.y // cell_size):
@@ -93,7 +93,7 @@ class Arrow:
                         if not field[column][center].blocked:
                             field[column][center].block(Color.RED)
                 if not self.right_dead_end:
-                    bottom = (self.y + (self.width + (cell_size // 2))) // cell_size
+                    bottom = (self.y + (self.width + (half_cell))) // cell_size
                     if field[column][bottom].blocked:
                         self.right_dead_end = True
                         for cell_y in range(bottom - 1, self.y // cell_size, -1):
@@ -104,7 +104,7 @@ class Arrow:
                 center = self.x // cell_size
                 row = self.y // cell_size
                 if not self.left_dead_end:
-                    left = (self.x - (self.width + (cell_size // 2))) // cell_size -1
+                    left = (self.x - (self.width + (half_cell))) // cell_size -1
                     if field[left][row].blocked:
                         self.left_dead_end = True
                         for cell_x in range(left + 1, self.x // cell_size):
@@ -112,7 +112,7 @@ class Arrow:
                         if not field[center][row].blocked:
                             field[center][row].block(Color.RED)
                 if not self.right_dead_end:
-                    right = (self.x + (self.width + (cell_size // 2))) // cell_size
+                    right = (self.x + (self.width + (half_cell))) // cell_size
                     if field[right][row].blocked:
                         self.right_dead_end = True
                         for cell_x in range(right - 1, self.x // cell_size, -1):
@@ -124,6 +124,36 @@ class Arrow:
 
 
         self.width = self.width + arrow_speed
+    
+
+    def left_part(self):
+        if self.vertical:
+            return (self.x - half_cell, self.y - half_cell - self.width, self.x + half_cell, self.y) 
+        else:
+            return (self.x - half_cell - self.width, self.y - half_cell , self.x, self.y + half_cell)   
+
+    def right_part(self):
+        if self.vertical:
+            return (self.x - half_cell, self.y, self.x + half_cell, self.y + half_cell + self.width) 
+        else:
+            return (self.x, self.y - half_cell, self.x + half_cell + self.width, self.y + half_cell)   
+
+    def left_strike(self):
+        print("LEFT STRIKE!")
+        self.left_dead_end = True
+        if self.right_dead_end:
+            self.visible = False
+            width = 0
+
+
+    def right_strike(self):
+        print("Right STRIKE!")
+        self.right_dead_end = True
+        if self.left_dead_end:
+            self.visible = False
+            width = 0
+    
+    
 
 
     def flip_vertical(self):
@@ -136,12 +166,15 @@ class Ball:
         self.angle = 2 * math.pi * randint(0,360) / 360
         self.set_coordinates()
 
+
     def set_coordinates(self):
         self.x = int(self.xf)
         self.y = int(self.yf)
 
+
     def draw(self, screen):
         pygame.draw.circle(screen, color(Color.YELLOW), (self.x, self.y), radius)
+
 
     def move(self, field, arrow):
         self.xf = self.xf + balls_speed * math.cos(self.angle)
@@ -172,6 +205,38 @@ class Ball:
             bottom = (self.y + radius) // cell_size
             if field[column][bottom].blocked:
                 self.angle = top_bottom_change_angle(self.angle)
+
+
+    def collides_with_arrow(self, arrow):
+        if not arrow.left_dead_end:
+            (x1, y1, x2, y2) = arrow.left_part()
+            if (x1 <= self.x <= x2) and (y1 <= self.y - radius <= self.y + radius <= y2):
+                arrow.left_strike()
+            elif (x1 <= self.x - radius <= self.x + radius <= x2) and (y1 <= self.y <= y2):
+                arrow.left_strike()
+            elif self.collides_with_point(x1,y1):
+                arrow.left_strike()
+            elif self.collides_with_point(x2,y1):
+                arrow.left_strike()
+            elif self.collides_with_point(x1,y2):
+                arrow.left_strike()
+            elif self.collides_with_point(x2,y2):
+                arrow.left_strike()
+        if not arrow.right_dead_end:
+            (x1, y1, x2, y2) = arrow.right_part()
+            if (x1 <= self.x <= x2) and (y1 <= self.y - radius <= self.y + radius <= y2):
+                arrow.right_strike()
+            elif (x1 <= self.x - radius <= self.x + radius <= x2) and (y1 <= self.y <= y2):
+                arrow.right_strike()
+            elif self.collides_with_point(x1,y1):
+                arrow.right_strike()
+            elif self.collides_with_point(x2,y1):
+                arrow.right_strike()
+            elif self.collides_with_point(x1,y2):
+                arrow.right_strike()
+            elif self.collides_with_point(x2,y2):
+                arrow.right_strike()
+                
 
 
 def left_right_change_angle(angle):
