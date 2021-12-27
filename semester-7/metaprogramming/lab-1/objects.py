@@ -84,9 +84,7 @@ class Arrow:
                         self.left_dead_end = True
                         for cell_y in range(top + 1, self.y // cell_size):
                             field[column][cell_y].block(Color.RED)
-                        if field[column][center].blocked == True:
-                            field[column][center].reset_color(Color.YELLOW)
-                        else:
+                        if not field[column][center].blocked:
                             field[column][center].block(Color.RED)
                 if not self.right_dead_end:
                     bottom = (self.y + (self.width + (cell_size // 2))) // cell_size
@@ -94,9 +92,7 @@ class Arrow:
                         self.right_dead_end = True
                         for cell_y in range(bottom - 1, self.y // cell_size, -1):
                             field[column][cell_y].block(Color.BLUE)
-                        if field[column][center].blocked == True:
-                            field[column][center].reset_color(Color.YELLOW)
-                        else:
+                        if not field[column][center].blocked:
                             field[column][center].block(Color.BLUE)
             else:
                 center = self.x // cell_size
@@ -107,9 +103,7 @@ class Arrow:
                         self.left_dead_end = True
                         for cell_x in range(left + 1, self.x // cell_size):
                             field[cell_x][row].block(Color.RED)
-                        if field[center][row].blocked == True:
-                            field[center][row].reset_color(Color.YELLOW)
-                        else:
+                        if not field[center][row].blocked:
                             field[center][row].block(Color.RED)
                 if not self.right_dead_end:
                     right = (self.x + (self.width + (cell_size // 2))) // cell_size
@@ -117,9 +111,7 @@ class Arrow:
                         self.right_dead_end = True
                         for cell_x in range(right - 1, self.x // cell_size, -1):
                             field[cell_x][row].block(Color.BLUE)
-                        if field[center][row].blocked == True:
-                            field[center][row].reset_color(Color.YELLOW)
-                        else:
+                        if not field[center][row].blocked:
                             field[center][row].block(Color.BLUE)
 
 
