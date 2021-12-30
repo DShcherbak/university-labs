@@ -10,12 +10,12 @@ def main():
     running = True
     arrow = Arrow()
     level = 2
-
-    field = [[Cell(x,y) for y in range(field_height)] for x in range(field_width)]
+    
+    field = Field()
+    field.cells = [[Cell(x,y) for y in range(field_height)] for x in range(field_width)]
     balls = [Ball() for _ in range(level + 1)]
 
     while running:
-
         arrow.grow(field)
         for ball in balls:
             ball.move(field, arrow)

@@ -4,7 +4,7 @@ from constants import *
 
 
 def redraw(screen, field, arrow, balls):
-    for line in field:
+    for line in field.cells:
         for cell in line:
             cell.draw(screen)
     draw_lines(screen)
