@@ -17,12 +17,15 @@ class Color(Enum):
     RED = 1
     BLUE = 2
     GRAY = 3
-    YELLOW = 4
+    GREEN = 4
+    YELLOW = 5
+
 
 colors = [(0, 0, 0),
           (250, 50, 50), (200, 0, 0),       # RED
           (50, 50, 250), (0, 0, 200),       # BLUE
           (100, 100, 100), (40, 40, 40),    # GRAY
+          (50, 250, 50), (50, 250, 50),     # GREEN
           (255, 255, 0)]                    # YELLOW (undefined)
 
 def color(color_name):
@@ -34,8 +37,10 @@ def color(color_name):
         return colors[3]
     elif color_name == Color.GRAY:
         return colors[5]
-    else:
+    elif color_name == Color.GREEN:
         return colors[7]
+    else:
+        return colors[9]
 
 
 
