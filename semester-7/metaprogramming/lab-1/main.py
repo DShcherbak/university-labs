@@ -11,6 +11,7 @@ def main():
     game = Game()
     game.screen = screen
     menu = Menu()
+    creds = Creds()
     restart_menu = Restart()
 
 
@@ -46,6 +47,14 @@ def main():
                     elif menu.isGameButton(x,y):
                         game.state = "Game"
             menu.draw(screen)
+        elif game.state == "Creds":
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if pygame.key.get_pressed()[pygame.K_ESCAPE]:
+                        game.state = "Menu"
+            creds.draw(screen)
         else:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

@@ -76,3 +76,34 @@ class Restart:
 
     def is_restart_button(self, x, y):
         return (left_x <= x <= left_x + button_width) and (self.restart_y <= y <= self.restart_y + button_height)
+
+
+class Creds:
+
+    def __init__(self):
+        self.restart_y = 3 * window_height_pix // q
+        self.quit_y = 5 * window_height_pix // q
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 34)
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, (100, 100, 100), (0, 0, field_width_pix, window_height_pix))
+
+        caps = pygame.font.Font(pygame.font.get_default_font(), 72)
+        text_surface = caps.render('How to play', True, (0, 0, 0))
+        screen.blit(text_surface, dest=(left_x + button_width // 2 - 9 * 20, button_height // 2 + 36))
+
+        font = self.font
+        text_surface2 = font.render('Натисніть лівою кнопкою миші, щоб почати будувати стіну.', True, (0, 0, 0))
+        screen.blit(text_surface2, dest=(20, button_height // 2 + 150))
+
+        text_surface2 = font.render('Міняйте напрям побудови стіни, натискаючи на пробіл.', True, (0, 0, 0))
+        screen.blit(text_surface2, dest=(20, button_height // 2 + 250))
+
+        text_surface2 = font.render('Якщо кулька стикається з недобудованою стіною, ви втрачаєте життя.', True, (0, 0, 0))
+        screen.blit(text_surface2, dest=(20, button_height // 2 + 350))
+
+        text_surface2 = font.render('Захопіть 75% поля, щоб пройти рівень.', True, (0, 0, 0))
+        screen.blit(text_surface2, dest=(20, button_height // 2 + 450))
+
+        text_surface2 = font.render('Натисніть Esc щоб вийти.', True, (0, 0, 0))
+        screen.blit(text_surface2, dest=(20, button_height // 2 + 550))
