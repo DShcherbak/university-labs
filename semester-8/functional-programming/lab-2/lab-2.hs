@@ -29,15 +29,7 @@ splitEveryLimit n list m = first : splitEveryLimit n rest (m-1)
 
 subdivideArray :: [a1] -> Int -> [[a1]]
 subdivideArray arr m = let n = length arr; p = div n m in
-    disposeFirst (reverse (splitEveryLimit p arr m))
-        where
-            disposeFirst [x] = [x]
-            disposeFirst [] = []
-            disposeFirst list@(x:xs) = if length list == m then list
-                                         else smashFirst x xs
-            smashFirst [] xs = xs
-            smashFirst xs [] = []
-            smashFirst (x:xs) (ys:yys) = (x:ys) : smashFirst xs yys
+    reverse (splitEveryLimit p arr m)
 
 mainThread :: Chan (IO [Int]) -> Int -> [CustomChan] -> MVar Bool -> IO ()
 mainThread fin n chans ioMutex = do
@@ -118,12 +110,22 @@ startWorkingThreads n channels arrs ioMutex = do
             do
                 sorterThread (ars !! i) (chans !! i) ioMutex)
 
+
+preprocessArray :: [Int] -> Int -> ([[Int]], Int)
+preprocessArray arr n = let m = length arr; md = mod m n in
+                        if md == 0 then
+                            (subdivideArray arr n, 0)
+                        else
+                            let mn = minimum arr; cnt = n - md  ; in
+                                (subdivideArray (replicate cnt mn ++arr) n, cnt)
+
+
 magicChannels :: Int -> IO ()
 magicChannels n = do
     ioMutex  <- newEmptyMVar
     putMVar ioMutex True
     channels <- makeNChannels n
-    let arrs = subdivideArray unsortedArray n
+    let (arrs, rmv) = preprocessArray unsortedArray n
     finished <- newChan
 
 
@@ -135,7 +137,8 @@ magicChannels n = do
 
     result <- readChan finished
     unboxed <- result
-    print unboxed
+    let originalSortedArray = drop rmv unboxed
+    print originalSortedArray
     return ()
 
 
