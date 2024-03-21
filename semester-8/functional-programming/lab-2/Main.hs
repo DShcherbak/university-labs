@@ -34,6 +34,12 @@ lab2 n = do
     return ()
 
 
+testFunc' :: Int -> [Char] -> Int 
+testFunc' x' ('a':xs) = x' + length xs 
+testFunc' x' xs = x'
+
+
+
 main :: IO()
 main = do
     let n = 1
