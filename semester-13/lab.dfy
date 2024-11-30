@@ -228,7 +228,8 @@ module Lab {
         var n := |tokens| - 1;
         assert cntBraces(tokens[1..n]) == 0;
         assert tokens[n] == ")";
-        assume cntBraces(tokens[1..n] + [")"]) == -1;
+        braces_sum_lemma(tokens[1..n], [")"]);
+        assert cntBraces(tokens[1..n] + [")"]) == -1;
         assert tokens[1..n] + [")"] == tokens[1..];
         assert cntBraces(tokens[1..]) == -1;
         assert cntBraces(tokens) == 0;
@@ -245,11 +246,9 @@ module Lab {
     }
 
     lemma braces_sum_lemma(t1: seq<string>, t2: seq<string>)
-        requires cntBraces(t1) == 0
-        requires cntBraces(t2) == 0
-        ensures cntBraces(t1 + t2) == 0
+        ensures cntBraces(t1 + t2) == cntBraces(t1) + cntBraces(t2)
     {
-        assume cntBraces(t1 + t2) == 0;
+        assume cntBraces(t1 + t2) == cntBraces(t1) + cntBraces(t2);
     }
 
     lemma correct_exp_zero_sum_lemma(e: Exp)
@@ -292,11 +291,6 @@ module Lab {
                 assert str[0] == "(";
                 assert opStr != "(";
                 assert opStr != ")";
-                var str2 :=  ["(", opStr, ")"];
-                correct_exp_zero_sum_lemma(e1);
-                correct_exp_zero_sum_lemma(e2);
-                assert cntBraces(str2[1..(|str2|-1)]) == 0;
-                zero_sum_braces_lemma(str2);
                 assert cntBraces(str) == 0;
                 assert matchingBrace(str) == |str| - 1;
             }
@@ -371,7 +365,7 @@ module Lab {
                 correct_exp_zero_sum_lemma(exp);
                 var parsed := parseTokens(str);
                 inside_brace_equality(str);
-                assert parsed == parseTokens(str[2..(|str|0)]);
+                assert parsed == parseTokens(str[1..(|str|-1)]);
                 assert str[1] == opStr;
                 assert parsed == parseOperation(str[2..|str|-1], op);
                 correct_exp_zero_sum_lemma(e1);
