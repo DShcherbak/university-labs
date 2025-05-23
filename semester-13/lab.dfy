@@ -207,7 +207,6 @@ module Lab {
             case n => 
                 if goodStringNumber(n) then Value(stringToInt(n))
                 else Err(Null)
-
     }
 
     function cntBraces(tokens: seq<string>) : int
@@ -297,7 +296,6 @@ module Lab {
         }
     }
 
-
     lemma inside_brace_equality(tokens: seq<string>)
         requires cntBraces(tokens) == 0
         requires |tokens| > 2
@@ -329,104 +327,102 @@ module Lab {
     }
 
 
-    lemma parse_print_identity(exp: Exp)
-    requires correctExp(exp)
-    ensures parseTokens(toString(exp)) == exp
-    decreases len(exp)
-    {
-        match exp {
-            case Value(n) => {
-                var str := toString(exp);
-                assert str == [intToString(n)];
-                assert goodStringNumber(str[0]);
-                assert |str| == 1;
-                var parsed := parseTokens(str);
-                assert parsed == Value(stringToInt(str[0]));
-                assert intToString(n) == str[0];
-                i2s_s2i_identity(n);
-                assert stringToInt(str[0]) == n;
-                assert parsed == exp;
-            }
-            case Operation(op, e1, e2) => {
-                var str := toString(exp);
-                parse_print_identity(e1);
-                var s1 := toString(e1);
-                var s2 := toString(e2);
-                assert parseTokens(s1) == e1;
-                parse_print_identity(e2);
-                var opStr := 
-                    match op {
-                        case Add => "+"
-                        case Sub => "-"
-                        case Mul => "*"
-                        case Div => "/"
-                    };
-                assert str == ["(", opStr] + s1 + s2 + [")"];
-                correct_exp_zero_sum_lemma(exp);
-                var parsed := parseTokens(str);
-                inside_brace_equality(str);
-                assert parsed == parseTokens(str[1..(|str|-1)]);
-                assert str[1] == opStr;
-                assert parsed == parseOperation(str[2..|str|-1], op);
-                correct_exp_zero_sum_lemma(e1);
-                correct_exp_zero_sum_lemma(e2);
-                assert cntBraces(s1) == 0;
-                if (s1[0] == "(") {
-                    var s12 := s1 + s2;
-                    var m1 := matchingBrace(s1);
-                    var j := matchingBrace(s12);
-                    no_suffix(s1, s2);
-                    assert j == m1;
-                    assert m1 == |s1| - 1;
-                    assert s12[0] == "(";
-                    assert s12[m1] == ")";
-                    var s12_1 := s12[..m1+1];
-                    inside_brace_equality(s12_1);
-                    assert parseTokens(s12_1) == parseTokens(s12_1[1..m1]);
-                    var e1p1 := parseTokens(s12_1);
-                    var e1p := parseTokens(s12_1[1..m1]);
-                    assert e1p1 == e1p;
-                    var e2p := parseTokens(s12[(j+1)..]);
-                    assert e1p == e1;
-                    assert e2p == e2;
-                    
-                    assert s12[..m1+1] == s1;
-                    assert parseTokens(s12[..m1+1]) == e1;
-                    assert s12[(m1+1)..] == s2;
-                    assert parseTokens(s12[(m1+1)..]) == e2;
-                    assert !badMatch(j, |s1|);
-                    assert |s12| > 2;
-                    
-                    assert e1p == parseTokens(s1);
-                    assert e2p == parseTokens(s2);
-                    assert e1p != Err(Null);
-                    assert e2p != Err(Null);
-                    assert s12[0] == "(";
-                    assert j >= 1 && j < |s12|;
-                    assert cntBraces(s1) == 0;
-                    assert cntBraces(s2) == 0;
-                    braces_sum_lemma(s1, s2);
-                    assert cntBraces(s12) == 0;
-                    inside_brace_equality_part(s12, j);
-                    assert e1p == parseTokens(s12[..j+1]);
-                    assert e1p == parseTokens(s12[1..j]);
-
-                    assert parseOperation(s12, op) == Operation(op, e1p, e2p);
-                    assert parseOperation(s12, op) == Operation(op, e1, e2);
-                    assert parsed == parseOperation(str[2..|str|-1], op);
-                    assert str[2..|str|-1] == s12;
-                    assert parsed == parseOperation(s12, op);
-                    assert parsed == Operation(op, e1, e2);
-                } else {
-                    var parsedS1 := parseTokens([str[2]]);
-                    assert parsedS1 == e1;
-                    var parsedS2 := parseTokens(str[3..|str|-1]);
-                    assert parsedS2 == e2;
-                    assert parsed == Operation(op, e1, e2);
-                }                
-            }
-        }
+lemma parse_print_identity(exp: Exp)
+requires correctExp(exp)
+ensures parseTokens(toString(exp)) == exp
+decreases len(exp)
+{
+  match exp {
+    case Value(n) => {
+      var str := toString(exp);
+      assert str == [intToString(n)];
+      assert goodStringNumber(str[0]);
+      assert |str| == 1;
+      var parsed := parseTokens(str);
+      assert parsed == Value(stringToInt(str[0]));
+      assert intToString(n) == str[0];
+      i2s_s2i_identity(n);
+      assert stringToInt(str[0]) == n;
+      assert parsed == exp;
     }
+    case Operation(op, e1, e2) => {
+      var str := toString(exp);
+      parse_print_identity(e1);
+      var s1 := toString(e1);
+      var s2 := toString(e2);
+      assert parseTokens(s1) == e1;
+      parse_print_identity(e2);
+      var opStr := 
+          match op {
+              case Add => "+"
+              case Sub => "-"
+              case Mul => "*"
+              case Div => "/"
+          };
+      assert str == ["(", opStr] + s1 + s2 + [")"];
+      correct_exp_zero_sum_lemma(exp);
+      var parsed := parseTokens(str);
+      inside_brace_equality(str);
+      assert parsed == parseTokens(str[1..(|str|-1)]);
+      assert str[1] == opStr;
+      assert parsed == parseOperation(str[2..|str|-1], op);
+      correct_exp_zero_sum_lemma(e1);
+      correct_exp_zero_sum_lemma(e2);
+      assert cntBraces(s1) == 0;
+      if (s1[0] == "(") {
+        var s12 := s1 + s2;
+        var m1 := matchingBrace(s1);
+        var j := matchingBrace(s12);
+        no_suffix(s1, s2);
+        assert j == m1;
+        assert m1 == |s1| - 1;
+        assert s12[0] == "(";
+        assert s12[m1] == ")";
+        var s12_1 := s12[..m1+1];
+        inside_brace_equality(s12_1);
+        assert parseTokens(s12_1) == parseTokens(s12_1[1..m1]);
+        var e1parsed := parseTokens(s12_1[1..m1]);
+        var e2p := parseTokens(s12[(j+1)..]);
+        assert e1parsed == e1;
+        assert e2p == e2;
+        
+        assert s12[..m1+1] == s1;
+        assert parseTokens(s12[..m1+1]) == e1;
+        assert s12[(m1+1)..] == s2;
+        assert parseTokens(s12[(m1+1)..]) == e2;
+        assert !badMatch(j, |s1|);
+        assert |s12| > 2;
+        
+        assert e1parsed == parseTokens(s1);
+        assert e2p == parseTokens(s2);
+        assert e1parsed != Err(Null);
+        assert e2p != Err(Null);
+        assert s12[0] == "(";
+        assert j >= 1 && j < |s12|;
+        assert cntBraces(s1) == 0;
+        assert cntBraces(s2) == 0;
+        braces_sum_lemma(s1, s2);
+        assert cntBraces(s12) == 0;
+        inside_brace_equality_part(s12, j);
+        assert e1parsed == parseTokens(s12[..j+1]);
+        assert e1parsed == parseTokens(s12[1..j]);
+
+        assert parseOperation(s12, op) == Operation(op, e1parsed, e2p);
+        assert parseOperation(s12, op) == Operation(op, e1, e2);
+        assert parsed == parseOperation(str[2..|str|-1], op);
+        assert str[2..|str|-1] == s12;
+        assert parsed == parseOperation(s12, op);
+        assert parsed == Operation(op, e1, e2);
+      } else {
+        var parsedS1 := parseTokens([str[2]]);
+        assert parsedS1 == e1;
+        var parsedS2 := parseTokens(str[3..|str|-1]);
+        assert parsedS2 == e2;
+        assert parsed == Operation(op, e1, e2);
+      }                
+    }
+  }
+}
 
    
     method parse(src: string) returns (res: Exp)
